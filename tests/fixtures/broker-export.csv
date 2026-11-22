@@ -1,0 +1,8 @@
+﻿Brokerage Positions Export as of 11/18/2026
+Account Name,Symbol,Description,Quantity,Last Price,Current Value
+Individual,SPAXX**,HELD IN MONEY MARKET,,,"$2,500.00"
+Individual,NVDA,NVIDIA CORP,2,"$140.00","$280.00"
+Roth IRA,NVDA,NVIDIA CORP,3,"$140.00","$420.00"
+Roth IRA,VXUS,VANGUARD TOTAL INTL STOCK ETF,,,"$1,234.50"
+Individual,Pending Activity,,,,"$100.00"
+Total,,,,,"$4,534.50"

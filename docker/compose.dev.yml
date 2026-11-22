@@ -1,0 +1,6 @@
+# Dev-only override for host tooling (prisma migrate dev, seed); scripts/start.sh never uses it.
+# Usage from the repo root: docker compose -f docker/docker-compose.yml -f docker/compose.dev.yml up -d db
+services:
+  db:
+    ports:
+      - "127.0.0.1:55432:5432"

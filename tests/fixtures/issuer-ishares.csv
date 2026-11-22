@@ -1,0 +1,16 @@
+iShares Core S&P Total U.S. Stock Market ETF
+Fund Holdings as of,"Dec 31, 2025"
+Inception Date,"Jun 10, 2004"
+Shares Outstanding,"1,000,000.00"
+ 
+Ticker,Name,Sector,Asset Class,Market Value,Weight (%),Notional Value,Quantity,Price,Location,Exchange,Currency
+"NVDA","NVIDIA CORP","Information Technology","Equity","1,234,567.00","6.51","1,234,567.00","100.00","186.50","United States","NASDAQ","USD"
+"AAPL","APPLE INC","Information Technology","Equity","1,100,000.00","6.02","1,100,000.00","100.00","271.86","United States","NASDAQ","USD"
+"MSFT","MICROSOFT CORP","Information Technology","Equity","1,000,000.00","5.40","1,000,000.00","100.00","483.62","United States","NASDAQ","USD"
+"AMZN","AMAZON COM INC","Consumer Discretionary","Equity","700,000.00","3.55","700,000.00","100.00","230.82","United States","NASDAQ","USD"
+"BRKB","BERKSHIRE HATHAWAY INC CLASS B","Financials","Equity","300,000.00","1.48","300,000.00","100.00","502.65","United States","New York Stock Exchange Inc.","USD"
+"JPM","JPMORGAN CHASE & CO","Financials","Equity","280,000.00","1.35","280,000.00","100.00","322.22","United States","New York Stock Exchange Inc.","USD"
+"USD","USD CASH","Cash and/or Derivatives","Cash","50,000.00","0.12","50,000.00","50,000.00","100.00","United States","-","USD"
+"ESZ5","S&P500 EMINI DEC 25","Cash and/or Derivatives","Futures","0.00","0.00","400,000.00","2.00","6,845.50","United States","Chicago Mercantile Exchange","USD"
+ 
+"The content contained herein is owned or licensed by BlackRock and/or its third-party information providers."

@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.env*
+src/generated
+.planning
+docs
+tests
+screenshots
+.claude
+planning
+.playwright-mcp

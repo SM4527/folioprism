@@ -1,0 +1,154 @@
+{
+  "holdings": [
+    {
+      "ticker": "VTI",
+      "kind": "FUND",
+      "valueCents": "4000000"
+    },
+    {
+      "ticker": "BND",
+      "kind": "FUND",
+      "valueCents": "1500000"
+    },
+    {
+      "ticker": "AAPL",
+      "kind": "STOCK",
+      "valueCents": "500000"
+    },
+    {
+      "ticker": "TSM",
+      "kind": "STOCK",
+      "valueCents": "100000"
+    },
+    {
+      "ticker": "CASH",
+      "kind": "CASH",
+      "valueCents": "100000"
+    },
+    {
+      "ticker": "XFND",
+      "kind": "FUND",
+      "valueCents": "200000"
+    }
+  ],
+  "funds": {
+    "VTI": {
+      "assetAllocation": {
+        "cash": "0.4",
+        "usStock": "98.9",
+        "nonUsStock": "0.6",
+        "bond": "0",
+        "other": "0.1"
+      },
+      "equityPct": "99.5",
+      "sectors": {
+        "basicMaterials": "2.0",
+        "consumerCyclical": "10.5",
+        "financialServices": "13.0",
+        "realEstate": "3.0",
+        "communicationServices": "9.0",
+        "energy": "3.5",
+        "industrials": "9.5",
+        "technology": "31.0",
+        "consumerDefensive": "5.0",
+        "healthcare": "11.0",
+        "utilities": "2.5"
+      },
+      "regions": {
+        "northAmerica": "99.2",
+        "latinAmerica": "0.1",
+        "unitedKingdom": "0.1",
+        "europeDeveloped": "0.4",
+        "europeEmerging": "0",
+        "africaMiddleEast": "0.1",
+        "japan": "0",
+        "australasia": "0",
+        "asiaDeveloped": "0.1",
+        "asiaEmerging": "0"
+      },
+      "styleBox": {
+        "large": {
+          "value": "22.3",
+          "blend": "25.1",
+          "growth": "24.6"
+        },
+        "mid": {
+          "value": "6.2",
+          "blend": "6.9",
+          "growth": "5.4"
+        },
+        "small": {
+          "value": "3.6",
+          "blend": "3.4",
+          "growth": "2.4"
+        }
+      },
+      "valuation": {
+        "marketCapMil": "325400",
+        "pe": "27.1",
+        "pb": "4.6",
+        "ps": "3.1",
+        "pcf": "18.2"
+      },
+      "expenseRatioPct": "0.03",
+      "bond": null
+    },
+    "BND": {
+      "assetAllocation": {
+        "cash": "1",
+        "usStock": "0",
+        "nonUsStock": "0",
+        "bond": "99",
+        "other": "0"
+      },
+      "equityPct": "0",
+      "sectors": null,
+      "regions": null,
+      "styleBox": null,
+      "valuation": null,
+      "expenseRatioPct": "0.03",
+      "bond": {
+        "sectors": {
+          "government": "50.52",
+          "municipal": "0.39",
+          "corporate": "27.2",
+          "securitized": "20.99",
+          "cash": "0.9"
+        },
+        "creditQuality": {
+          "aaa": "3.16",
+          "aa": "72.7",
+          "a": "12.02",
+          "bbb": "12.17",
+          "bb": "0.01",
+          "b": "0",
+          "belowB": "0",
+          "nr": "0"
+        },
+        "effectiveDurationYears": "5.7",
+        "effectiveMaturityYears": "9.26"
+      }
+    },
+    "XFND": null
+  },
+  "stocks": {
+    "AAPL": {
+      "sector": "technology",
+      "country": "United States",
+      "marketCapMil": "5074783.31",
+      "pe": "38.89",
+      "pb": "45.28",
+      "ps": "10.6",
+      "pcf": "34.98"
+    },
+    "TSM": {
+      "sector": null,
+      "country": "Taiwan",
+      "marketCapMil": null,
+      "pe": "-5",
+      "pb": null,
+      "ps": "9.1",
+      "pcf": null
+    }
+  }
+}

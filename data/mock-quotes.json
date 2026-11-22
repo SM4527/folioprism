@@ -1,0 +1,13 @@
+{
+  "AAPL": { "name": "Apple Inc.", "quoteType": "EQUITY", "price": 352.45, "asOf": "2026-11-18T21:00:00Z" },
+  "MSFT": { "name": "Microsoft Corporation", "quoteType": "EQUITY", "price": 508.29, "asOf": "2026-11-18T21:00:00Z" },
+  "NVDA": { "name": "NVIDIA Corporation", "quoteType": "EQUITY", "price": 150.96, "asOf": "2026-11-18T21:00:00Z" },
+  "AMZN": { "name": "Amazon.com, Inc.", "quoteType": "EQUITY", "price": 267.74, "asOf": "2026-11-18T21:00:00Z" },
+  "GOOGL": { "name": "Alphabet Inc. Class A", "quoteType": "EQUITY", "price": 282.44, "asOf": "2026-11-18T21:00:00Z" },
+  "GOOG": { "name": "Alphabet Inc. Class C", "quoteType": "EQUITY", "price": 279.2, "asOf": "2026-11-18T21:00:00Z" },
+  "META": { "name": "Meta Platforms, Inc.", "quoteType": "EQUITY", "price": 616.38, "asOf": "2026-11-18T21:00:00Z" },
+  "BRK.B": { "name": "Berkshire Hathaway Inc. Class B", "quoteType": "EQUITY", "price": 574.62, "asOf": "2026-11-18T21:00:00Z" },
+  "AVGO": { "name": "Broadcom Inc.", "quoteType": "EQUITY", "price": 354.05, "asOf": "2026-11-18T21:00:00Z" },
+  "TSLA": { "name": "Tesla, Inc.", "quoteType": "EQUITY", "price": 383.72, "asOf": "2026-11-18T21:00:00Z" },
+  "JPM": { "name": "JPMorgan Chase & Co.", "quoteType": "EQUITY", "price": 324.11, "asOf": "2026-11-18T21:00:00Z" }
+}

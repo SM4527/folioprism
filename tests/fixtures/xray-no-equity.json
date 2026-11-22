@@ -1,0 +1,19 @@
+{
+  "holdings": [
+    { "ticker": "CASH", "kind": "CASH", "valueCents": "500000" },
+    { "ticker": "BND", "kind": "FUND", "valueCents": "2000000" }
+  ],
+  "funds": {
+    "BND": {
+      "assetAllocation": { "cash": "1", "usStock": "0", "nonUsStock": "0", "bond": "99", "other": "0" },
+      "equityPct": "0",
+      "sectors": null,
+      "regions": null,
+      "styleBox": null,
+      "valuation": null,
+      "expenseRatioPct": "0.03",
+      "bond": null
+    }
+  },
+  "stocks": {}
+}

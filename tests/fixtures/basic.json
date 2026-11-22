@@ -1,0 +1,32 @@
+{
+  "holdings": [
+    { "ticker": "VTI", "inputMode": "DOLLARS", "dollarAmount": "200000" },
+    { "ticker": "FXAIX", "inputMode": "DOLLARS", "dollarAmount": "100000" },
+    { "ticker": "AAPL", "inputMode": "SHARES", "shares": "30" }
+  ],
+  "quotes": {
+    "AAPL": { "price": "225.50", "name": "Apple Inc" },
+    "VTI": { "price": "290.00", "name": "Vanguard Total Stock Market ETF" },
+    "FXAIX": { "price": "205.00", "name": "Fidelity 500 Index Fund" }
+  },
+  "funds": {
+    "VTI": {
+      "name": "Vanguard Total Stock Market ETF",
+      "source": "curated",
+      "constituents": [
+        { "ticker": "AAPL", "name": "Apple Inc", "weightPct": "5.32" },
+        { "ticker": "MSFT", "name": "Microsoft Corp", "weightPct": "5.10" },
+        { "ticker": "NVDA", "name": "NVIDIA Corp", "weightPct": "4.80" }
+      ]
+    },
+    "FXAIX": {
+      "name": "Fidelity 500 Index Fund",
+      "source": "curated",
+      "constituents": [
+        { "ticker": "AAPL", "name": "Apple Inc", "weightPct": "6.69" },
+        { "ticker": "MSFT", "name": "Microsoft Corp", "weightPct": "6.20" },
+        { "ticker": "NVDA", "name": "NVIDIA Corp", "weightPct": "5.90" }
+      ]
+    }
+  }
+}

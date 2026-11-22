@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><edgarSubmission xmlns="http://www.sec.gov/edgar/nport" xmlns:com="http://www.sec.gov/edgar/common" xmlns:ncom="http://www.sec.gov/edgar/nportcommon" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sec.gov/edgar/nport eis_NPORT_Filer.xsd">
+  <headerData>
+    <submissionType>NPORT-P</submissionType>
+    <isConfidential>false</isConfidential>
+    <filerInfo>
+
+      <filer>
+        <issuerCredentials>
+          <cik>0000036405</cik>
+          <ccc>XXXXXXXX</ccc>
+        </issuerCredentials>
+      </filer>
+
+
+      <seriesClassInfo>
+        <seriesId>S000002848</seriesId>
+        <classId>C000007805</classId>
+        <classId>C000007807</classId>
+        <classId>C000155407</classId>
+        <classId>C000007808</classId>
+        <classId>C000170276</classId>
+        <classId>C000007806</classId>
+      </seriesClassInfo>
+
+
+    </filerInfo>
+  </headerData>
+  <formData>
+    <genInfo>
+      <regName>VANGUARD INDEX FUNDS</regName>
+      <regFileNumber>811-02652</regFileNumber>
+      <regCik>0000036405</regCik>
+      <regLei>549300G6KNDK44WUN559</regLei>
+      <regStreet1>100 Vanguard Boulevard</regStreet1>
+      <regCity>Malvern</regCity>
+      <regStateConditional regCountry="US" regState="US-PA"/>
+      <regZipOrPostalCode>19355</regZipOrPostalCode>
+      <regPhone>610-669-1000</regPhone>
+      <seriesName>VANGUARD TOTAL STOCK MARKET INDEX FUND</seriesName>
+      <seriesId>S000002848</seriesId>
+      <seriesLei>HJ2RZRUQEVF2A5SPRB21</seriesLei>
+      <repPdEnd>2026-12-31</repPdEnd>
+      <repPdDate>2026-06-30</repPdDate>
+      <isFinalFiling>N</isFinalFiling>
+    </genInfo>
+    <invstOrSecs>
+      <invstOrSec>
+        <name>Apple Inc</name>
+        <lei>HWUPKR0MPOU8FGXBT394</lei>
+        <title>APPLE INC</title>
+        <cusip>037833100</cusip>
+        <identifiers>
+          <isin value="US0378331005"/>
+        </identifiers>
+        <balance>466272244.00000000</balance>
+        <units>NS</units>
+        <curCd>USD</curCd>
+        <valUSD>134920536523.84000000</valUSD>
+        <pctVal>5.871626660176</pctVal>
+        <payoffProfile>Long</payoffProfile>
+        <assetCat>EC</assetCat>
+        <issuerCat>CORP</issuerCat>
+        <invCountry>US</invCountry>
+
+        <isRestrictedSec>N</isRestrictedSec>
+
+        <fairValLevel>1</fairValLevel>
+        <securityLending>
+          <isCashCollateral>N</isCashCollateral>
+          <isNonCashCollateral>N</isNonCashCollateral>
+          <isLoanByFund>N</isLoanByFund>
+        </securityLending>
+      </invstOrSec>
+      <invstOrSec>
+        <name>Surgery Partners Inc</name>
+        <lei>549300LC82HG33S19I03</lei>
+        <title>SURGERY PARTNERS</title>
+        <cusip>86881A100</cusip>
+        <identifiers>
+          <isin value="US86881A1007"/>
+        </identifiers>
+        <balance>2481034.00000000</balance>
+        <units>NS</units>
+        <curCd>USD</curCd>
+        <valUSD>41681371.20000000</valUSD>
+        <pctVal>0.001813937719</pctVal>
+        <payoffProfile>Long</payoffProfile>
+        <assetCat>EC</assetCat>
+        <issuerCat>CORP</issuerCat>
+        <invCountry>US</invCountry>
+
+        <isRestrictedSec>N</isRestrictedSec>
+
+        <fairValLevel>1</fairValLevel>
+        <securityLending>
+          <isCashCollateral>N</isCashCollateral>
+          <isNonCashCollateral>N</isNonCashCollateral>
+          <loanByFundCondition isLoanByFund="Y" loanVal="1965600.00000000"/>
+        </securityLending>
+      </invstOrSec>
+      <invstOrSec>
+        <name>Dianthus Therapeutics Inc</name>
+        <lei>549300Z3N6ODPCOFC890</lei>
+        <title>MAGENTA THERAPEUTICS INC - CVR (SEP 2023)</title>
+        <cusip>N/A</cusip>
+        <identifiers>
+          <isin value="US559CVR0225"/>
+        </identifiers>
+        <balance>1432921.00000000</balance>
+        <units>NS</units>
+        <curCd>USD</curCd>
+        <valUSD>7164.61000000</valUSD>
+        <pctVal>0.000000311797</pctVal>
+        <payoffProfile>Long</payoffProfile>
+        <assetCat>EC</assetCat>
+        <issuerCat>CORP</issuerCat>
+        <invCountry>US</invCountry>
+
+        <isRestrictedSec>N</isRestrictedSec>
+
+        <fairValLevel>3</fairValLevel>
+        <securityLending>
+          <isCashCollateral>N</isCashCollateral>
+          <isNonCashCollateral>N</isNonCashCollateral>
+          <isLoanByFund>N</isLoanByFund>
+        </securityLending>
+      </invstOrSec>
+      <invstOrSec>
+        <name>Vanguard Cmt Funds-Vanguard Market Liquidity Fund</name>
+        <lei>1I6HV0TLSTR3A4XQ6L78</lei>
+        <title>Vanguard Market Liquidity Fund</title>
+        <cusip>N/A</cusip>
+        <identifiers>
+          <other otherDesc="FAID" value="CMT001142"/>
+        </identifiers>
+        <balance>61033263.11800000</balance>
+        <units>NS</units>
+        <curCd>USD</curCd>
+        <valUSD>6102715979.17000000</valUSD>
+        <pctVal>0.265584993700</pctVal>
+        <payoffProfile>Long</payoffProfile>
+        <assetCat>STIV</assetCat>
+        <issuerCat>CORP</issuerCat>
+        <invCountry>US</invCountry>
+
+        <isRestrictedSec>N</isRestrictedSec>
+
+        <fairValLevel>1</fairValLevel>
+        <securityLending>
+          <isCashCollateral>N</isCashCollateral>
+          <isNonCashCollateral>N</isNonCashCollateral>
+          <isLoanByFund>N</isLoanByFund>
+        </securityLending>
+      </invstOrSec>
+      <invstOrSec>
+        <name>N/A</name>
+        <lei>N/A</lei>
+        <title>S&amp;P500 EMINI FUT  Sep26</title>
+        <cusip>N/A</cusip>
+        <identifiers>
+          <ticker value="ESU6"/>
+        </identifiers>
+        <balance>364.00000000</balance>
+        <units>NC</units>
+        <curCd>USD</curCd>
+        <valUSD>2116868.10000000</valUSD>
+        <pctVal>0.000092124293</pctVal>
+        <payoffProfile>N/A</payoffProfile>
+        <assetCat>DE</assetCat>
+        <issuerConditional desc="N/A" issuerCat="OTHER"/>
+        <invCountry>N/A</invCountry>
+
+        <isRestrictedSec>N</isRestrictedSec>
+
+        <fairValLevel>1</fairValLevel>
+        <derivativeInfo>
+          <futrDeriv derivCat="FUT">
+            <counterparties>
+              <counterpartyName>MERRILL LYNCH, PIERCE, FENNER &amp; SMITH INCORPORATED</counterpartyName>
+              <counterpartyLei>8NAV47T0Y26Q87Y0QP81</counterpartyLei>
+            </counterparties>
+            <counterparties>
+              <counterpartyName>MORGAN STANLEY &amp; CO LLC</counterpartyName>
+              <counterpartyLei>9R7GPTSO7KV3UQJZQ078</counterpartyLei>
+            </counterparties>
+            <payOffProf>Long</payOffProf>
+            <descRefInstrmnt>
+              <indexBasketInfo>
+                <indexName>S&amp;P 500 Index</indexName>
+                <indexIdentifier>SPX</indexIdentifier>
+              </indexBasketInfo>
+            </descRefInstrmnt>
+            <expDate>2026-09-18</expDate>
+            <notionalAmt>135261281.90000000</notionalAmt>
+            <curCd>USD</curCd>
+            <unrealizedAppr>2116868.10000000</unrealizedAppr>
+          </futrDeriv>
+        </derivativeInfo>
+        <securityLending>
+          <isCashCollateral>N</isCashCollateral>
+          <isNonCashCollateral>N</isNonCashCollateral>
+          <isLoanByFund>N</isLoanByFund>
+        </securityLending>
+      </invstOrSec>
+    </invstOrSecs>
+  </formData>
+</edgarSubmission>

@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum InputMode {
+  SHARES
+  DOLLARS
+}
+
+enum DataType {
+  QUOTE
+  HOLDINGS
+  METADATA
+}
+
+model Portfolio {
+  id              Int                @id @default(1)
+  name            String             @default("My Portfolio")
+  benchmarkTicker String             @default("SPY")
+  holdings        PortfolioHolding[]
+}
+
+model PortfolioHolding {
+  id           Int       @id @default(autoincrement())
+  portfolioId  Int       @default(1)
+  portfolio    Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  ticker       String
+  inputMode    InputMode
+  shares       Decimal?  @db.Decimal(20, 6)
+  dollarAmount Decimal?  @db.Decimal(20, 2)
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([portfolioId, ticker])
+}
+
+model MarketDataCache {
+  ticker      String
+  dataType    DataType
+  payloadJson Json
+  fetchedAt   DateTime @default(now())
+
+  @@id([ticker, dataType])
+}
+
+model FundHoldingsImport {
+  ticker       String   @id
+  constituents Json
+  holdingsAsOf DateTime @db.Date
+  asOfFromFile Boolean
+}

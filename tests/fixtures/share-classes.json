@@ -1,0 +1,24 @@
+{
+  "holdings": [
+    { "ticker": "GOOG", "inputMode": "SHARES", "shares": "10" },
+    { "ticker": "GOOGL", "inputMode": "SHARES", "shares": "10" },
+    { "ticker": "QQQ", "inputMode": "DOLLARS", "dollarAmount": "50000" },
+    { "ticker": "brk/b", "inputMode": "DOLLARS", "dollarAmount": "5000" }
+  ],
+  "quotes": {
+    "GOOG": { "price": "170.00", "name": "Alphabet Inc Class C" },
+    "GOOGL": { "price": "172.00", "name": "Alphabet Inc Class A" },
+    "BRK.B": { "price": "470.00", "name": "Berkshire Hathaway Inc Class B" }
+  },
+  "funds": {
+    "QQQ": {
+      "name": "Invesco QQQ Trust",
+      "source": "yahoo-top10",
+      "constituents": [
+        { "ticker": "GOOGL", "name": "Alphabet Inc Class A", "weightPct": "2.50" },
+        { "ticker": "GOOG", "name": "Alphabet Inc Class C", "weightPct": "2.40" },
+        { "ticker": "BRK-B", "name": "Berkshire Hathaway Inc Class B", "weightPct": "1.00" }
+      ]
+    }
+  }
+}
