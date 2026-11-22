@@ -10,9 +10,9 @@ Single user, single portfolio, no account. Data stays on your machine.
 
 ![X-Ray Overview of the sample portfolio](docs/screenshots/xray-overview.png)
 
-![Stock Intersection: top 50 underlying stocks, expanded to show each fund's contribution](docs/screenshots/stock-intersection.png)
-
 ![AI chat answering questions about the sample portfolio](docs/screenshots/ai-chat.png)
+
+![Stock Intersection: top 50 underlying stocks, expanded to show each fund's contribution](docs/screenshots/stock-intersection.png)
 
 <details>
 <summary>More screenshots</summary>
