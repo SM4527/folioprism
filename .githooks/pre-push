@@ -1,7 +1,7 @@
 #!/bin/sh
 # Block pushes that would publish private data:
 # - a .png outside docs/screenshots/, any file under data/local/, imports/ or backups/, any .csv outside tests/fixtures/
-# - any database dump (.sql, .dump, .sql.gz)
+# - any database dump (.dump, .sql.gz, or .sql outside prisma/migrations/)
 # - a private ticker from data/local/ in added lines or commit messages (scripts/privacy-scan.mjs, never printed)
 zero=0000000000000000000000000000000000000000
 while read local_ref local_sha remote_ref remote_sha; do
@@ -11,7 +11,8 @@ while read local_ref local_sha remote_ref remote_sha; do
   bad=$(printf '%s\n' "$files" | grep -iE '\.png$' | grep -v '^docs/screenshots/'
         printf '%s\n' "$files" | grep -E '^(data/local|imports|backups)/'
         printf '%s\n' "$files" | grep -iE '\.csv$' | grep -v '^tests/fixtures/'
-        printf '%s\n' "$files" | grep -iE '\.(sql|dump|sql\.gz)$')
+        printf '%s\n' "$files" | grep -iE '\.(dump|sql\.gz)$'
+        printf '%s\n' "$files" | grep -iE '\.sql$' | grep -v '^prisma/migrations/')
   if [ -n "$bad" ]; then
     echo "pre-push: blocked, private or disallowed files:" >&2
     echo "$bad" >&2
