@@ -2,6 +2,18 @@ Build **FolioPrism**, a portfolio look-through ("X-Ray") web application
 
 @planning/PLAN.md has all the details.
 
+## Privacy (mandatory)
+
+The user runs FolioPrism daily with real holdings on a separate personal stack. These rules apply to every task:
+
+- Develop, verify, test and take screenshots only against the default stack on :8420 with the seeded sample portfolio.
+- Never start, stop, reset, query, screenshot or read logs from the personal stack (`folioprism-personal`, :8430), its containers or its volume (`folioprism_personal_pgdata`), unless the user explicitly asks in the current session, and then only start, stop, restart or health-check it; never read its data, logs, database or screenshots.
+- Never read `data/local/`, `imports/`, `refresh.log` or the personal database, and never copy values from them into code, tests, fixtures, docs, planning notes or commit messages. Scripts may read `data/local/` only to report counts or pass/fail.
+- Private CSVs live only in `imports/` or `data/local/`, never elsewhere in the repo (permission rules cannot stop `Glob` from listing CSV names in other folders).
+- Never record the user's tickers, amounts or holding counts in tracked files. Committed code, tests and `data/local.example/` use made-up tickers.
+- README screenshots come only from the default stack.
+- If a task seems to need real data, stop and ask the user.
+
 <!-- GSD:project-start source:PROJECT.md -->
 ## Project
 
@@ -15,11 +27,17 @@ FolioPrism is a self-hosted portfolio look-through ("X-Ray") web app for a singl
 
 - **Tech stack**: Next.js 16 (App Router, React 19), TypeScript strict, Tailwind v4, shadcn/ui, Recharts, Prisma 7 (`prisma-client` generator, `@prisma/adapter-pg`, `prisma.config.ts`), PostgreSQL 16, yahoo-finance2 v3, decimal.js, zod, Vitest, Node 22. Use the latest APIs.
 - **Precision**: All aggregation in Decimal / integer cents; nested child rows must sum exactly to parent at both 4dp and 2dp display.
-- **Ports**: App on host 8420 only; DB never bound to the host.
+- **Ports**: Default stack on host 8420 and optional personal stack on 8430, both loopback only. The DB is never bound to the host in either stack.
 - **Persistence**: Named volume; stop scripts never use `-v`.
 - **Code style**: Simple, incremental, short modules, no overengineering or defensive programming, no emojis, concise README.
 - **Process**: Work incrementally and verify each step (tests, curl, Playwright screenshots).
-- **Privacy**: Screenshots, verify logs and planning docs use only the seeded sample portfolio (prisma/seed.ts). Never record the user's tickers, amounts or holding counts in tracked files. The user's own curated data lives only in gitignored `data/local/`; committed code, tests and `data/local.example/` use made-up tickers.
+- **Privacy** (mandatory; also in the Privacy section of CLAUDE.md):
+  - Develop, verify, test and take screenshots only against the default stack on :8420 with the seeded sample portfolio.
+  - Never start, stop, reset, query, screenshot or read logs from the personal stack (`folioprism-personal`, :8430), its containers or its volume (`folioprism_personal_pgdata`), unless the user explicitly asks in the current session, and then only start, stop, restart or health-check it; never read its data, logs, database or screenshots.
+  - Never read `data/local/`, `imports/`, `refresh.log` or the personal database, and never copy values from them into code, tests, fixtures, docs, planning notes or commit messages. Scripts may read `data/local/` only to report counts or pass/fail.
+  - Never record the user's tickers, amounts or holding counts in tracked files. Committed code, tests and `data/local.example/` use made-up tickers.
+  - README screenshots come only from the default stack.
+  - If a task seems to need real data, stop and ask the user.
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:research/STACK.md -->

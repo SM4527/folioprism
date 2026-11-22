@@ -61,11 +61,15 @@ The app container reads them from the root `.env`, whether started by `./scripts
 
 ## Refresh fund holdings
 
-`./scripts/refresh-funds.sh` rebuilds `data/mock-funds.json` and `data/cusip-tickers.json` from the funds listed in `data/fund-sources.json`. It runs on the host, not in the container, needs Node 22.9+ on the host, and reads the root `.env` itself (no `WSLENV` needed under WSL).
+`./scripts/refresh-funds.sh` rebuilds fund constituents from SEC N-PORT filings or issuer files. It runs on the host, not in the container, needs Node 22.9+ on the host, and reads the root `.env` itself (no `WSLENV` needed under WSL).
+
+- `--public` refreshes the funds in `data/fund-sources.json` into the tracked `data/mock-funds.json` and `data/cusip-tickers.json`, for a deliberate commit.
+- Without a flag it also refreshes the funds in `data/local/fund-sources.json`, and writes every result only to the gitignored `data/local/` (for the personal stack). Tracked files are not changed.
 
 ```bash
-npm ci                                              # once
-./scripts/refresh-funds.sh && ./scripts/restart.sh  # restart loads the new data
+npm ci                                                       # once
+./scripts/refresh-funds.sh --public && ./scripts/restart.sh  # public data, then test and commit
+./scripts/refresh-funds.sh && ./scripts/personal-restart.sh  # personal stack
 ```
 
 Optional keys in `.env`: `OPENFIGI_API_KEY` (higher OpenFIGI rate limit for CUSIP/ISIN-to-ticker mapping) and `SEC_USER_AGENT` (SEC asks for a real contact; a placeholder is used otherwise). It can run on a schedule, for example weekly from Windows Task Scheduler via `wsl.exe`, appending output to `refresh.log` (gitignored).
@@ -76,13 +80,27 @@ On the Stock Intersection tab, the Fund holdings table under the coverage note h
 
 ## Private curated data
 
-Curated data for your own funds and stocks goes in `data/local/`, which is gitignored. It is merged over the committed data at startup. Copy the layout from `data/local.example/`:
+Curated data for your own funds and stocks goes in `data/local/`, which is gitignored. Only the personal stack loads it (`LOCAL_OVERLAY=on`); the default stack, `npm run dev` and `npm run build` ignore it. Copy the layout from `data/local.example/`:
 
 - `funds.json`: fund entries, same layout as `data/mock-funds.json`
 - `stocks.json`: direct-stock facts, same layout as `data/mock-stocks.json`
 - `cash.json`: extra money-market tickers priced at $1.00 and counted as cash
+- `fund-sources.json`: refresh sources for your own funds, same layout as `data/fund-sources.json`
 
-Run `./scripts/restart.sh` after editing. The pre-push hook blocks any file under `data/local/` (enable it with `git config core.hooksPath .githooks`).
+Keep broker exports in `imports/` (gitignored). Enable the pre-push hook with `git config core.hooksPath .githooks`; it blocks files under `data/local/` or `imports/`, CSVs outside `tests/fixtures/`, PNGs outside `docs/screenshots/`, and any ticker from your `data/local/` files that is not in the public fund data.
+
+## Personal stack (optional)
+
+To keep real holdings apart from development, run a second, independent stack on http://localhost:8430 with its own containers (`folioprism-personal-*`) and volume (`folioprism_personal_pgdata`). It loads `data/local/` and starts with an empty portfolio instead of the sample.
+
+```bash
+./scripts/personal-start.sh     # build and start
+./scripts/personal-stop.sh      # stop; data is kept
+./scripts/personal-restart.sh
+./scripts/personal-logs.sh
+```
+
+The default scripts never touch the personal stack, and the personal scripts never touch the default one. There is no personal reset script.
 
 ## Stack
 

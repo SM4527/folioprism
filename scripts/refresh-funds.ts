@@ -1,5 +1,9 @@
-/** Rebuild fund constituents in data/mock-funds.json from public issuer CSVs or each fund's latest SEC N-PORT filing. */
-import { readFileSync, writeFileSync } from 'node:fs';
+/**
+ * Rebuild fund constituents from public issuer CSVs or each fund's latest SEC N-PORT filing.
+ * Default (private): public plus data/local funds, results written only to gitignored data/local/.
+ * --public: public funds only, written to the tracked data/mock-funds.json and data/cusip-tickers.json.
+ */
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { canonicalTicker } from '../src/lib/engine/ticker';
 import { figiIds, keptSnapshotBlocks, tickerLookup, toConstituents } from '../src/lib/refresh/constituents';
 import { mapToTickers } from '../src/lib/refresh/figi';
@@ -13,11 +17,10 @@ type Fund = Record<string, unknown> & {
   constituents: { ticker: string; name: string }[];
 };
 
-const FUNDS = 'data/mock-funds.json';
-const SOURCES = 'data/fund-sources.json';
+const PUBLIC = { funds: 'data/mock-funds.json', sources: 'data/fund-sources.json', cusips: 'data/cusip-tickers.json' };
+const LOCAL = { funds: 'data/local/funds.json', sources: 'data/local/fund-sources.json', cusips: 'data/local/cusip-tickers.json' };
 
 type Source = { nport?: string; csv?: string };
-const CUSIPS = 'data/cusip-tickers.json';
 const USER_AGENT = process.env.SEC_USER_AGENT || 'FolioPrism refresh-funds/1.0 admin@example.com';
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -57,10 +60,19 @@ function readJson<T>(path: string): T {
   return JSON.parse(readFileSync(path, 'utf8')) as T;
 }
 
-function saveCache(cache: Record<string, string | null>): void {
-  const sorted = Object.fromEntries(Object.entries(cache).sort(([a], [b]) => a.localeCompare(b)));
-  writeFileSync(CUSIPS, `${JSON.stringify(sorted, null, 2)}\n`);
+/** A JSON file, or {} when it does not exist (optional data/local files). */
+function readOptional<T>(path: string): T {
+  return (existsSync(path) ? readJson<T>(path) : {}) as T;
 }
+
+/** Write a CUSIP map sorted by key. */
+function writeCache(path: string, cache: Record<string, string | null>): void {
+  const sorted = Object.fromEntries(Object.entries(cache).sort(([a], [b]) => a.localeCompare(b)));
+  writeFileSync(path, `${JSON.stringify(sorted, null, 2)}\n`);
+}
+
+/** Persists the CUSIP cache after each filing; set per mode in main. */
+let saveCache: (cache: Record<string, string | null>) => void;
 
 /** Display names already used for a ticker anywhere in the file (DEC-19). */
 function nameMap(funds: Record<string, Fund>): Record<string, string> {
@@ -137,7 +149,7 @@ async function refresh(
 ): Promise<[string, boolean]> {
   const fund = funds[ticker];
   const source = sources[ticker] ?? {};
-  if (!fund) return [`${ticker.padEnd(7)}${'skipped'.padEnd(14)}not in ${FUNDS}`, false];
+  if (!fund) return [`${ticker.padEnd(7)}${'skipped'.padEnd(14)}not a curated fund`, false];
   if (!source.nport && !source.csv) return [skip(ticker, 'no public source configured', fund), false];
   try {
     const out = source.csv ? await fromIssuer(ticker, source.csv, fund, names) : await fromNport(ticker, source.nport!, fund, cache, names);
@@ -150,23 +162,38 @@ async function refresh(
 }
 
 async function main() {
-  const text = readFileSync(FUNDS, 'utf8');
-  const funds = JSON.parse(text) as Record<string, Fund>;
-  const sources = readJson<Record<string, Source>>(SOURCES);
-  const cache = readJson<Record<string, string | null>>(CUSIPS);
+  const argv = process.argv.slice(2);
+  const isPublic = argv.includes('--public');
+  const publicFunds = readJson<Record<string, Fund>>(PUBLIC.funds);
+  const publicCache = readJson<Record<string, string | null>>(PUBLIC.cusips);
+  const localFunds = isPublic ? {} : readOptional<Record<string, Fund>>(LOCAL.funds);
+  const funds = { ...publicFunds, ...localFunds };
+  const sources = {
+    ...readJson<Record<string, Source>>(PUBLIC.sources),
+    ...(isPublic ? {} : readOptional<Record<string, Source>>(LOCAL.sources)),
+  };
+  const cache = { ...publicCache, ...(isPublic ? {} : readOptional<Record<string, string | null>>(LOCAL.cusips)) };
+  if (isPublic) saveCache = (c) => writeCache(PUBLIC.cusips, c);
+  else {
+    mkdirSync('data/local', { recursive: true });
+    saveCache = (c) => writeCache(LOCAL.cusips, Object.fromEntries(Object.entries(c).filter(([k]) => !(k in publicCache))));
+  }
   const names = nameMap(funds);
-  const args = process.argv.slice(2).map(canonicalTicker);
+  const args = argv.filter((a) => a !== '--public').map(canonicalTicker);
   const tickers = args.length ? args : Object.keys(funds).filter((t) => funds[t].constituents.length > 0);
 
-  let updated = 0;
+  const updated: string[] = [];
   for (const ticker of tickers) {
     const [line, ok] = await refresh(ticker, funds, sources, cache, names);
     console.log(line);
-    if (ok) updated++;
+    if (ok) updated.push(ticker);
   }
-  const out = formatFundsJson(funds);
-  if (out !== text) writeFileSync(FUNDS, out);
-  console.log(`Updated ${updated} of ${tickers.length} funds in ${FUNDS}`);
+  const target = isPublic ? PUBLIC.funds : LOCAL.funds;
+  const before = existsSync(target) ? readFileSync(target, 'utf8') : '';
+  const kept = isPublic ? funds : { ...localFunds, ...Object.fromEntries(updated.map((t) => [t, funds[t]])) };
+  const out = formatFundsJson(kept);
+  if (out !== before) writeFileSync(target, out);
+  console.log(`Updated ${updated.length} of ${tickers.length} funds in ${target}`);
 }
 
 main();

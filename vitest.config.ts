@@ -13,6 +13,6 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['tests/**/*.test.ts'],
-    env: { LOCAL_DATA_DIR, LOCAL_CASH_TICKERS: cash.join(',') },
+    env: { LOCAL_OVERLAY: 'on', LOCAL_DATA_DIR, LOCAL_CASH_TICKERS: cash.join(',') },
   },
 });

@@ -1,0 +1,47 @@
+# Optional personal stack for real holdings: its own project, containers, volume and port, with data/local on.
+# Use scripts/personal-*.sh. Never pass -v to down.
+name: folioprism-personal
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: folioprism-personal-db
+    environment:
+      POSTGRES_USER: lens
+      POSTGRES_PASSWORD: lens
+      POSTGRES_DB: folioprism
+    volumes:
+      - folioprism_personal_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lens -d folioprism"]
+      interval: 5s
+      retries: 10
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      additional_contexts:
+        local: ../data/local
+      args:
+        LOCAL_OVERLAY: "on"
+    container_name: folioprism-personal-app
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://lens:lens@db:5432/folioprism
+      MARKET_DATA_MODE: ${MARKET_DATA_MODE:-live}
+      SEED_SAMPLE: "off"
+    ports:
+      - "127.0.0.1:8430:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      retries: 12
+      start_period: 20s
+volumes:
+  folioprism_personal_pgdata:
+    name: folioprism_personal_pgdata

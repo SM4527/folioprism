@@ -1,14 +1,22 @@
 #!/bin/sh
-# Block pushes that add or modify a .png outside docs/screenshots/ or any private file under data/local/.
+# Block pushes that would publish private data:
+# - a .png outside docs/screenshots/, any file under data/local/ or imports/, any .csv outside tests/fixtures/
+# - a private ticker from data/local/ in added lines or commit messages (scripts/privacy-scan.mjs, never printed)
 zero=0000000000000000000000000000000000000000
 while read local_ref local_sha remote_ref remote_sha; do
   [ "$local_sha" = "$zero" ] && continue
   if [ "$remote_sha" = "$zero" ]; then range="$local_sha --not --remotes"; else range="$remote_sha..$local_sha"; fi
   files=$(git log --format= --name-only --diff-filter=AMR $range | sort -u)
-  bad=$( (printf '%s\n' "$files" | grep -iE '\.png$' | grep -v '^docs/screenshots/'; printf '%s\n' "$files" | grep '^data/local/') )
+  bad=$(printf '%s\n' "$files" | grep -iE '\.png$' | grep -v '^docs/screenshots/'
+        printf '%s\n' "$files" | grep -E '^(data/local|imports)/'
+        printf '%s\n' "$files" | grep -iE '\.csv$' | grep -v '^tests/fixtures/')
   if [ -n "$bad" ]; then
-    echo "pre-push: blocked, PNG files outside docs/screenshots/ or private data/local/ files:" >&2
+    echo "pre-push: blocked, private or disallowed files:" >&2
     echo "$bad" >&2
+    exit 1
+  fi
+  if ! node scripts/privacy-scan.mjs push $range >&2; then
+    echo "pre-push: blocked, private tickers in the pushed changes (see lines above)" >&2
     exit 1
   fi
 done

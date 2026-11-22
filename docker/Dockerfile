@@ -1,3 +1,6 @@
+# Empty by default; the personal stack replaces it with data/local via additional_contexts.
+FROM scratch AS local
+
 FROM node:24-alpine AS base
 RUN apk add --no-cache openssl
 WORKDIR /app
@@ -8,12 +11,16 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 FROM base AS build
+ARG LOCAL_OVERLAY=off
+ENV LOCAL_OVERLAY=$LOCAL_OVERLAY
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+COPY --from=local . ./data/local/
 RUN npx prisma --version && npx prisma generate && npm run build
 
 FROM base AS runner
-ENV NODE_ENV=production
+ARG LOCAL_OVERLAY=off
+ENV NODE_ENV=production LOCAL_OVERLAY=$LOCAL_OVERLAY
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/.next ./.next
 COPY --from=build --chown=node:node /app/prisma ./prisma

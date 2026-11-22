@@ -41,3 +41,6 @@ refresh.log
 
 # Personal tickers and curated data (never committed)
 /data/local/
+
+# Broker exports (never committed)
+/imports/

@@ -22,6 +22,10 @@ async function main() {
     create: { id: 1, name: "My Portfolio", benchmarkTicker: "SPY" },
     update: {},
   });
+  if (process.env.SEED_SAMPLE === 'off') {
+    console.log('Seed: SEED_SAMPLE=off, skipped sample');
+    return;
+  }
   if ((await prisma.portfolioHolding.count()) > 0) {
     console.log("Seed: holdings present, skipped sample");
     return;
