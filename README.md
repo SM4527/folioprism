@@ -12,6 +12,8 @@ Single user, single portfolio, no account. Data stays on your machine.
 
 ![Stock Intersection: Top 50 underlying stocks](docs/screenshots/stock-intersection.png)
 
+![AI chat answering questions about the sample portfolio](docs/screenshots/ai-chat.png)
+
 <details>
 <summary>More screenshots</summary>
 
