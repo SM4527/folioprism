@@ -1,0 +1,14 @@
+#!/bin/sh
+# Block pushes that add or modify a .png outside docs/screenshots/.
+zero=0000000000000000000000000000000000000000
+while read local_ref local_sha remote_ref remote_sha; do
+  [ "$local_sha" = "$zero" ] && continue
+  if [ "$remote_sha" = "$zero" ]; then range="$local_sha --not --remotes"; else range="$remote_sha..$local_sha"; fi
+  bad=$(git log --format= --name-only --diff-filter=AMR $range | grep -iE '\.png$' | grep -v '^docs/screenshots/' | sort -u)
+  if [ -n "$bad" ]; then
+    echo "pre-push: blocked, PNG files outside docs/screenshots/:" >&2
+    echo "$bad" >&2
+    exit 1
+  fi
+done
+exit 0
