@@ -1,0 +1,29 @@
+{
+  "ZZBIL": {
+    "name": "Example Treasury Bill ETF",
+    "quoteType": "ETF",
+    "price": 50.25,
+    "asOf": "2026-11-20T21:00:00Z",
+    "aggregatesSource": [
+      {
+        "blocks": ["assetAllocation", "bond", "expenseRatioPct"],
+        "url": "https://example.com/funds/zzbil",
+        "asOf": "2026-10-31",
+        "note": "made-up example entry"
+      }
+    ],
+    "assetAllocation": { "cash": 1, "usStock": 0, "nonUsStock": 0, "bond": 99, "other": 0 },
+    "sectors": null,
+    "regions": null,
+    "styleBox": null,
+    "valuation": null,
+    "expenseRatioPct": 0.05,
+    "bond": {
+      "sectors": { "government": 99, "municipal": 0, "corporate": 0, "securitized": 0, "cash": 1 },
+      "creditQuality": { "aaa": 0, "aa": 100, "a": 0, "bbb": 0, "bb": 0, "b": 0, "belowB": 0, "nr": 0 },
+      "effectiveDurationYears": 0.1,
+      "effectiveMaturityYears": 0.1
+    },
+    "constituents": []
+  }
+}

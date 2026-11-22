@@ -19,7 +19,7 @@ FolioPrism is a self-hosted portfolio look-through ("X-Ray") web app for a singl
 - **Persistence**: Named volume; stop scripts never use `-v`.
 - **Code style**: Simple, incremental, short modules, no overengineering or defensive programming, no emojis, concise README.
 - **Process**: Work incrementally and verify each step (tests, curl, Playwright screenshots).
-- **Privacy**: Screenshots, verify logs and planning docs use only the seeded sample portfolio (prisma/seed.ts). Never record the user's tickers, amounts or holding counts in tracked files.
+- **Privacy**: Screenshots, verify logs and planning docs use only the seeded sample portfolio (prisma/seed.ts). Never record the user's tickers, amounts or holding counts in tracked files. The user's own curated data lives only in gitignored `data/local/`; committed code, tests and `data/local.example/` use made-up tickers.
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:research/STACK.md -->

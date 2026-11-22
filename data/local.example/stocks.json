@@ -1,0 +1,14 @@
+{
+  "ZZCO": {
+    "name": "Example Private Co",
+    "sector": "technology",
+    "country": "United States",
+    "marketCapMil": 50000,
+    "pe": null,
+    "pb": null,
+    "ps": null,
+    "pcf": null,
+    "style": "growth",
+    "source": { "url": "https://example.com/stocks/zzco", "asOf": "2026-11-20", "note": "made-up example entry" }
+  }
+}

@@ -74,6 +74,16 @@ Optional keys in `.env`: `OPENFIGI_API_KEY` (higher OpenFIGI rate limit for CUSI
 
 On the Stock Intersection tab, the Fund holdings table under the coverage note has an import button for each held fund. Upload an issuer holdings CSV (max 2 MB) with a header row containing a ticker column (`ticker` or `symbol`) and a weight column in percent (for example `weight` or `% of net assets`), plus optional name and as-of date columns. Skipped rows are reported with their line and reason. An import replaces that fund's holdings; the remove button returns the fund to its curated or Yahoo holdings.
 
+## Private curated data
+
+Curated data for your own funds and stocks goes in `data/local/`, which is gitignored. It is merged over the committed data at startup. Copy the layout from `data/local.example/`:
+
+- `funds.json`: fund entries, same layout as `data/mock-funds.json`
+- `stocks.json`: direct-stock facts, same layout as `data/mock-stocks.json`
+- `cash.json`: extra money-market tickers priced at $1.00 and counted as cash
+
+Run `./scripts/restart.sh` after editing. The pre-push hook blocks any file under `data/local/` (enable it with `git config core.hooksPath .githooks`).
+
 ## Stack
 
 Next.js 16, TypeScript, Tailwind v4, shadcn/ui, Recharts, Prisma 7, PostgreSQL 16, yahoo-finance2, decimal.js, Vitest. Market data comes from Yahoo Finance with cache, stale and curated fallbacks (`data/mock-funds.json`).

@@ -18,6 +18,7 @@ COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/.next ./.next
 COPY --from=build --chown=node:node /app/public ./public
 COPY --from=build --chown=node:node /app/prisma ./prisma
+COPY --from=build --chown=node:node /app/data ./data
 COPY --from=build --chown=node:node /app/src/generated ./src/generated
 COPY --from=build --chown=node:node /app/prisma.config.ts /app/next.config.ts /app/package.json /app/docker/docker-entrypoint.sh ./
 USER node

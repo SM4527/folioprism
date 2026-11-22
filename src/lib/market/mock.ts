@@ -3,6 +3,7 @@ import { z } from 'zod';
 import mockFunds from '../../../data/mock-funds.json';
 import mockQuotes from '../../../data/mock-quotes.json';
 import mockStocks from '../../../data/mock-stocks.json';
+import { readLocal } from '../local-data';
 import { ALLOCATION_KEYS, BOND_SECTORS, CREDIT, SECTORS, STYLE_STYLES, SUB_REGIONS } from '../engine/taxonomy';
 import type { FundData } from '../engine/types';
 import type { FundAggregates } from '../engine/xray/types';
@@ -81,9 +82,9 @@ const stockEntry = z.object({
   source,
 });
 
-const funds = z.record(z.string(), fundEntry).parse(mockFunds);
+const funds = z.record(z.string(), fundEntry).parse({ ...mockFunds, ...readLocal('funds.json') });
 const stocks = z.record(z.string(), quoteEntry).parse(mockQuotes);
-const stockFacts = z.record(z.string(), stockEntry).parse(mockStocks);
+const stockFacts = z.record(z.string(), stockEntry).parse({ ...mockStocks, ...readLocal('stocks.json') });
 
 /** Curated direct-stock metadata, or undefined when the stock is not curated. */
 export function curatedStock(ticker: string): StockMetadata | undefined {

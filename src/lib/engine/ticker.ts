@@ -11,8 +11,11 @@ export function groupTicker(ticker: string, merge: boolean): string {
   return merge ? (SHARE_CLASS_MAP[ticker] ?? ticker) : ticker;
 }
 
+/** Extra money markets from the local cash.json, inlined at build by next.config.ts (env in tests). */
+const LOCAL_CASH = (process.env.LOCAL_CASH_TICKERS ?? '').split(',').filter(Boolean);
+
 /** Money-market funds counted as cash and priced at a fixed $1.00 NAV (D-09). */
-export const MONEY_MARKET = new Set(['SPAXX', 'FDRXX', 'VMFXX', 'SWVXX', 'SPRXX']);
+export const MONEY_MARKET = new Set(['SPAXX', 'FDRXX', 'VMFXX', 'SWVXX', 'SPRXX', ...LOCAL_CASH]);
 
 /** A canonical ticker: 1-12 letters, digits or dots (D-08). */
 export const TICKER_RE = /^[A-Z0-9.]{1,12}$/;

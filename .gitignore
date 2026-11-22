@@ -38,3 +38,6 @@ refresh.log
 
 # Planning docs (local only)
 .planning/
+
+# Personal tickers and curated data (never committed)
+/data/local/
