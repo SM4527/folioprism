@@ -95,7 +95,7 @@ Next.js 16, TypeScript, Tailwind v4, shadcn/ui, Recharts, Prisma 7, PostgreSQL 1
 
 ## Built with Claude Code
 
-FolioPrism was designed by Sivanandam Manickavasagam and built with [Claude Code](https://claude.com/claude-code): Claude agents planned, wrote, tested and reviewed the code phase by phase from written specs.
+FolioPrism was designed by Sivanandam Manickavasagam and built with [Claude Code](https://claude.com/claude-code): Claude agents planned, wrote, tested and reviewed the code phase by phase from written specs. The build followed the GSD workflow: research, phased plans, code review and verification for each phase, across two milestones (v1.0 and v1.1).
 
 ## License
 
