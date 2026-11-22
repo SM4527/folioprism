@@ -17,7 +17,7 @@ Single user, single portfolio, no account. Data stays on your machine.
 <details>
 <summary>More screenshots</summary>
 
-![Holdings table](docs/screenshots/holdings.png)
+![Stock analysis: sectors and world regions versus the benchmark](docs/screenshots/stock-analysis.png)
 
 ![Bond analysis](docs/screenshots/bonds.png)
 
