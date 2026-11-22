@@ -87,7 +87,7 @@ Curated data for your own funds and stocks goes in `data/local/`, which is gitig
 - `cash.json`: extra money-market tickers priced at $1.00 and counted as cash
 - `fund-sources.json`: refresh sources for your own funds, same layout as `data/fund-sources.json`
 
-Keep broker exports in `imports/` (gitignored). Enable the pre-push hook with `git config core.hooksPath .githooks`; it blocks files under `data/local/` or `imports/`, CSVs outside `tests/fixtures/`, PNGs outside `docs/screenshots/`, and any ticker from your `data/local/` files that is not in the public fund data.
+Keep broker exports in `imports/` (gitignored). Enable the pre-push hook with `git config core.hooksPath .githooks`; it blocks files under `data/local/` or `imports/`, CSVs outside `tests/fixtures/`, PNGs outside `docs/screenshots/`, database dumps (`.sql`, `.dump`, `.sql.gz`), and any ticker from your `data/local/` files that is not in the public fund data.
 
 ## Personal stack (optional)
 
@@ -98,6 +98,7 @@ To keep real holdings apart from development, run a second, independent stack on
 ./scripts/personal-stop.sh      # stop; data is kept
 ./scripts/personal-restart.sh
 ./scripts/personal-logs.sh
+./scripts/personal-backup.sh    # pg_dump to backups/ (gitignored), plus a copy to BACKUP_DIR if set in .env
 ```
 
 The default scripts never touch the personal stack, and the personal scripts never touch the default one. There is no personal reset script.

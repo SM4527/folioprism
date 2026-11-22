@@ -44,3 +44,6 @@ refresh.log
 
 # Broker exports (never committed)
 /imports/
+
+# Personal database dumps (never committed)
+/backups/

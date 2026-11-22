@@ -8,7 +8,7 @@ The user runs FolioPrism daily with real holdings on a separate personal stack. 
 
 - Develop, verify, test and take screenshots only against the default stack on :8420 with the seeded sample portfolio.
 - Never start, stop, reset, query, screenshot or read logs from the personal stack (`folioprism-personal`, :8430), its containers or its volume (`folioprism_personal_pgdata`), unless the user explicitly asks in the current session, and then only start, stop, restart or health-check it; never read its data, logs, database or screenshots.
-- Never read `data/local/`, `imports/`, `refresh.log` or the personal database, and never copy values from them into code, tests, fixtures, docs, planning notes or commit messages. Scripts may read `data/local/` only to report counts or pass/fail.
+- Never read `data/local/`, `imports/`, `backups/`, `refresh.log` or the personal database, and never copy values from them into code, tests, fixtures, docs, planning notes or commit messages. Scripts may read `data/local/` only to report counts or pass/fail.
 - Private CSVs live only in `imports/` or `data/local/`, never elsewhere in the repo (permission rules cannot stop `Glob` from listing CSV names in other folders).
 - Never record the user's tickers, amounts or holding counts in tracked files. Committed code, tests and `data/local.example/` use made-up tickers.
 - README screenshots come only from the default stack.
@@ -34,7 +34,7 @@ FolioPrism is a self-hosted portfolio look-through ("X-Ray") web app for a singl
 - **Privacy** (mandatory; also in the Privacy section of CLAUDE.md):
   - Develop, verify, test and take screenshots only against the default stack on :8420 with the seeded sample portfolio.
   - Never start, stop, reset, query, screenshot or read logs from the personal stack (`folioprism-personal`, :8430), its containers or its volume (`folioprism_personal_pgdata`), unless the user explicitly asks in the current session, and then only start, stop, restart or health-check it; never read its data, logs, database or screenshots.
-  - Never read `data/local/`, `imports/`, `refresh.log` or the personal database, and never copy values from them into code, tests, fixtures, docs, planning notes or commit messages. Scripts may read `data/local/` only to report counts or pass/fail.
+  - Never read `data/local/`, `imports/`, `backups/`, `refresh.log` or the personal database, and never copy values from them into code, tests, fixtures, docs, planning notes or commit messages. Scripts may read `data/local/` only to report counts or pass/fail.
   - Never record the user's tickers, amounts or holding counts in tracked files. Committed code, tests and `data/local.example/` use made-up tickers.
   - README screenshots come only from the default stack.
   - If a task seems to need real data, stop and ask the user.
