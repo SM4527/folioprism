@@ -62,6 +62,7 @@ const SYSTEM_PROMPT = [
   'Percents are of total portfolio net assets; usd values are US dollars.',
   `topStocks are only the largest underlying stocks, sorted by value, and their sources sum to the row; a stock not in topStocks is smaller than the last one listed, so say it is outside the top ${CHAT_TOP_STOCKS} rather than not held; a source ticker names a holding in summary.holdings, and a source equal to the row ticker is a direct holding.`,
   'prismView is the Prism View (portfolio look-through): asset allocation, sectors, regions, style box, valuation, fees and bonds, portfolio vs benchmark.',
+  'The style box is calculated from holdings; styleBox fallbackTickers are funds shown as a one-cell estimate because under 60% of their holdings could be classified.',
   'For top 10 concentration use summary.top10Pct.',
   'A source has no pct: quote its usd, and its weight inside its fund is its usd over that holding usd in summary.holdings.',
   'Data gaps: summary.asOf is the latest price time; summary.staleTickers have cached or sample prices; summary.unpricedTickers have no price and are left out of every total and percent; coverage.items holdingsAsOf is each fund holdings date and coverage.staleHoldings are funds with holdings older than 180 days.',

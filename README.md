@@ -2,7 +2,7 @@
 
 A self-hosted portfolio web app. Enter your stocks, ETFs and mutual funds; FolioPrism unpacks each fund into its underlying stocks, aggregates the overlap, and shows:
 
-- **Prism View**, a portfolio look-through — asset allocation, 11 sectors in 3 super-sectors, world regions, 3x3 style box, valuation metrics, expense ratio, and bonds, all vs a benchmark (SPY, VTI or AGG).
+- **Prism View**, a portfolio look-through — asset allocation, 11 sectors in 3 super-sectors, world regions, 3x3 style box (calculated from holdings), valuation metrics, expense ratio, and bonds, all vs a benchmark (SPY, VTI or AGG).
 - **Stock Intersection** — the Top 50 underlying stocks with % of portfolio and $ value, each expandable into the funds it comes from. Child rows always sum exactly to the parent.
 - **AI chat (optional)** — ask questions like "what is my top 10 stock concentration?", answered from the current analysis.
 
@@ -74,6 +74,16 @@ npm ci                                                       # once
 ./scripts/refresh-funds.sh && ./scripts/personal-restart.sh  # personal stack
 ```
 
+### Stock facts for the style box
+
+The style box is calculated from each fund's holdings using per-stock market cap, P/E, P/B and dividend yield. The default stack always uses the synthetic `data/stock-facts.sample.json` (made by `scripts/make-sample-facts.ts`), so sample screenshots show illustrative values. For the personal stack, fetch real facts from Yahoo into the gitignored `data/local/stock-facts.json`; they are never committed:
+
+```bash
+npx tsx scripts/refresh-stock-facts.ts --include-local && ./scripts/personal-restart.sh
+```
+
+Without `--include-local` it fetches only the public curated funds' holdings and reads nothing else in `data/local/`.
+
 Optional keys in `.env`: `OPENFIGI_API_KEY` (higher OpenFIGI rate limit for CUSIP/ISIN-to-ticker mapping) and `SEC_USER_AGENT` (SEC asks for a real contact; a placeholder is used otherwise). It can run on a schedule, for example weekly from Windows Task Scheduler via `wsl.exe`, appending output to `refresh.log` (gitignored).
 
 ## Import fund holdings (CSV)
@@ -87,6 +97,7 @@ Curated data for your own funds and stocks goes in `data/local/`, which is gitig
 - `funds.json`: fund entries, same layout as `data/mock-funds.json`
 - `stocks.json`: direct-stock facts, same layout as `data/mock-stocks.json`
 - `cash.json`: extra money-market tickers priced at $1.00 and counted as cash
+- `stock-facts.json`: written by `scripts/refresh-stock-facts.ts`; not edited by hand
 - `fund-sources.json`: refresh sources for your own funds, same layout as `data/fund-sources.json`
 
 Keep broker exports in `imports/` (gitignored). Enable the pre-push hook with `git config core.hooksPath .githooks`; it blocks files under `data/local/`, `imports/` or `backups/`, CSVs outside `tests/fixtures/`, PNGs outside `docs/screenshots/`, database dumps (`.dump`, `.sql.gz`, and `.sql` outside `prisma/migrations/`), and any ticker from your `data/local/` files that is not in the public fund data.

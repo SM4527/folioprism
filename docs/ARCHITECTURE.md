@@ -212,7 +212,11 @@ Curated funds: VTI, FXAIX, FSKAX, VOO, QQQ, SCHD, BND, plus the benchmarks SPY a
 
   Yahoo `sectorWeightings` keys (`realestate`, `consumer_cyclical`, …) are mapped to these 11.
 - **Regions**: the same equity weighting. Country maps to 10 sub-regions, which roll up to 3 groups (Americas, Greater Europe, Greater Asia).
-- **Style box**: per stock, size comes from market cap (Large ≥ $10B, Mid $2B–10B, Small < $2B). Valuation comes from P/B against breakpoints (Value < 2.5, Growth > 5, otherwise Blend), as a documented simplification. Funds use curated `styleBox` if present, else their look-through constituents re-scaled to 100%. The result is normalized to 100% of equity.
+- **Style box** (calculated from holdings, `engine/prism-view/classify.ts` and `fund-style.ts`):
+  - Stock facts (market cap, P/E, P/B, dividend yield) come from one universe: the synthetic `data/stock-facts.sample.json` on the default stack, or `data/local/stock-facts.json` (Yahoo, gitignored) on the personal stack. They are never merged.
+  - Per stock: size from market cap (Large ≥ $10B, Mid $2B–10B, Small < $2B). Within each size band, across the whole universe, each of earnings yield (P/E > 0), book yield (P/B ≥ 0.05) and dividend yield is ranked by percentile. The mean of the available ranks, split into count-based thirds, gives Value, Blend or Growth. A stock lands in the same cell in every fund.
+  - Per fund: constituent weights are summed per cell, over the constituents actually analysed (uploads included). Unclassified weight stays in Not classified and is never scaled up. Below 60% classified weight the fund falls back to one cell from its average market cap and P/B, and is listed in `fallbackTickers`.
+  - Direct stocks use their facts cell's style when present, else Value < 2.5 P/B, Growth > 5, otherwise Blend.
 - **Valuation metrics**: weighted harmonic mean for P/E, P/B, P/S, P/CF (the standard convention, robust to outliers). Average market cap uses a weighted geometric mean. Each is computed for both the portfolio and the benchmark.
 - **Bonds**: present only if bond weight > 0. Bond-weighted sectors, credit quality (AAA, AA, A, BBB, BB, B, Below B, NR), and weighted effective duration and maturity.
 

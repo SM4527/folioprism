@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import { useId } from 'react';
 import type { SerializedFees, SerializedStyle, SerializedPrismView } from '@/lib/engine/prism-view/types';
 import { STYLE_SIZES, STYLE_STYLES, type StyleSize, type StyleStyle } from '@/lib/engine/taxonomy';
@@ -8,11 +9,10 @@ import { CardFrame } from '@/components/prism-view/card-frame';
 import { heaviestIndex, rampStep, type RampInk } from '@/components/prism-view/ramp';
 
 const STYLE_RULE =
-  'Approximate. Size by market cap: Large $10B and up, Mid $2B to $10B, Small under $2B. ' +
-  'Style by price/book: Value under 2.5, Growth over 5, Blend in between. ' +
-  'Missing or negative P/B counts as Blend. Missing market cap counts as Not classified. ' +
-  'Funds use their published style box where available. ' +
-  'Funds without one are placed in a single cell by their market cap and P/B.';
+  'Calculated from holdings. Size by market cap: Large $10B and up, Mid $2B to $10B, Small under $2B. ' +
+  'Value, Blend or Growth by thirds of each stock’s earnings, book and dividend yields, ranked within its size band. ' +
+  'A fund is the sum of its holdings; holdings without data count as Not classified. ' +
+  'Funds with under 60% of holdings classified use one cell from their average market cap and P/B.';
 
 const SIZE_LABEL: Record<StyleSize, string> = { large: 'Large', mid: 'Mid', small: 'Small' };
 const STYLE_LABEL: Record<StyleStyle, string> = { value: 'Value', blend: 'Blend', growth: 'Growth' };
@@ -38,10 +38,10 @@ interface StyleCardProps {
   busy: boolean;
 }
 
-/** Investment Style: approximate style box, valuation and fees, portfolio vs benchmark (XRAY-05..07). */
+/** Investment Style: style box calculated from holdings, valuation and fees, portfolio vs benchmark (XRAY-05..07). */
 export function StyleCard({ styleBox, valuation, fees, benchmark, busy }: StyleCardProps) {
   return (
-    <CardFrame title="Investment Style" aside={<ApproximateChip />} busy={busy}>
+    <CardFrame title="Investment Style" aside={<MethodChip />} busy={busy}>
       {styleBox.portfolio === null ? (
         <div className="py-6 text-[13px] leading-5">
           <p className="font-semibold">No stock exposure</p>
@@ -68,7 +68,7 @@ export function StyleCard({ styleBox, valuation, fees, benchmark, busy }: StyleC
   );
 }
 
-function ApproximateChip() {
+function MethodChip() {
   const id = useId();
   return (
     <>
@@ -79,7 +79,7 @@ function ApproximateChip() {
         aria-describedby={id}
         className="h-4 rounded-[4px] bg-transparent px-1 py-0 text-[11px] leading-4 font-normal text-muted-foreground"
       >
-        Approximate
+        Calculated from holdings
       </Badge>
       <span id={id} className="sr-only">
         {STYLE_RULE}
@@ -152,7 +152,12 @@ function StyleBox({ portfolio, bmark, benchmark }: StyleBoxProps) {
                   %
                 </p>
               )}
-              <p className="mt-1">% of equity</p>
+              <p className="mt-1">
+                % of equity · {new Decimal(100).minus(portfolio.notClassified).toFixed(1)}% classified
+              </p>
+              {portfolio.fallbackTickers.length > 0 && (
+                <p className="mt-1 max-w-[216px]">{portfolio.fallbackTickers.join(', ')}: single-cell estimate (low coverage)</p>
+              )}
             </td>
           </tr>
         </tfoot>
