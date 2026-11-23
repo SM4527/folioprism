@@ -2,7 +2,7 @@ import Decimal from 'decimal.js';
 import { STYLE_SIZES, STYLE_STYLES, type StyleSize, type StyleStyle } from '../taxonomy';
 import { sizeOf } from './classify';
 import type { StyleResult, PrismViewInput } from './types';
-import { display, equityShare, notClassified, scaled, weights } from './weights';
+import { display, equityShare, notClassified, weights } from './weights';
 
 const CELLS = STYLE_SIZES.flatMap((size) => STYLE_STYLES.map((style) => ({ size, style })));
 
@@ -28,8 +28,7 @@ function cellsOf(ticker: string, kind: string, input: PrismViewInput): Decimal[]
   const fund = kind === 'FUND' ? input.funds[ticker] : null;
   if (fund?.styleBox) {
     const box = fund.styleBox;
-    const shares = scaled(Object.fromEntries(CELLS.map((c, i) => [i, box[c.size][c.style]])));
-    return shares ? Object.values(shares) : cells;
+    return CELLS.map((c) => new Decimal(box[c.size][c.style]));
   }
   const facts = fund ? fund.valuation : input.stocks[ticker];
   const explicit = fund ? null : input.stocks[ticker]?.style;

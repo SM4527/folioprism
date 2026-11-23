@@ -47,7 +47,8 @@ const aggregateBlocks = {
   assetAllocation: percents(ALLOCATION_KEYS).nullable(),
   sectors: percents(SECTORS).nullable(),
   regions: percents(SUB_REGIONS).nullable(),
-  styleBox: z.object({ large: styleRow, mid: styleRow, small: styleRow }).nullable(),
+  /** Optional and superseded: the style box is calculated from holdings (stock-facts) at analysis time. */
+  styleBox: z.object({ large: styleRow, mid: styleRow, small: styleRow }).nullable().optional(),
   valuation: z.object({ marketCapMil: num, pe: num, pb: num, ps: num, pcf: num }).nullable(),
   expenseRatioPct: num,
   bond: z
@@ -119,7 +120,7 @@ export function curatedAggregates(ticker: string): FundAggregates | undefined {
   if (!fund) return undefined;
   const { assetAllocation, sectors, regions, styleBox, valuation, expenseRatioPct, bond } = fund;
   const equityPct = assetAllocation && Decimal.sum(assetAllocation.usStock, assetAllocation.nonUsStock).toString();
-  return { assetAllocation, equityPct, sectors, regions, styleBox, valuation, expenseRatioPct, bond };
+  return { assetAllocation, equityPct, sectors, regions, styleBox: styleBox ?? null, valuation, expenseRatioPct, bond };
 }
 
 /** The last-resort sample quote, always flagged stale (D-09). */

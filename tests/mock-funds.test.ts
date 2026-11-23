@@ -72,25 +72,24 @@ describe('curatedFund', () => {
 describe('aggregate blocks', () => {
   const entries = Object.entries(mockFunds as Record<string, Record<string, unknown>>);
   const near100 = (n: number) => expect(Math.abs(n - 100)).toBeLessThanOrEqual(0.5);
-  const BLOCKS = ['assetAllocation', 'sectors', 'regions', 'styleBox', 'valuation', 'expenseRatioPct', 'bond'];
+  const BLOCKS = ['assetAllocation', 'sectors', 'regions', 'valuation', 'expenseRatioPct', 'bond'];
 
   it.each(entries)('%s raw aggregates sum to 100 where present', (_t, fund) => {
     for (const b of ['assetAllocation', 'sectors', 'regions'])
       if (fund[b]) near100(total(fund[b] as Record<string, number>));
-    if (fund.styleBox) {
-      const cells = Object.values(fund.styleBox as Record<string, Record<string, number>>).flatMap((row) => Object.values(row));
-      expect(cells).toHaveLength(9);
-      expect(Math.abs(cells.reduce((s, v) => s + v, 0) - 100)).toBeLessThanOrEqual(2);
-    }
     const bond = fund.bond as { sectors: Record<string, number> | null; creditQuality: Record<string, number> | null } | null;
     if (bond?.sectors) near100(total(bond.sectors));
     if (bond?.creditQuality) near100(total(bond.creditQuality));
   });
 
-  it.each(entries)('%s cites a source for a non-null styleBox', (_t, fund) => {
-    if (!fund.styleBox) return;
-    const sources = fund.aggregatesSource as { blocks: string[] }[];
-    expect(sources.some((s) => s.blocks.includes('styleBox'))).toBe(true);
+  it.each(entries)('%s stores no styleBox and cites no morningstar.com source (calculated from holdings)', (_t, fund) => {
+    expect(fund).not.toHaveProperty('styleBox');
+    const sources = fund.aggregatesSource as { url: string; blocks: string[] }[];
+    expect(sources.filter((s) => /morningstar\.com/i.test(s.url) || s.blocks.includes('styleBox'))).toEqual([]);
+  });
+
+  it('still parses a local fund entry that keeps a styleBox key (data/local.example)', () => {
+    expect(curatedAggregates('ZZBIL')).not.toBeNull();
   });
 
   it.each(entries)('%s has every block key, as a value or explicit null (D-02)', (_t, fund) => {

@@ -1,0 +1,1898 @@
+{
+ "AAPL": {
+  "marketCapMil": 3522960,
+  "pe": 37.37,
+  "pb": 5.01,
+  "divYieldPct": 1.04
+ },
+ "ABBV": {
+  "marketCapMil": 368580,
+  "pe": 18.83,
+  "pb": 1.12,
+  "divYieldPct": 0
+ },
+ "ABNB": {
+  "marketCapMil": 47100,
+  "pe": 10.24,
+  "pb": 19.58,
+  "divYieldPct": 2.49
+ },
+ "ABT": {
+  "marketCapMil": 131040,
+  "pe": 41.17,
+  "pb": 4.68,
+  "divYieldPct": 2.44
+ },
+ "ACN": {
+  "marketCapMil": 63360,
+  "pe": 10.97,
+  "pb": 10.03,
+  "divYieldPct": 0
+ },
+ "ADBE": {
+  "marketCapMil": 68700,
+  "pe": 15.98,
+  "pb": 5.33,
+  "divYieldPct": 0
+ },
+ "ADI": {
+  "marketCapMil": 160380,
+  "pe": 27.93,
+  "pb": 4.37,
+  "divYieldPct": 2.94
+ },
+ "ADM": {
+  "marketCapMil": 30540,
+  "pe": 52.36,
+  "pb": 7.09,
+  "divYieldPct": 2.68
+ },
+ "ADP": {
+  "marketCapMil": 74220,
+  "pe": 30.91,
+  "pb": 7.39,
+  "divYieldPct": 0.05
+ },
+ "ADSK": {
+  "marketCapMil": 34020,
+  "pe": 17.74,
+  "pb": 0.85,
+  "divYieldPct": 3.92
+ },
+ "AEP": {
+  "marketCapMil": 61680,
+  "pe": 54.65,
+  "pb": 3.95,
+  "divYieldPct": 3.85
+ },
+ "AFG": {
+  "marketCapMil": 7740,
+  "pe": 45.4,
+  "pb": 2.23,
+  "divYieldPct": 3.19
+ },
+ "AGM": {
+  "marketCapMil": 1440,
+  "pe": 22.94,
+  "pb": 16.42,
+  "divYieldPct": 0.51
+ },
+ "AJG": {
+  "marketCapMil": 48900,
+  "pe": 13.86,
+  "pb": 17.16,
+  "divYieldPct": 1.93
+ },
+ "ALAB": {
+  "marketCapMil": 61740,
+  "pe": 15.54,
+  "pb": 15.26,
+  "divYieldPct": 1.09
+ },
+ "ALL": {
+  "marketCapMil": 50760,
+  "pe": 13.66,
+  "pb": 0.95,
+  "divYieldPct": 1.81
+ },
+ "ALV": {
+  "marketCapMil": 5000,
+  "pe": 9.51,
+  "pb": 10.1,
+  "divYieldPct": 2.4
+ },
+ "AMAT": {
+  "marketCapMil": 475860,
+  "pe": 37.47,
+  "pb": 16.73,
+  "divYieldPct": 2.19
+ },
+ "AMD": {
+  "marketCapMil": 785220,
+  "pe": 43.25,
+  "pb": 7.4,
+  "divYieldPct": 0
+ },
+ "AMGN": {
+  "marketCapMil": 162000,
+  "pe": 9.27,
+  "pb": 7.32,
+  "divYieldPct": 3.78
+ },
+ "AMSF": {
+  "marketCapMil": 540,
+  "pe": 9.4,
+  "pb": 3.18,
+  "divYieldPct": 0.13
+ },
+ "AMT": {
+  "marketCapMil": 63180,
+  "pe": 24.34,
+  "pb": 1.18,
+  "divYieldPct": 1.92
+ },
+ "AMZN": {
+  "marketCapMil": 1912740,
+  "pe": 35.09,
+  "pb": 2.21,
+  "divYieldPct": 0.14
+ },
+ "ANET": {
+  "marketCapMil": 150720,
+  "pe": 58.09,
+  "pb": 1.02,
+  "divYieldPct": 3.22
+ },
+ "AON": {
+  "marketCapMil": 55800,
+  "pe": 23.15,
+  "pb": 1.64,
+  "divYieldPct": 0
+ },
+ "APA": {
+  "marketCapMil": 9540,
+  "pe": 10.67,
+  "pb": 2.38,
+  "divYieldPct": 0.68
+ },
+ "APAM": {
+  "marketCapMil": 1920,
+  "pe": 17.1,
+  "pb": 15.51,
+  "divYieldPct": 0.64
+ },
+ "APD": {
+  "marketCapMil": 54120,
+  "pe": 55.55,
+  "pb": 1.86,
+  "divYieldPct": 0
+ },
+ "APH": {
+  "marketCapMil": 179820,
+  "pe": 9.76,
+  "pb": 9.14,
+  "divYieldPct": 1.94
+ },
+ "APO": {
+  "marketCapMil": 39600,
+  "pe": 45.97,
+  "pb": 4.37,
+  "divYieldPct": 2.18
+ },
+ "APP": {
+  "marketCapMil": 117540,
+  "pe": 30.98,
+  "pb": 19.18,
+  "divYieldPct": 0
+ },
+ "ARES": {
+  "marketCapMil": 19440,
+  "pe": 9.48,
+  "pb": 1.22,
+  "divYieldPct": 3.15
+ },
+ "ARM": {
+  "marketCapMil": 119712,
+  "pe": 9.78,
+  "pb": 4.44,
+  "divYieldPct": 0
+ },
+ "ASML": {
+  "marketCapMil": 197056,
+  "pe": 15.08,
+  "pb": 1.58,
+  "divYieldPct": 2.39
+ },
+ "AVGO": {
+  "marketCapMil": 1482600,
+  "pe": 9.47,
+  "pb": 1.93,
+  "divYieldPct": 0.66
+ },
+ "AXON": {
+  "marketCapMil": 35580,
+  "pe": 45.28,
+  "pb": 0.84,
+  "divYieldPct": 0.96
+ },
+ "AXP": {
+  "marketCapMil": 153060,
+  "pe": 33.3,
+  "pb": 2.41,
+  "divYieldPct": 3.88
+ },
+ "BA": {
+  "marketCapMil": 141480,
+  "pe": 46.06,
+  "pb": 0.82,
+  "divYieldPct": 0.49
+ },
+ "BAC": {
+  "marketCapMil": 301680,
+  "pe": 12.11,
+  "pb": 2.73,
+  "divYieldPct": 2.14
+ },
+ "BAH": {
+  "marketCapMil": 6000,
+  "pe": 14.3,
+  "pb": 3.46,
+  "divYieldPct": 2.3
+ },
+ "BANR": {
+  "marketCapMil": 1800,
+  "pe": 23.41,
+  "pb": 1.21,
+  "divYieldPct": 3.24
+ },
+ "BBY": {
+  "marketCapMil": 12600,
+  "pe": 39.36,
+  "pb": 4.15,
+  "divYieldPct": 0
+ },
+ "BE": {
+  "marketCapMil": 67800,
+  "pe": 23.95,
+  "pb": 1.32,
+  "divYieldPct": 1.51
+ },
+ "BKE": {
+  "marketCapMil": 1080,
+  "pe": 41.32,
+  "pb": 6.46,
+  "divYieldPct": 2.71
+ },
+ "BKNG": {
+  "marketCapMil": 114480,
+  "pe": 21.12,
+  "pb": 12.36,
+  "divYieldPct": 2.62
+ },
+ "BKR": {
+  "marketCapMil": 45660,
+  "pe": 8.26,
+  "pb": 4.36,
+  "divYieldPct": 0.92
+ },
+ "BLK": {
+  "marketCapMil": 111360,
+  "pe": 42.22,
+  "pb": 1.72,
+  "divYieldPct": 3.66
+ },
+ "BMY": {
+  "marketCapMil": 97560,
+  "pe": 9.6,
+  "pb": 17.46,
+  "divYieldPct": 0.09
+ },
+ "BNY": {
+  "marketCapMil": 82260,
+  "pe": 12.56,
+  "pb": 1.14,
+  "divYieldPct": 3.81
+ },
+ "BR": {
+  "marketCapMil": 13140,
+  "pe": 12.33,
+  "pb": 2.69,
+  "divYieldPct": 3.98
+ },
+ "BRK.B": {
+  "marketCapMil": 746460,
+  "pe": 12.76,
+  "pb": 7.13,
+  "divYieldPct": 2.15
+ },
+ "BSX": {
+  "marketCapMil": 52560,
+  "pe": 16.97,
+  "pb": 2.13,
+  "divYieldPct": 3.16
+ },
+ "BX": {
+  "marketCapMil": 72480,
+  "pe": 36.6,
+  "pb": 15.05,
+  "divYieldPct": 0.05
+ },
+ "C": {
+  "marketCapMil": 182160,
+  "pe": 49.36,
+  "pb": 1.52,
+  "divYieldPct": 3.37
+ },
+ "CAT": {
+  "marketCapMil": 406560,
+  "pe": 23.09,
+  "pb": 17.3,
+  "divYieldPct": 0
+ },
+ "CB": {
+  "marketCapMil": 98580,
+  "pe": 30.25,
+  "pb": 12.84,
+  "divYieldPct": 0.75
+ },
+ "CCBG": {
+  "marketCapMil": 540,
+  "pe": 35.69,
+  "pb": 1.67,
+  "divYieldPct": 0
+ },
+ "CCEP": {
+  "marketCapMil": 77664,
+  "pe": 27.11,
+  "pb": 1.21,
+  "divYieldPct": 2.98
+ },
+ "CDNS": {
+  "marketCapMil": 85800,
+  "pe": 28.57,
+  "pb": 2.06,
+  "divYieldPct": 1.03
+ },
+ "CEG": {
+  "marketCapMil": 66780,
+  "pe": 17.69,
+  "pb": 4.3,
+  "divYieldPct": 0.27
+ },
+ "CHCO": {
+  "marketCapMil": 1500,
+  "pe": 8.39,
+  "pb": 4.06,
+  "divYieldPct": 3.08
+ },
+ "CI": {
+  "marketCapMil": 60480,
+  "pe": 13.59,
+  "pb": 3.18,
+  "divYieldPct": 1.94
+ },
+ "CIEN": {
+  "marketCapMil": 57480,
+  "pe": 47.69,
+  "pb": 2.91,
+  "divYieldPct": 1.4
+ },
+ "CINF": {
+  "marketCapMil": 23880,
+  "pe": 21.83,
+  "pb": 4.53,
+  "divYieldPct": 0
+ },
+ "CL": {
+  "marketCapMil": 60780,
+  "pe": 14.52,
+  "pb": 1.18,
+  "divYieldPct": 2.93
+ },
+ "CMCSA": {
+  "marketCapMil": 72480,
+  "pe": 55.68,
+  "pb": 1.6,
+  "divYieldPct": 3.32
+ },
+ "CME": {
+  "marketCapMil": 66300,
+  "pe": 35.16,
+  "pb": 8.85,
+  "divYieldPct": 2.77
+ },
+ "CMI": {
+  "marketCapMil": 81600,
+  "pe": 10.18,
+  "pb": 5.12,
+  "divYieldPct": 0
+ },
+ "CNA": {
+  "marketCapMil": 5000,
+  "pe": 20.34,
+  "pb": 13.56,
+  "divYieldPct": 0
+ },
+ "CNS": {
+  "marketCapMil": 1800,
+  "pe": 50.85,
+  "pb": 6.26,
+  "divYieldPct": 1.63
+ },
+ "COF": {
+  "marketCapMil": 103500,
+  "pe": 29.43,
+  "pb": 3.64,
+  "divYieldPct": 3.22
+ },
+ "COHR": {
+  "marketCapMil": 63960,
+  "pe": 20.22,
+  "pb": 10.37,
+  "divYieldPct": 2.9
+ },
+ "COLB": {
+  "marketCapMil": 7680,
+  "pe": 19.15,
+  "pb": 5.67,
+  "divYieldPct": 0.88
+ },
+ "COP": {
+  "marketCapMil": 105060,
+  "pe": 38.69,
+  "pb": 0.82,
+  "divYieldPct": 0
+ },
+ "COR": {
+  "marketCapMil": 43380,
+  "pe": 36.2,
+  "pb": 1.02,
+  "divYieldPct": 2.15
+ },
+ "COST": {
+  "marketCapMil": 344040,
+  "pe": 27.64,
+  "pb": 3.07,
+  "divYieldPct": 0
+ },
+ "CPF": {
+  "marketCapMil": 780,
+  "pe": 30.39,
+  "pb": 1.75,
+  "divYieldPct": 2.09
+ },
+ "CPRT": {
+  "marketCapMil": 20280,
+  "pe": 9.11,
+  "pb": 14.78,
+  "divYieldPct": 0
+ },
+ "CRH": {
+  "marketCapMil": 59280,
+  "pe": 24.21,
+  "pb": 8.65,
+  "divYieldPct": 1.31
+ },
+ "CRM": {
+  "marketCapMil": 101040,
+  "pe": 31.41,
+  "pb": 1.22,
+  "divYieldPct": 1.14
+ },
+ "CRWD": {
+  "marketCapMil": 153000,
+  "pe": 12.79,
+  "pb": 1.74,
+  "divYieldPct": 1.03
+ },
+ "CRWV": {
+  "marketCapMil": 31380,
+  "pe": 19.3,
+  "pb": 0.93,
+  "divYieldPct": 0
+ },
+ "CSCO": {
+  "marketCapMil": 345420,
+  "pe": 15.43,
+  "pb": 0.84,
+  "divYieldPct": 1.8
+ },
+ "CSX": {
+  "marketCapMil": 73200,
+  "pe": 48.29,
+  "pb": 2.38,
+  "divYieldPct": 0
+ },
+ "CTAS": {
+  "marketCapMil": 47940,
+  "pe": 37.94,
+  "pb": 1.64,
+  "divYieldPct": 0
+ },
+ "CVBF": {
+  "marketCapMil": 3120,
+  "pe": 22.65,
+  "pb": 1.5,
+  "divYieldPct": 0.7
+ },
+ "CVS": {
+  "marketCapMil": 109380,
+  "pe": 33.38,
+  "pb": 6.2,
+  "divYieldPct": 3.28
+ },
+ "CVX": {
+  "marketCapMil": 259980,
+  "pe": 18.41,
+  "pb": 3.81,
+  "divYieldPct": 0.05
+ },
+ "CWEN": {
+  "marketCapMil": 3420,
+  "pe": 14.72,
+  "pb": 2.45,
+  "divYieldPct": 1.77
+ },
+ "D": {
+  "marketCapMil": 49800,
+  "pe": 10.61,
+  "pb": 11.07,
+  "divYieldPct": 0
+ },
+ "DASH": {
+  "marketCapMil": 56640,
+  "pe": 22.01,
+  "pb": 6.86,
+  "divYieldPct": 1.65
+ },
+ "DDOG": {
+  "marketCapMil": 71400,
+  "pe": 33.69,
+  "pb": 18.45,
+  "divYieldPct": 2.85
+ },
+ "DE": {
+  "marketCapMil": 134820,
+  "pe": 27.75,
+  "pb": 1.95,
+  "divYieldPct": 3.4
+ },
+ "DELL": {
+  "marketCapMil": 104640,
+  "pe": 18.71,
+  "pb": 2.59,
+  "divYieldPct": 3.12
+ },
+ "DHR": {
+  "marketCapMil": 100560,
+  "pe": 12.37,
+  "pb": 4.15,
+  "divYieldPct": 2.05
+ },
+ "DINO": {
+  "marketCapMil": 8820,
+  "pe": 40.16,
+  "pb": 10.47,
+  "divYieldPct": 0.5
+ },
+ "DIS": {
+  "marketCapMil": 138540,
+  "pe": 19.81,
+  "pb": 5.15,
+  "divYieldPct": 2.88
+ },
+ "DLR": {
+  "marketCapMil": 52320,
+  "pe": 36.2,
+  "pb": 1.41,
+  "divYieldPct": 1.53
+ },
+ "DRI": {
+  "marketCapMil": 19560,
+  "pe": 42.36,
+  "pb": 2.12,
+  "divYieldPct": 1.93
+ },
+ "DUK": {
+  "marketCapMil": 81660,
+  "pe": 41.51,
+  "pb": 1.41,
+  "divYieldPct": 0
+ },
+ "DVN": {
+  "marketCapMil": 39480,
+  "pe": 55.42,
+  "pb": 15.65,
+  "divYieldPct": 2.6
+ },
+ "DXCM": {
+  "marketCapMil": 21540,
+  "pe": 8.13,
+  "pb": 3.99,
+  "divYieldPct": 1
+ },
+ "EBF": {
+  "marketCapMil": 420,
+  "pe": 17.1,
+  "pb": 19.85,
+  "divYieldPct": 0.27
+ },
+ "ECL": {
+  "marketCapMil": 58500,
+  "pe": 41.69,
+  "pb": 2.55,
+  "divYieldPct": 0
+ },
+ "ELV": {
+  "marketCapMil": 66720,
+  "pe": 17.94,
+  "pb": 0.86,
+  "divYieldPct": 0
+ },
+ "EMR": {
+  "marketCapMil": 66480,
+  "pe": 43.67,
+  "pb": 4.38,
+  "divYieldPct": 0.63
+ },
+ "EOG": {
+  "marketCapMil": 57300,
+  "pe": 12.89,
+  "pb": 2.06,
+  "divYieldPct": 1.64
+ },
+ "EQIX": {
+  "marketCapMil": 85200,
+  "pe": 12.28,
+  "pb": 13.86,
+  "divYieldPct": 0.52
+ },
+ "ERIE": {
+  "marketCapMil": 5040,
+  "pe": 34.85,
+  "pb": 16.04,
+  "divYieldPct": 3.41
+ },
+ "ETD": {
+  "marketCapMil": 480,
+  "pe": 36.58,
+  "pb": 3.28,
+  "divYieldPct": 2.75
+ },
+ "ETN": {
+  "marketCapMil": 137160,
+  "pe": 22.52,
+  "pb": 10.69,
+  "divYieldPct": 1.79
+ },
+ "EWBC": {
+  "marketCapMil": 14640,
+  "pe": 45.11,
+  "pb": 1.14,
+  "divYieldPct": 0
+ },
+ "EXC": {
+  "marketCapMil": 39540,
+  "pe": 29.94,
+  "pb": 3.8,
+  "divYieldPct": 1.62
+ },
+ "F": {
+  "marketCapMil": 45120,
+  "pe": 12.82,
+  "pb": 7.55,
+  "divYieldPct": 2.9
+ },
+ "FANG": {
+  "marketCapMil": 28680,
+  "pe": 9.42,
+  "pb": 2.21,
+  "divYieldPct": 3.57
+ },
+ "FAST": {
+  "marketCapMil": 45720,
+  "pe": 8.19,
+  "pb": 8.42,
+  "divYieldPct": 1.62
+ },
+ "FCX": {
+  "marketCapMil": 74940,
+  "pe": 15.53,
+  "pb": 1.48,
+  "divYieldPct": 1.89
+ },
+ "FDX": {
+  "marketCapMil": 55740,
+  "pe": 46.91,
+  "pb": 13.72,
+  "divYieldPct": 1.52
+ },
+ "FER": {
+  "marketCapMil": 67712,
+  "pe": 49.93,
+  "pb": 1.62,
+  "divYieldPct": 2.26
+ },
+ "FHI": {
+  "marketCapMil": 3300,
+  "pe": 48.29,
+  "pb": 4.66,
+  "divYieldPct": 1.47
+ },
+ "FITB": {
+  "marketCapMil": 42360,
+  "pe": 24.33,
+  "pb": 2.61,
+  "divYieldPct": 1.19
+ },
+ "FIX": {
+  "marketCapMil": 57840,
+  "pe": 17.92,
+  "pb": 5.17,
+  "divYieldPct": 0.44
+ },
+ "FLO": {
+  "marketCapMil": 1260,
+  "pe": 13.56,
+  "pb": 4.32,
+  "divYieldPct": 3.25
+ },
+ "FNF": {
+  "marketCapMil": 10020,
+  "pe": 10.68,
+  "pb": 6.59,
+  "divYieldPct": 3.96
+ },
+ "FTNT": {
+  "marketCapMil": 79320,
+  "pe": 57.75,
+  "pb": 1.3,
+  "divYieldPct": 2.6
+ },
+ "GABC": {
+  "marketCapMil": 1320,
+  "pe": 23.52,
+  "pb": 1.37,
+  "divYieldPct": 1.01
+ },
+ "GD": {
+  "marketCapMil": 75420,
+  "pe": 37.86,
+  "pb": 15.42,
+  "divYieldPct": 0
+ },
+ "GE": {
+  "marketCapMil": 323220,
+  "pe": 9.52,
+  "pb": 2.44,
+  "divYieldPct": 2.32
+ },
+ "GEHC": {
+  "marketCapMil": 24120,
+  "pe": 51.87,
+  "pb": 10.83,
+  "divYieldPct": 0.56
+ },
+ "GEV": {
+  "marketCapMil": 261720,
+  "pe": 33.01,
+  "pb": 6.45,
+  "divYieldPct": 1.51
+ },
+ "GILD": {
+  "marketCapMil": 130020,
+  "pe": 8.88,
+  "pb": 1.9,
+  "divYieldPct": 0
+ },
+ "GIS": {
+  "marketCapMil": 15420,
+  "pe": 47.69,
+  "pb": 13.99,
+  "divYieldPct": 1.38
+ },
+ "GLW": {
+  "marketCapMil": 163680,
+  "pe": 17.65,
+  "pb": 3.17,
+  "divYieldPct": 0.16
+ },
+ "GM": {
+  "marketCapMil": 57600,
+  "pe": 40.14,
+  "pb": 3.37,
+  "divYieldPct": 0
+ },
+ "GOOG": {
+  "marketCapMil": 1368000,
+  "pe": 10.95,
+  "pb": 1.79,
+  "divYieldPct": 0
+ },
+ "GOOGL": {
+  "marketCapMil": 1737300,
+  "pe": 35.38,
+  "pb": 2.28,
+  "divYieldPct": 3.3
+ },
+ "GS": {
+  "marketCapMil": 229440,
+  "pe": 25.75,
+  "pb": 14.11,
+  "divYieldPct": 1.98
+ },
+ "GWW": {
+  "marketCapMil": 50580,
+  "pe": 26.27,
+  "pb": 1.69,
+  "divYieldPct": 2.12
+ },
+ "HAFC": {
+  "marketCapMil": 780,
+  "pe": 24.94,
+  "pb": 5.87,
+  "divYieldPct": 2.58
+ },
+ "HCA": {
+  "marketCapMil": 50220,
+  "pe": 15.77,
+  "pb": 15.42,
+  "divYieldPct": 2.48
+ },
+ "HD": {
+  "marketCapMil": 291480,
+  "pe": 36.79,
+  "pb": 0.84,
+  "divYieldPct": 2.12
+ },
+ "HLT": {
+  "marketCapMil": 62340,
+  "pe": 28.12,
+  "pb": 2.79,
+  "divYieldPct": 3.5
+ },
+ "HON": {
+  "marketCapMil": 58800,
+  "pe": 54.8,
+  "pb": 4.9,
+  "divYieldPct": 3.37
+ },
+ "HONA": {
+  "marketCapMil": 58080,
+  "pe": 24.41,
+  "pb": 1.38,
+  "divYieldPct": 0
+ },
+ "HOOD": {
+  "marketCapMil": 65760,
+  "pe": 13.71,
+  "pb": 19.44,
+  "divYieldPct": 1.08
+ },
+ "HPE": {
+  "marketCapMil": 49620,
+  "pe": 23.7,
+  "pb": 1.41,
+  "divYieldPct": 0
+ },
+ "HSY": {
+  "marketCapMil": 21540,
+  "pe": 18.79,
+  "pb": 2.55,
+  "divYieldPct": 1.87
+ },
+ "HWM": {
+  "marketCapMil": 89160,
+  "pe": 51.77,
+  "pb": 6.57,
+  "divYieldPct": 3.52
+ },
+ "IBCP": {
+  "marketCapMil": 600,
+  "pe": 19.58,
+  "pb": 5.29,
+  "divYieldPct": 1.49
+ },
+ "IBM": {
+  "marketCapMil": 219120,
+  "pe": 36.46,
+  "pb": 5,
+  "divYieldPct": 1.81
+ },
+ "ICE": {
+  "marketCapMil": 57720,
+  "pe": 56.93,
+  "pb": 6.68,
+  "divYieldPct": 0.78
+ },
+ "IDXX": {
+  "marketCapMil": 34440,
+  "pe": 31.36,
+  "pb": 11.24,
+  "divYieldPct": 0
+ },
+ "INTC": {
+  "marketCapMil": 465420,
+  "pe": 11.11,
+  "pb": 2.17,
+  "divYieldPct": 0.76
+ },
+ "INTU": {
+  "marketCapMil": 59160,
+  "pe": 19.67,
+  "pb": 3.43,
+  "divYieldPct": 1.2
+ },
+ "IPAR": {
+  "marketCapMil": 1620,
+  "pe": 29.99,
+  "pb": 0.85,
+  "divYieldPct": 0
+ },
+ "ISRG": {
+  "marketCapMil": 116760,
+  "pe": 9.99,
+  "pb": 12.1,
+  "divYieldPct": 3.27
+ },
+ "ITW": {
+  "marketCapMil": 61260,
+  "pe": 8.18,
+  "pb": 4.82,
+  "divYieldPct": 3.54
+ },
+ "JCI": {
+  "marketCapMil": 73920,
+  "pe": 8.73,
+  "pb": 12.48,
+  "divYieldPct": 1.34
+ },
+ "JNJ": {
+  "marketCapMil": 506820,
+  "pe": 48.1,
+  "pb": 16.08,
+  "divYieldPct": 3.16
+ },
+ "JPM": {
+  "marketCapMil": 671220,
+  "pe": 19.62,
+  "pb": 4.81,
+  "divYieldPct": 1.43
+ },
+ "KDP": {
+  "marketCapMil": 35100,
+  "pe": 42.12,
+  "pb": 8.51,
+  "divYieldPct": 0
+ },
+ "KFY": {
+  "marketCapMil": 2880,
+  "pe": 30.7,
+  "pb": 0.95,
+  "divYieldPct": 1.61
+ },
+ "KKR": {
+  "marketCapMil": 51240,
+  "pe": 41.41,
+  "pb": 0.89,
+  "divYieldPct": 2.92
+ },
+ "KLAC": {
+  "marketCapMil": 326700,
+  "pe": 13.5,
+  "pb": 6.85,
+  "divYieldPct": 3.39
+ },
+ "KMB": {
+  "marketCapMil": 30180,
+  "pe": 43.22,
+  "pb": 5.62,
+  "divYieldPct": 3.77
+ },
+ "KMI": {
+  "marketCapMil": 50100,
+  "pe": 46.5,
+  "pb": 3.34,
+  "divYieldPct": 3.86
+ },
+ "KO": {
+  "marketCapMil": 231840,
+  "pe": 23.48,
+  "pb": 1.66,
+  "divYieldPct": 1.2
+ },
+ "LIN": {
+  "marketCapMil": 198960,
+  "pe": 21.77,
+  "pb": 16.59,
+  "divYieldPct": 3.54
+ },
+ "LITE": {
+  "marketCapMil": 55320,
+  "pe": 17.05,
+  "pb": 6.14,
+  "divYieldPct": 3.18
+ },
+ "LKFN": {
+  "marketCapMil": 1200,
+  "pe": 36.52,
+  "pb": 6.19,
+  "divYieldPct": 3.27
+ },
+ "LLY": {
+  "marketCapMil": 842700,
+  "pe": 34.41,
+  "pb": 3.03,
+  "divYieldPct": 0.76
+ },
+ "LMT": {
+  "marketCapMil": 97380,
+  "pe": 22.75,
+  "pb": 7.98,
+  "divYieldPct": 0
+ },
+ "LOW": {
+  "marketCapMil": 102480,
+  "pe": 13.09,
+  "pb": 19.95,
+  "divYieldPct": 3.62
+ },
+ "LRCX": {
+  "marketCapMil": 449220,
+  "pe": 8.78,
+  "pb": 1.86,
+  "divYieldPct": 0
+ },
+ "M": {
+  "marketCapMil": 4620,
+  "pe": 41.08,
+  "pb": 1.3,
+  "divYieldPct": 0
+ },
+ "MA": {
+  "marketCapMil": 336060,
+  "pe": 21.72,
+  "pb": 13.24,
+  "divYieldPct": 1.78
+ },
+ "MAR": {
+  "marketCapMil": 64800,
+  "pe": 10.22,
+  "pb": 3.96,
+  "divYieldPct": 1.8
+ },
+ "MC": {
+  "marketCapMil": 4020,
+  "pe": 49.39,
+  "pb": 0.9,
+  "divYieldPct": 1.82
+ },
+ "MCD": {
+  "marketCapMil": 159180,
+  "pe": 27.7,
+  "pb": 8.93,
+  "divYieldPct": 2.36
+ },
+ "MCHP": {
+  "marketCapMil": 40980,
+  "pe": 8.82,
+  "pb": 10.74,
+  "divYieldPct": 2.25
+ },
+ "MCK": {
+  "marketCapMil": 75300,
+  "pe": 50.62,
+  "pb": 11.93,
+  "divYieldPct": 1.08
+ },
+ "MCO": {
+  "marketCapMil": 55740,
+  "pe": 39.59,
+  "pb": 7.72,
+  "divYieldPct": 2.27
+ },
+ "MDLZ": {
+  "marketCapMil": 61560,
+  "pe": 50.19,
+  "pb": 5.06,
+  "divYieldPct": 3.78
+ },
+ "MDT": {
+  "marketCapMil": 83280,
+  "pe": 58.96,
+  "pb": 2.91,
+  "divYieldPct": 1.76
+ },
+ "MELI": {
+  "marketCapMil": 108352,
+  "pe": 28.67,
+  "pb": 9.78,
+  "divYieldPct": 0.02
+ },
+ "META": {
+  "marketCapMil": 1025400,
+  "pe": 38.86,
+  "pb": 2.66,
+  "divYieldPct": 1.76
+ },
+ "MMM": {
+  "marketCapMil": 70020,
+  "pe": 10.72,
+  "pb": 2.05,
+  "divYieldPct": 0.66
+ },
+ "MNST": {
+  "marketCapMil": 54540,
+  "pe": 27.58,
+  "pb": 5.22,
+  "divYieldPct": 2.05
+ },
+ "MO": {
+  "marketCapMil": 99600,
+  "pe": 12.9,
+  "pb": 1.48,
+  "divYieldPct": 0.44
+ },
+ "MPC": {
+  "marketCapMil": 61860,
+  "pe": 38.55,
+  "pb": 0.88,
+  "divYieldPct": 0.98
+ },
+ "MPWR": {
+  "marketCapMil": 53460,
+  "pe": 52.61,
+  "pb": 2.95,
+  "divYieldPct": 0.76
+ },
+ "MRK": {
+  "marketCapMil": 263100,
+  "pe": 55.08,
+  "pb": 4.3,
+  "divYieldPct": 1.67
+ },
+ "MRNA": {
+  "marketCapMil": 20700,
+  "pe": 51.43,
+  "pb": 14.15,
+  "divYieldPct": 0
+ },
+ "MRSH": {
+  "marketCapMil": 66600,
+  "pe": 14.44,
+  "pb": 11.74,
+  "divYieldPct": 0
+ },
+ "MRVL": {
+  "marketCapMil": 221580,
+  "pe": 13.63,
+  "pb": 1.23,
+  "divYieldPct": 1.59
+ },
+ "MS": {
+  "marketCapMil": 204960,
+  "pe": 27.11,
+  "pb": 0.81,
+  "divYieldPct": 3.57
+ },
+ "MSFT": {
+  "marketCapMil": 2296980,
+  "pe": 24.7,
+  "pb": 8.3,
+  "divYieldPct": 2.88
+ },
+ "MSI": {
+  "marketCapMil": 57120,
+  "pe": 19.61,
+  "pb": 10.76,
+  "divYieldPct": 2.44
+ },
+ "MSM": {
+  "marketCapMil": 4440,
+  "pe": 41.01,
+  "pb": 5.42,
+  "divYieldPct": 0
+ },
+ "MSTR": {
+  "marketCapMil": 23820,
+  "pe": 32.82,
+  "pb": 2.12,
+  "divYieldPct": 0
+ },
+ "MTN": {
+  "marketCapMil": 4020,
+  "pe": 9.08,
+  "pb": 13.53,
+  "divYieldPct": 1.48
+ },
+ "MU": {
+  "marketCapMil": 1079040,
+  "pe": 8.14,
+  "pb": 4.34,
+  "divYieldPct": 1.93
+ },
+ "MUR": {
+  "marketCapMil": 3660,
+  "pe": 12.2,
+  "pb": 2.17,
+  "divYieldPct": 0.84
+ },
+ "MZTI": {
+  "marketCapMil": 1800,
+  "pe": 36.55,
+  "pb": 5.51,
+  "divYieldPct": 1.44
+ },
+ "NBHC": {
+  "marketCapMil": 1560,
+  "pe": 51.21,
+  "pb": 6.17,
+  "divYieldPct": 0.13
+ },
+ "NBIS": {
+  "marketCapMil": 38304,
+  "pe": 13.83,
+  "pb": 4.96,
+  "divYieldPct": 3.3
+ },
+ "NEE": {
+  "marketCapMil": 151740,
+  "pe": 33.9,
+  "pb": 14.6,
+  "divYieldPct": 1.38
+ },
+ "NEM": {
+  "marketCapMil": 82680,
+  "pe": 24.83,
+  "pb": 2.03,
+  "divYieldPct": 2.76
+ },
+ "NET": {
+  "marketCapMil": 64980,
+  "pe": 50.03,
+  "pb": 1.17,
+  "divYieldPct": 0
+ },
+ "NFLX": {
+  "marketCapMil": 249240,
+  "pe": 36.73,
+  "pb": 1.22,
+  "divYieldPct": 2.4
+ },
+ "NOC": {
+  "marketCapMil": 59940,
+  "pe": 15.43,
+  "pb": 10.03,
+  "divYieldPct": 0.12
+ },
+ "NOW": {
+  "marketCapMil": 84840,
+  "pe": 54.62,
+  "pb": 14.45,
+  "divYieldPct": 0.98
+ },
+ "NSC": {
+  "marketCapMil": 58560,
+  "pe": 22,
+  "pb": 6.41,
+  "divYieldPct": 2.86
+ },
+ "NSP": {
+  "marketCapMil": 1140,
+  "pe": 8.69,
+  "pb": 12.68,
+  "divYieldPct": 1.69
+ },
+ "NVDA": {
+  "marketCapMil": 3813240,
+  "pe": 52.41,
+  "pb": 4.84,
+  "divYieldPct": 0.53
+ },
+ "NXPI": {
+  "marketCapMil": 44564,
+  "pe": 27.58,
+  "pb": 8.79,
+  "divYieldPct": 0
+ },
+ "NXST": {
+  "marketCapMil": 4320,
+  "pe": 54.94,
+  "pb": 1.03,
+  "divYieldPct": 1.48
+ },
+ "O": {
+  "marketCapMil": 47880,
+  "pe": 21.6,
+  "pb": 9.42,
+  "divYieldPct": 0
+ },
+ "ODFL": {
+  "marketCapMil": 33600,
+  "pe": 13.55,
+  "pb": 1.52,
+  "divYieldPct": 0
+ },
+ "OFG": {
+  "marketCapMil": 1740,
+  "pe": 19.63,
+  "pb": 0.96,
+  "divYieldPct": 0
+ },
+ "OKE": {
+  "marketCapMil": 45420,
+  "pe": 13.71,
+  "pb": 1.75,
+  "divYieldPct": 2.14
+ },
+ "ORCL": {
+  "marketCapMil": 209640,
+  "pe": 26.11,
+  "pb": 6.33,
+  "divYieldPct": 0
+ },
+ "ORI": {
+  "marketCapMil": 7440,
+  "pe": 52.59,
+  "pb": 4.96,
+  "divYieldPct": 0
+ },
+ "ORLY": {
+  "marketCapMil": 63240,
+  "pe": 38.73,
+  "pb": 12.34,
+  "divYieldPct": 1.86
+ },
+ "ORRF": {
+  "marketCapMil": 660,
+  "pe": 22.44,
+  "pb": 17.64,
+  "divYieldPct": 0.74
+ },
+ "OXM": {
+  "marketCapMil": 420,
+  "pe": 38.34,
+  "pb": 3.11,
+  "divYieldPct": 1.36
+ },
+ "OZK": {
+  "marketCapMil": 4620,
+  "pe": 8.96,
+  "pb": 1.38,
+  "divYieldPct": 1.55
+ },
+ "PAG": {
+  "marketCapMil": 2460,
+  "pe": 9.93,
+  "pb": 4.72,
+  "divYieldPct": 2.49
+ },
+ "PANW": {
+  "marketCapMil": 230700,
+  "pe": 13.32,
+  "pb": 1.17,
+  "divYieldPct": 0.01
+ },
+ "PAYX": {
+  "marketCapMil": 26280,
+  "pe": 8.7,
+  "pb": 5.38,
+  "divYieldPct": 0.4
+ },
+ "PCAR": {
+  "marketCapMil": 52380,
+  "pe": 37.44,
+  "pb": 0.84,
+  "divYieldPct": 2.95
+ },
+ "PDD": {
+  "marketCapMil": 77696,
+  "pe": 45.67,
+  "pb": 1,
+  "divYieldPct": 0
+ },
+ "PEP": {
+  "marketCapMil": 153420,
+  "pe": 12.05,
+  "pb": 1.65,
+  "divYieldPct": 2.99
+ },
+ "PFBC": {
+  "marketCapMil": 960,
+  "pe": 17.4,
+  "pb": 8.62,
+  "divYieldPct": 3.91
+ },
+ "PFE": {
+  "marketCapMil": 113760,
+  "pe": 34.68,
+  "pb": 8.64,
+  "divYieldPct": 0
+ },
+ "PFG": {
+  "marketCapMil": 19320,
+  "pe": 34.7,
+  "pb": 10.16,
+  "divYieldPct": 3.85
+ },
+ "PG": {
+  "marketCapMil": 283020,
+  "pe": 21.93,
+  "pb": 2.43,
+  "divYieldPct": 0
+ },
+ "PGR": {
+  "marketCapMil": 105660,
+  "pe": 9.18,
+  "pb": 1.27,
+  "divYieldPct": 2.3
+ },
+ "PH": {
+  "marketCapMil": 102240,
+  "pe": 16.41,
+  "pb": 12.36,
+  "divYieldPct": 0.26
+ },
+ "PLD": {
+  "marketCapMil": 104700,
+  "pe": 11.18,
+  "pb": 14.18,
+  "divYieldPct": 1.82
+ },
+ "PLTR": {
+  "marketCapMil": 210960,
+  "pe": 14.89,
+  "pb": 0.85,
+  "divYieldPct": 0
+ },
+ "PM": {
+  "marketCapMil": 233760,
+  "pe": 8.7,
+  "pb": 19.51,
+  "divYieldPct": 1.34
+ },
+ "PNC": {
+  "marketCapMil": 81960,
+  "pe": 22.75,
+  "pb": 10.88,
+  "divYieldPct": 0
+ },
+ "PSX": {
+  "marketCapMil": 56160,
+  "pe": 52.67,
+  "pb": 4.38,
+  "divYieldPct": 2.54
+ },
+ "PWR": {
+  "marketCapMil": 89580,
+  "pe": 55.42,
+  "pb": 17.37,
+  "divYieldPct": 3.8
+ },
+ "PYPL": {
+  "marketCapMil": 29400,
+  "pe": 19.15,
+  "pb": 10.86,
+  "divYieldPct": 2.32
+ },
+ "QCOM": {
+  "marketCapMil": 161460,
+  "pe": 12.02,
+  "pb": 1.25,
+  "divYieldPct": 0
+ },
+ "RCL": {
+  "marketCapMil": 63540,
+  "pe": 25.91,
+  "pb": 1.84,
+  "divYieldPct": 0.02
+ },
+ "REGN": {
+  "marketCapMil": 53280,
+  "pe": 52.68,
+  "pb": 2.95,
+  "divYieldPct": 0.18
+ },
+ "RF": {
+  "marketCapMil": 21360,
+  "pe": 29.08,
+  "pb": 7.03,
+  "divYieldPct": 3.1
+ },
+ "RHI": {
+  "marketCapMil": 2460,
+  "pe": 53.31,
+  "pb": 9.65,
+  "divYieldPct": 0
+ },
+ "RKLB": {
+  "marketCapMil": 48780,
+  "pe": 26.85,
+  "pb": 3.44,
+  "divYieldPct": 0
+ },
+ "ROP": {
+  "marketCapMil": 28320,
+  "pe": 50.85,
+  "pb": 1.48,
+  "divYieldPct": 3.51
+ },
+ "ROST": {
+  "marketCapMil": 56820,
+  "pe": 32.04,
+  "pb": 18.73,
+  "divYieldPct": 1.21
+ },
+ "RTX": {
+  "marketCapMil": 211800,
+  "pe": 19.64,
+  "pb": 4.06,
+  "divYieldPct": 0.11
+ },
+ "SBUX": {
+  "marketCapMil": 96540,
+  "pe": 10.6,
+  "pb": 1.23,
+  "divYieldPct": 2.89
+ },
+ "SCHW": {
+  "marketCapMil": 126360,
+  "pe": 17.12,
+  "pb": 1.28,
+  "divYieldPct": 1.41
+ },
+ "SHOP": {
+  "marketCapMil": 253088,
+  "pe": 20.36,
+  "pb": 3.84,
+  "divYieldPct": 3.81
+ },
+ "SHW": {
+  "marketCapMil": 66900,
+  "pe": 9.19,
+  "pb": 19.17,
+  "divYieldPct": 0.34
+ },
+ "SLB": {
+  "marketCapMil": 57600,
+  "pe": 12.6,
+  "pb": 1.95,
+  "divYieldPct": 0
+ },
+ "SNA": {
+  "marketCapMil": 17280,
+  "pe": 10.67,
+  "pb": 3.9,
+  "divYieldPct": 3.53
+ },
+ "SNDK": {
+  "marketCapMil": 279120,
+  "pe": 23.77,
+  "pb": 2.64,
+  "divYieldPct": 2.19
+ },
+ "SNOW": {
+  "marketCapMil": 69480,
+  "pe": 35.68,
+  "pb": 12.56,
+  "divYieldPct": 1.6
+ },
+ "SNPS": {
+  "marketCapMil": 70800,
+  "pe": 20.93,
+  "pb": 10.46,
+  "divYieldPct": 0
+ },
+ "SO": {
+  "marketCapMil": 89520,
+  "pe": 13.66,
+  "pb": 1.31,
+  "divYieldPct": 1.73
+ },
+ "SPCX": {
+  "marketCapMil": 83580,
+  "pe": 18.5,
+  "pb": 12.17,
+  "divYieldPct": 3.12
+ },
+ "SPG": {
+  "marketCapMil": 57120,
+  "pe": 17.95,
+  "pb": 3.39,
+  "divYieldPct": 0
+ },
+ "SPGI": {
+  "marketCapMil": 97260,
+  "pe": 12.64,
+  "pb": 17.47,
+  "divYieldPct": 2.61
+ },
+ "SRCE": {
+  "marketCapMil": 1080,
+  "pe": 32.32,
+  "pb": 8.16,
+  "divYieldPct": 1.53
+ },
+ "SRE": {
+  "marketCapMil": 50220,
+  "pe": 23.94,
+  "pb": 2.85,
+  "divYieldPct": 1.37
+ },
+ "STBA": {
+  "marketCapMil": 1440,
+  "pe": 17.05,
+  "pb": 6.26,
+  "divYieldPct": 2.3
+ },
+ "STX": {
+  "marketCapMil": 179340,
+  "pe": 9.91,
+  "pb": 3.13,
+  "divYieldPct": 0
+ },
+ "SWKS": {
+  "marketCapMil": 8460,
+  "pe": 23.82,
+  "pb": 8.33,
+  "divYieldPct": 3.22
+ },
+ "SYK": {
+  "marketCapMil": 90060,
+  "pe": 21.31,
+  "pb": 1.41,
+  "divYieldPct": 1.68
+ },
+ "T": {
+  "marketCapMil": 119220,
+  "pe": 18.31,
+  "pb": 2.46,
+  "divYieldPct": 0.32
+ },
+ "TDG": {
+  "marketCapMil": 61740,
+  "pe": 8.91,
+  "pb": 2.11,
+  "divYieldPct": 3.18
+ },
+ "TEL": {
+  "marketCapMil": 48780,
+  "pe": 8.71,
+  "pb": 1.71,
+  "divYieldPct": 1.05
+ },
+ "TER": {
+  "marketCapMil": 62760,
+  "pe": 8.56,
+  "pb": 15.17,
+  "divYieldPct": 2.92
+ },
+ "TFC": {
+  "marketCapMil": 51420,
+  "pe": 20.42,
+  "pb": 11.96,
+  "divYieldPct": 1.98
+ },
+ "TGT": {
+  "marketCapMil": 49140,
+  "pe": 10.38,
+  "pb": 0.86,
+  "divYieldPct": 0.28
+ },
+ "THFF": {
+  "marketCapMil": 660,
+  "pe": 34.37,
+  "pb": 2.2,
+  "divYieldPct": 0.68
+ },
+ "TJX": {
+  "marketCapMil": 138840,
+  "pe": 50.42,
+  "pb": 3.55,
+  "divYieldPct": 0
+ },
+ "TMO": {
+  "marketCapMil": 154440,
+  "pe": 9.88,
+  "pb": 3.87,
+  "divYieldPct": 3.07
+ },
+ "TMUS": {
+  "marketCapMil": 60180,
+  "pe": 24.74,
+  "pb": 12.99,
+  "divYieldPct": 0
+ },
+ "TRGP": {
+  "marketCapMil": 47700,
+  "pe": 36.49,
+  "pb": 6.5,
+  "divYieldPct": 0
+ },
+ "TRI": {
+  "marketCapMil": 59168,
+  "pe": 22.7,
+  "pb": 13.76,
+  "divYieldPct": 0
+ },
+ "TROW": {
+  "marketCapMil": 20160,
+  "pe": 12.6,
+  "pb": 6.39,
+  "divYieldPct": 1.01
+ },
+ "TRV": {
+  "marketCapMil": 58200,
+  "pe": 9.64,
+  "pb": 4.82,
+  "divYieldPct": 0
+ },
+ "TSLA": {
+  "marketCapMil": 982080,
+  "pe": 46.33,
+  "pb": 14.98,
+  "divYieldPct": 0.04
+ },
+ "TT": {
+  "marketCapMil": 90000,
+  "pe": 9.43,
+  "pb": 1.92,
+  "divYieldPct": 2.35
+ },
+ "TTWO": {
+  "marketCapMil": 36540,
+  "pe": 30.67,
+  "pb": 12.17,
+  "divYieldPct": 3.71
+ },
+ "TXN": {
+  "marketCapMil": 224880,
+  "pe": 25.07,
+  "pb": 14.38,
+  "divYieldPct": 0
+ },
+ "UBER": {
+  "marketCapMil": 121740,
+  "pe": 51.36,
+  "pb": 14.2,
+  "divYieldPct": 2.68
+ },
+ "UNH": {
+  "marketCapMil": 312900,
+  "pe": 28.19,
+  "pb": 13.41,
+  "divYieldPct": 0
+ },
+ "UNP": {
+  "marketCapMil": 133860,
+  "pe": 39.66,
+  "pb": 0.86,
+  "divYieldPct": 3.49
+ },
+ "UPS": {
+  "marketCapMil": 66540,
+  "pe": 38.7,
+  "pb": 2.79,
+  "divYieldPct": 0
+ },
+ "URI": {
+  "marketCapMil": 58860,
+  "pe": 26.82,
+  "pb": 2.01,
+  "divYieldPct": 1.29
+ },
+ "USB": {
+  "marketCapMil": 77700,
+  "pe": 8.6,
+  "pb": 3.84,
+  "divYieldPct": 1.78
+ },
+ "V": {
+  "marketCapMil": 462840,
+  "pe": 22.78,
+  "pb": 5.2,
+  "divYieldPct": 0.48
+ },
+ "VLO": {
+  "marketCapMil": 64080,
+  "pe": 8.64,
+  "pb": 5.78,
+  "divYieldPct": 1.04
+ },
+ "VRT": {
+  "marketCapMil": 106620,
+  "pe": 37.49,
+  "pb": 1.01,
+  "divYieldPct": 0
+ },
+ "VRTS": {
+  "marketCapMil": 780,
+  "pe": 13.56,
+  "pb": 1.85,
+  "divYieldPct": 0.4
+ },
+ "VRTX": {
+  "marketCapMil": 104520,
+  "pe": 17.12,
+  "pb": 5.23,
+  "divYieldPct": 0.03
+ },
+ "VZ": {
+  "marketCapMil": 131880,
+  "pe": 24.26,
+  "pb": 5.3,
+  "divYieldPct": 0.33
+ },
+ "WDAY": {
+  "marketCapMil": 20400,
+  "pe": 53.76,
+  "pb": 8.31,
+  "divYieldPct": 0
+ },
+ "WDC": {
+  "marketCapMil": 182520,
+  "pe": 28.93,
+  "pb": 1.72,
+  "divYieldPct": 3.71
+ },
+ "WELL": {
+  "marketCapMil": 132840,
+  "pe": 9.41,
+  "pb": 1.07,
+  "divYieldPct": 0
+ },
+ "WEN": {
+  "marketCapMil": 1080,
+  "pe": 45.78,
+  "pb": 9.16,
+  "divYieldPct": 3.94
+ },
+ "WFC": {
+  "marketCapMil": 209640,
+  "pe": 18.66,
+  "pb": 3.91,
+  "divYieldPct": 0
+ },
+ "WM": {
+  "marketCapMil": 74160,
+  "pe": 27.31,
+  "pb": 18.77,
+  "divYieldPct": 0
+ },
+ "WMB": {
+  "marketCapMil": 75360,
+  "pe": 11.25,
+  "pb": 3.8,
+  "divYieldPct": 3.78
+ },
+ "WMT": {
+  "marketCapMil": 411600,
+  "pe": 8.57,
+  "pb": 0.99,
+  "divYieldPct": 0.52
+ },
+ "WSO": {
+  "marketCapMil": 12120,
+  "pe": 44.08,
+  "pb": 2.86,
+  "divYieldPct": 0.01
+ },
+ "WU": {
+  "marketCapMil": 1980,
+  "pe": 18.7,
+  "pb": 13.62,
+  "divYieldPct": 1.43
+ },
+ "XEL": {
+  "marketCapMil": 41580,
+  "pe": 22.92,
+  "pb": 5.39,
+  "divYieldPct": 3.4
+ },
+ "XOM": {
+  "marketCapMil": 469740,
+  "pe": 42.8,
+  "pb": 5.41,
+  "divYieldPct": 3.89
+ }
+}

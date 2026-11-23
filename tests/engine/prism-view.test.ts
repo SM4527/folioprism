@@ -8,6 +8,9 @@ import { valuation } from '../../src/lib/engine/prism-view/valuation';
 import { computePrismView, serializePrismView } from '../../src/lib/engine/prism-view';
 import { ALLOCATION_KEYS, STYLE_SIZES, STYLE_STYLES } from '../../src/lib/engine/taxonomy';
 import { curatedAggregates } from '../../src/lib/market/mock';
+import { curatedWithStyle } from '../../src/lib/market/stock-facts';
+import { classifyUniverse } from '../../src/lib/engine/prism-view/classify';
+import { fundStyleBox } from '../../src/lib/engine/prism-view/fund-style';
 import type { PrismViewInput } from '../../src/lib/engine/prism-view/types';
 import { loadPrismViewFixture } from './load-fixture';
 
@@ -137,18 +140,28 @@ describe('styleBox', () => {
   it('spreads a fund styleBox and sums to exactly 100.0 on prism-view-basic', () => {
     const s = styleBox(loadPrismViewFixture('prism-view-basic'))!;
     expect(styleSum(s)).toBe('100.0');
-    expect(s.notClassified.toFixed(1)).toBe('2.2');
+    expect(s.notClassified.toFixed(1)).toBe('2.3'); // VTI's box covers 99.9%: the 0.1% gap is not scaled away
     expect(s.cells.small.growth.gt(0)).toBe(true);
   });
 
-  it('spreads curated VTI, SPY and QQQ across their published style box (XRAY-10)', () => {
-    for (const t of ['VTI', 'SPY', 'QQQ']) {
-      const s = styleBox(curatedOnly(t))!;
-      expect(styleSum(s)).toBe('100.0');
-      expect(s.notClassified.toFixed(1)).toBe('0.0');
-      const filled = STYLE_SIZES.flatMap((size) => STYLE_STYLES.map((st) => s.cells[size][st])).filter((c) => c.gt(0));
-      expect(filled.length).toBeGreaterThanOrEqual(3);
-    }
+  it('leans value for a cheap, high-yield fund and growth for an expensive one (made-up universe)', () => {
+    const f = (pe: string, pb: string, divYieldPct: string) => ({ marketCapMil: '50000', pe, pb, divYieldPct });
+    const universe = classifyUniverse({
+      CHP1: f('8', '0.9', '5'), CHP2: f('9', '1.1', '4'),
+      MID1: f('18', '3', '1.5'), MID2: f('20', '3.5', '1.2'),
+      EXP1: f('70', '25', '0'), EXP2: f('90', '30', '0'),
+    });
+    const fund = (box: ReturnType<typeof fundStyleBox>) => ({ ...curatedAggregates('VTI')!, styleBox: box });
+    const one = (box: ReturnType<typeof fundStyleBox>): PrismViewInput => ({
+      holdings: [{ ticker: 'ZFND', kind: 'FUND', valueCents: '1000000' }],
+      funds: { ZFND: fund(box) },
+      stocks: {},
+    });
+    const value = styleBox(one(fundStyleBox([{ ticker: 'CHP1', weightPct: '60' }, { ticker: 'CHP2', weightPct: '30' }, { ticker: 'EXP1', weightPct: '10' }], universe)))!;
+    const growth = styleBox(one(fundStyleBox([{ ticker: 'EXP1', weightPct: '50' }, { ticker: 'EXP2', weightPct: '40' }, { ticker: 'MID1', weightPct: '10' }], universe)))!;
+    expect(value.cells.large.value.toFixed(1)).toBe('90.0');
+    expect(growth.cells.large.growth.toFixed(1)).toBe('90.0');
+    expect(styleSum(value)).toBe('100.0');
   });
 
   it('keeps the D-10 single-cell fallback for a fund without styleBox', () => {
@@ -195,12 +208,17 @@ describe('computePrismView', () => {
 
   it('serializes portfolio and benchmark at their display precision', () => {
     const p = computePrismView(loadPrismViewFixture('prism-view-basic'));
-    const s = serializePrismView(p, computePrismView(curatedOnly('SPY')));
+    const spy: PrismViewInput = { ...curatedOnly('SPY'), funds: { SPY: curatedWithStyle('SPY')! } };
+    const s = serializePrismView(p, computePrismView(spy));
     expect(s.allocation.portfolio.usStock).toBe('69.6');
-    expect(s.styleBox.portfolio!.notClassified).toBe('2.2');
+    expect(s.styleBox.portfolio!.notClassified).toBe('2.3');
     expect(s.valuation.portfolio!.pe).toMatch(/^\d+\.\d{2}$/);
     expect(s.fees.portfolio).toEqual({ expenseRatioPct: '0.0258', feeCents: '1650', unknownTickers: ['XFND'] });
-    expect(s.styleBox.benchmark!.cells.large.growth).toBe('18.0');
+    const bench = s.styleBox.benchmark!;
+    const shown = [...Object.values(bench.cells).flatMap((row) => Object.values(row)), bench.notClassified];
+    expect(shown.every((v) => /^\d+\.\d$/.test(v))).toBe(true);
+    expect(Decimal.sum(...shown).toFixed(1)).toBe('100.0');
+    expect(bench.fallbackTickers).toEqual([]);
   });
 
   it('sets every benchmark field to null without a benchmark', () => {

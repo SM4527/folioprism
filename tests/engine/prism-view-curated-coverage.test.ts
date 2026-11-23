@@ -5,6 +5,7 @@ import { STYLE_SIZES, STYLE_STYLES } from '../../src/lib/engine/taxonomy';
 import { computePrismView } from '../../src/lib/engine/prism-view';
 import type { PrismViewInput } from '../../src/lib/engine/prism-view/types';
 import { curatedAggregates, curatedStock } from '../../src/lib/market/mock';
+import { curatedWithStyle } from '../../src/lib/market/stock-facts';
 import mockFunds from '../../data/mock-funds.json';
 
 const FUNDS = [
@@ -39,36 +40,38 @@ describe('curated fund coverage', () => {
   });
 });
 
-const US_STYLE = [
-  'SPY', 'VOO', 'FXAIX', 'VTI', 'VTSAX', 'FSKAX',
-  'ITOT', 'SPTM', 'QQQ', 'SCHD', 'VPU', 'VIG', 'VYM', 'DGRO',
-];
+/** The sample funds whose top 200 holdings are in data/stock-facts.sample.json. */
+const SAMPLE_FUNDS = ['VTI', 'FXAIX', 'QQQ', 'SCHD', 'SPY'];
 
 const cells = (x: ReturnType<typeof computePrismView>) =>
   STYLE_SIZES.flatMap((size) => STYLE_STYLES.map((st) => x.styleBox!.cells[size][st]));
 
-describe('published style box (XRAY-10, XRAY-11)', () => {
-  it.each(US_STYLE)('%s spreads across its published style box', (t) => {
-    expect(curatedAggregates(t)!.styleBox).not.toBeNull();
-    expect(cells(computePrismView(oneFund(t))).filter((c) => c.gt(0)).length).toBeGreaterThanOrEqual(2);
-  });
+/** One fund at 100% with its style box calculated from holdings, as the app does. */
+const calculated = (ticker: string): PrismViewInput => ({ ...oneFund(ticker), funds: { [ticker]: curatedWithStyle(ticker)! } });
 
-  it.each(Object.keys(mockFunds))('%s has a style box exactly when it holds equity', (t) => {
-    const a = curatedAggregates(t)!;
-    if (new Decimal(a.equityPct ?? 0).gt(0)) expect(a.styleBox).not.toBeNull();
-    else expect(a.styleBox).toBeNull();
-  });
-
-  it.each(['VT', 'VXUS'])('benchmark %s spreads across at least 3 style cells', (t) => {
-    expect(cells(computePrismView(oneFund(t))).filter((c) => c.gt(0)).length).toBeGreaterThanOrEqual(3);
-  });
-
-  it('SPY benchmark is not all Large Growth and has Large Value', () => {
-    const x = computePrismView(oneFund('SPY'));
-    expect(x.styleBox!.cells.large.growth.lt(100)).toBe(true);
-    expect(x.styleBox!.cells.large.value.gt(0)).toBe(true);
+describe('style box calculated from holdings (sample facts)', () => {
+  it.each(SAMPLE_FUNDS)('%s gets a holdings-based box over 3+ cells that sums to exactly 100.0', (t) => {
+    expect(curatedWithStyle(t)!.styleBox).not.toBeNull();
+    const x = computePrismView(calculated(t));
     expect(cells(x).filter((c) => c.gt(0)).length).toBeGreaterThanOrEqual(3);
     expect(Decimal.sum(...cells(x), x.styleBox!.notClassified).toFixed(1)).toBe('100.0');
+    expect(x.styleBox!.fallbackTickers).toEqual([]);
+  });
+
+  it('leaves the uncovered share of VTI in Not classified instead of scaling up', () => {
+    const x = computePrismView(calculated('VTI'));
+    expect(x.styleBox!.notClassified.gt(0)).toBe(true);
+    expect(x.styleBox!.notClassified.lt(40)).toBe(true);
+  });
+
+  it.each(['VXUS', 'HDEF'])('%s is outside the sample facts and falls back, listed in fallbackTickers', (t) => {
+    expect(curatedWithStyle(t)!.styleBox).toBeNull();
+    expect(computePrismView(calculated(t)).styleBox!.fallbackTickers).toEqual([t]);
+  });
+
+  it.each(Object.keys(mockFunds))('%s has no calculated box without equity constituents', (t) => {
+    const a = curatedWithStyle(t)!;
+    if (new Decimal(a.equityPct ?? 0).isZero()) expect(a.styleBox).toBeNull();
   });
 });
 
