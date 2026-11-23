@@ -36,6 +36,12 @@ export interface RawYahooQuote {
   longName?: string;
   shortName?: string;
   quoteType: string;
+  /** In the quote currency, not always USD. */
+  marketCap?: number;
+  trailingPE?: number;
+  priceToBook?: number;
+  /** Percent, not a fraction (0.32 = 0.32%). */
+  dividendYield?: number;
 }
 
 /** Yahoo's symbol for a canonical ticker: a one-letter share class takes a dash (BRK.B -> BRK-B), exchange suffixes stay (SHOP.TO). */
@@ -75,6 +81,43 @@ export async function fetchYahooQuotes(tickers: string[]): Promise<Map<string, M
   const raw = await quoteBatch(tickers.map(yahooSymbol));
   if (!raw) return null;
   return new Map(raw.map((r) => [canonicalTicker(r.symbol), toMarketQuote(r)?.quote ?? null]));
+}
+
+/** One stock's facts as JSON numbers, the stock-facts.json format; ratios are null when absent. */
+export interface RawStockFact {
+  marketCapMil: number;
+  pe: number | null;
+  pb: number | null;
+  divYieldPct: number | null;
+}
+
+const finite = (n: number | undefined) => (typeof n === 'number' && Number.isFinite(n) ? n : null);
+
+/** Facts from one quote: USD quotes with a positive market cap only, since market cap is in the quote currency. */
+export function toStockFact(raw: RawYahooQuote): RawStockFact | null {
+  if (raw.currency !== 'USD' || !(typeof raw.marketCap === 'number' && raw.marketCap > 0)) return null;
+  return {
+    marketCapMil: Number((raw.marketCap / 1e6).toFixed(2)),
+    pe: finite(raw.trailingPE),
+    pb: finite(raw.priceToBook),
+    divYieldPct: finite(raw.dividendYield),
+  };
+}
+
+/** Symbols per batched quote call; one call accepted 1,500 in testing. */
+export const FACTS_BATCH = 1000;
+
+/** Stock facts for many tickers via batched quote calls, keyed by canonical ticker, plus how many batches failed. */
+export async function fetchYahooFacts(tickers: string[]): Promise<{ facts: Record<string, RawStockFact>; failedBatches: number }> {
+  const batches: string[][] = [];
+  for (let i = 0; i < tickers.length; i += FACTS_BATCH) batches.push(tickers.slice(i, i + FACTS_BATCH).map(yahooSymbol));
+  const results = await Promise.all(batches.map(quoteBatch));
+  const facts: Record<string, RawStockFact> = {};
+  for (const raw of results) for (const r of raw ?? []) {
+    const fact = toStockFact(r);
+    if (fact) facts[canonicalTicker(r.symbol)] = fact;
+  }
+  return { facts, failedBatches: results.filter((r) => r === null).length };
 }
 
 /** The subset of Yahoo `topHoldings` the app reads; holdingPercent is a fraction (0.07 = 7%). */
