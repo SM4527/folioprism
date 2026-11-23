@@ -83,7 +83,7 @@ The style box is calculated from each fund's holdings using per-stock market cap
 npx tsx scripts/refresh-stock-facts.ts --include-local && ./scripts/personal-restart.sh
 ```
 
-Without `--include-local` it fetches only the public curated funds' holdings and reads nothing else in `data/local/`.
+Without `--include-local` it fetches only the public curated funds' holdings and reads nothing else in `data/local/`. Add `--dry-run` to count the tickers without any network call or write.
 
 Optional keys in `.env`: `OPENFIGI_API_KEY` (higher OpenFIGI rate limit for CUSIP/ISIN-to-ticker mapping) and `SEC_USER_AGENT` (SEC asks for a real contact; a placeholder is used otherwise). It can run on a schedule, for example weekly from Windows Task Scheduler via `wsl.exe`, appending output to `refresh.log` (gitignored).
 
