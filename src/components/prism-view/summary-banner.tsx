@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Analysis } from '@/lib/analysis';
-import { formatAsOfDateTime, formatCents } from '@/lib/format';
+import { formatAsOfDateTime, formatCents, formatHoldingsDate } from '@/lib/format';
 import { BENCHMARKS } from '@/lib/benchmarks';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -33,6 +33,11 @@ export function SummaryBanner({ name, benchmark, summary, failed, busy }: Summar
           <span className="font-mono text-[13px] leading-5 font-semibold">{benchmark}</span>
           {description && <span className="text-xs leading-4 text-muted-foreground">{description}</span>}
         </span>
+        {summary?.benchmarkHoldingsAsOf && (
+          <span className="block text-[11px] leading-4 text-muted-foreground" data-benchmark-asof="">
+            Holdings as of {formatHoldingsDate(summary.benchmarkHoldingsAsOf)}
+          </span>
+        )}
       </Field>
       <Rule />
       <Field label="Total Market Value">

@@ -2,7 +2,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Analysis } from '../src/lib/analysis';
 
 const analysis: Analysis = {
-  summary: { name: 'My Portfolio', benchmark: 'SPY', totalCents: '1000000', asOf: null, staleTickers: [], unpricedTickers: [] },
+  summary: {
+    name: 'My Portfolio',
+    benchmark: 'SPY',
+    benchmarkHoldingsAsOf: null,
+    totalCents: '1000000',
+    asOf: null,
+    staleTickers: [],
+    unpricedTickers: [],
+  },
   holdings: [],
   intersection: {
     rows: [

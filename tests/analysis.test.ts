@@ -71,6 +71,12 @@ describe('buildAnalysis', () => {
     expect(a.summary.totalCents).toBe('7500000');
     expect(a.summary.unpricedTickers).toEqual(['ZZZZZQ']);
   });
+
+  it("reports the benchmark's holdings date so an older snapshot is visible", () => {
+    expect(buildAnalysis(portfolio, holdings, quotes, market(), false).summary.benchmarkHoldingsAsOf).toBeNull();
+    const dated = { ...market(), benchmarkHoldingsAsOf: '2026-06-30' };
+    expect(buildAnalysis(portfolio, holdings, quotes, dated, false).summary.benchmarkHoldingsAsOf).toBe('2026-06-30');
+  });
 });
 
 describe('buildAnalysis cash and money markets', () => {

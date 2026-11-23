@@ -67,6 +67,7 @@ The app container reads them from the root `.env`, whether started by `./scripts
 
 - `--public` refreshes the funds in `data/fund-sources.json` into the tracked `data/mock-funds.json` and `data/cusip-tickers.json`, for a deliberate commit.
 - Without a flag it also refreshes the funds in `data/local/fund-sources.json`, and writes every result only to the gitignored `data/local/` (for the personal stack). Tracked files are not changed.
+- An older source never replaces a newer kept snapshot, unless you pass `--allow-older` for that run; each replacement is printed.
 
 ```bash
 npm ci                                                       # once

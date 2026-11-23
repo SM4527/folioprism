@@ -2,6 +2,7 @@
  * Rebuild fund constituents from public issuer CSVs or each fund's latest SEC N-PORT filing.
  * Default (private): public plus data/local funds, results written only to gitignored data/local/.
  * --public: public funds only, written to the tracked data/mock-funds.json and data/cusip-tickers.json.
+ * --allow-older: for this run only, let an older source replace a newer kept snapshot (printed per fund).
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { canonicalTicker } from '../src/lib/engine/ticker';
@@ -101,9 +102,19 @@ const skip = (ticker: string, reason: string, fund?: Fund) =>
 const done = (ticker: string, label: string, asOf: string, count: number, sumPct: string) =>
   `${ticker.padEnd(7)}${label.padEnd(14)}${asOf}    ${String(count).padStart(4)} holdings    sum ${Number(sumPct).toFixed(2)}%`;
 
-/** The skip reason when the kept full-list snapshot is newer than the source (DEC-17). */
+/** Set by --allow-older for this run only: an older source may replace a newer kept snapshot. Never the default. */
+let allowOlder = false;
+
+/** The skip reason when the kept full-list snapshot is newer than the source (DEC-17), unless --allow-older. */
 const olderThanKept = (fund: Fund, asOf: string) =>
-  keptSnapshotBlocks(fund, asOf) ? `source dated ${asOf} is older than the kept ${fund.holdingsAsOf!.slice(0, 10)} snapshot` : null;
+  keptSnapshotBlocks(fund, asOf) && !allowOlder ? `source dated ${asOf} is older than the kept ${fund.holdingsAsOf!.slice(0, 10)} snapshot` : null;
+
+/** The output line: says so explicitly when --allow-older replaces a newer kept snapshot with an older source. */
+function outLine(ticker: string, fund: Fund, [label, short]: [string, string], asOf: string, count: number, sumPct: string): string {
+  if (!keptSnapshotBlocks(fund, asOf)) return done(ticker, label, asOf, count, sumPct);
+  const kept = `${fund.holdingsAsOf!.slice(0, 10)} snapshot (${fund.constituents.length} holdings)`;
+  return `${ticker}: replacing ${kept} with older ${asOf} ${short} (${count} holdings) because --allow-older`;
+}
 
 type Outcome = { line: string; update: Pick<Fund, 'holdingsAsOf' | 'holdingsSource' | 'constituents'> } | { reason: string };
 
@@ -124,7 +135,7 @@ async function fromNport(ticker: string, id: string, fund: Fund, cache: Record<s
   if (constituents.length === 0) return { reason: 'no mapped equity holdings' };
   if (Number(sumPct) > 100) return { reason: `weights sum to ${Number(sumPct).toFixed(2)}%, above 100%` };
   return {
-    line: done(ticker, 'SEC N-PORT', repPdDate, constituents.length, sumPct),
+    line: outLine(ticker, fund, ['SEC N-PORT', 'N-PORT'], repPdDate, constituents.length, sumPct),
     update: { constituents, holdingsSource: url, holdingsAsOf: `${repPdDate}T00:00:00Z` },
   };
 }
@@ -135,7 +146,7 @@ async function fromIssuer(ticker: string, url: string, fund: Fund, names: Record
   const older = olderThanKept(fund, result.asOf);
   if (older) return { reason: older };
   return {
-    line: done(ticker, 'Issuer file', result.asOf, result.constituents.length, result.sumPct),
+    line: outLine(ticker, fund, ['Issuer file', 'issuer file'], result.asOf, result.constituents.length, result.sumPct),
     update: { constituents: result.constituents, holdingsSource: url, holdingsAsOf: `${result.asOf}T00:00:00Z` },
   };
 }
@@ -165,6 +176,7 @@ async function refresh(
 async function main() {
   const argv = process.argv.slice(2);
   const isPublic = argv.includes('--public');
+  allowOlder = argv.includes('--allow-older');
   const publicFunds = readJson<Record<string, Fund>>(PUBLIC.funds);
   const publicCache = readJson<Record<string, string | null>>(PUBLIC.cusips);
   const localFunds = isPublic ? {} : readOptional<Record<string, Fund>>(LOCAL.funds);
@@ -180,7 +192,7 @@ async function main() {
     saveCache = (c) => writeCache(LOCAL.cusips, Object.fromEntries(Object.entries(c).filter(([k]) => !(k in publicCache))));
   }
   const names = nameMap(funds);
-  const args = argv.filter((a) => a !== '--public').map(canonicalTicker);
+  const args = argv.filter((a) => !a.startsWith('--')).map(canonicalTicker);
   const tickers = args.length ? args : Object.keys(funds).filter((t) => funds[t].constituents.length > 0);
 
   const updated: string[] = [];

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Follow-up: test that uploaded holdings change the style box (needs DB-backed test).
+- Read issuer .xlsx holdings files so SPY can use its daily full list (replaces --allow-older for SPY).
 
 ## 1.3.0
 
@@ -10,6 +11,8 @@
 - Size is relative to the US market (largest 70% of value Large, next 20% Mid, rest Small), with cut-offs from VTI's public holdings and a hand-entered market total in `data/size-breakpoints.json`.
 - Removed stored style boxes and their third-party source notes from `data/mock-funds.json`; `styleBox` is optional in `data/local/funds.json`.
 - New `scripts/refresh-stock-facts.ts` writes Yahoo stock facts to the gitignored `data/local/stock-facts.json`; the default stack uses synthetic sample facts.
+- Weight missing from a truncated holdings list counts as Not classified (and against the 60% rule) instead of being spread over the listed stocks.
+- SPY uses its full N-PORT holdings (501, as of 2026-06-30) via the new explicit `refresh-funds --allow-older` flag; the banner shows the benchmark's holdings date.
 - Pre-push hook now reports git and scan errors correctly.
 
 ## 1.2.0

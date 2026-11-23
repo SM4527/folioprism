@@ -32,6 +32,8 @@ export interface MarketData {
   benchmark: FundAggregates | null;
   /** Size cut-offs; the fixed fallback when absent. */
   sizeThresholds?: SizeThresholds;
+  /** The benchmark's holdings date (YYYY-MM-DD), or null when unknown. */
+  benchmarkHoldingsAsOf?: string | null;
 }
 
 /** One priced holding on the wire; cents are integer strings (D-14). */
@@ -74,6 +76,8 @@ export interface Analysis {
   summary: {
     name: string;
     benchmark: string;
+    /** The benchmark's holdings date (YYYY-MM-DD), shown so an older benchmark snapshot is visible. */
+    benchmarkHoldingsAsOf: string | null;
     totalCents: string;
     asOf: string | null;
     staleTickers: string[];
@@ -236,6 +240,7 @@ export function buildAnalysis(
     summary: {
       name: portfolio.name,
       benchmark: portfolio.benchmarkTicker,
+      benchmarkHoldingsAsOf: market.benchmarkHoldingsAsOf ?? null,
       totalCents: totalCents.toString(),
       asOf: latestAsOf(ok),
       staleTickers: rows.filter((r) => r.stale).map((r) => r.ticker),
