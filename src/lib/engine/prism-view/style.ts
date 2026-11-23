@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
 import { STYLE_SIZES, STYLE_STYLES, type StyleSize, type StyleStyle } from '../taxonomy';
+import { sizeOf } from './classify';
 import type { StyleResult, PrismViewInput } from './types';
 import { display, equityShare, notClassified, scaled, weights } from './weights';
 
@@ -12,8 +13,7 @@ export function styleCell(
   explicit?: StyleStyle | null,
 ): { size: StyleSize; style: StyleStyle } | null {
   if (marketCapMil === null) return null;
-  const cap = new Decimal(marketCapMil);
-  const size = cap.gte(10000) ? 'large' : cap.gte(2000) ? 'mid' : 'small';
+  const size = sizeOf(new Decimal(marketCapMil));
   const ratio = new Decimal(pb ?? 0);
   const style = explicit ?? (ratio.gt(0) && ratio.lt(2.5) ? 'value' : ratio.gt(5) ? 'growth' : 'blend');
   return { size, style };
