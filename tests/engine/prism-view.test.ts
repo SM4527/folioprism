@@ -157,8 +157,8 @@ describe('styleBox', () => {
       funds: { ZFND: fund(box) },
       stocks: {},
     });
-    const value = styleBox(one(fundStyleBox([{ ticker: 'CHP1', weightPct: '60' }, { ticker: 'CHP2', weightPct: '30' }, { ticker: 'EXP1', weightPct: '10' }], universe)))!;
-    const growth = styleBox(one(fundStyleBox([{ ticker: 'EXP1', weightPct: '50' }, { ticker: 'EXP2', weightPct: '40' }, { ticker: 'MID1', weightPct: '10' }], universe)))!;
+    const value = styleBox(one(fundStyleBox([{ ticker: 'CHP1', weightPct: '60' }, { ticker: 'CHP2', weightPct: '30' }, { ticker: 'EXP1', weightPct: '10' }], universe, '100')))!;
+    const growth = styleBox(one(fundStyleBox([{ ticker: 'EXP1', weightPct: '50' }, { ticker: 'EXP2', weightPct: '40' }, { ticker: 'MID1', weightPct: '10' }], universe, '100')))!;
     expect(value.cells.large.value.toFixed(1)).toBe('90.0');
     expect(growth.cells.large.growth.toFixed(1)).toBe('90.0');
     expect(styleSum(value)).toBe('100.0');

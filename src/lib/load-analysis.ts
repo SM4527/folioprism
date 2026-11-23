@@ -28,7 +28,7 @@ async function resolveFunds(tickers: string[], quotes: Map<string, QuoteResult>)
 
 /** The fund with its style box calculated from the constituents it is analysed with, uploads included. */
 function withStyleBox(h: FundHoldings): FundHoldings {
-  return h.aggregates ? { ...h, aggregates: { ...h.aggregates, styleBox: calculatedStyleBox(h.constituents) } } : h;
+  return h.aggregates ? { ...h, aggregates: { ...h.aggregates, styleBox: calculatedStyleBox(h.constituents, h.aggregates.equityPct) } } : h;
 }
 
 /** A direct stock's facts-based style, unless a curated style already sets it; size stays from its market cap. */

@@ -27,14 +27,17 @@ export function stockCells(): Map<string, StyleCellKey> {
   return (cells ??= classifyUniverse(stockFacts(), sizeThresholds()));
 }
 
-/** A fund's style box calculated from the constituents it is analysed with; null below 60% coverage. */
-export function calculatedStyleBox(constituents: { ticker: string; weightPct: string }[]): FundAggregates['styleBox'] {
-  return fundStyleBox(constituents, stockCells());
+/** A fund's style box calculated from the constituents it is analysed with, against its equity share; null below 60% coverage. */
+export function calculatedStyleBox(
+  constituents: { ticker: string; weightPct: string }[],
+  equityPct: string | null,
+): FundAggregates['styleBox'] {
+  return fundStyleBox(constituents, stockCells(), equityPct);
 }
 
 /** A curated fund's aggregates with its style box calculated from its curated constituents. */
 export function curatedWithStyle(ticker: string): FundAggregates | null {
   const aggregates = curatedAggregates(ticker);
   const fund = curatedFund(ticker);
-  return aggregates && fund ? { ...aggregates, styleBox: calculatedStyleBox(fund.constituents) } : null;
+  return aggregates && fund ? { ...aggregates, styleBox: calculatedStyleBox(fund.constituents, aggregates.equityPct) } : null;
 }

@@ -18,32 +18,47 @@ const sum = (box: NonNullable<FundAggregates['styleBox']>) =>
 
 describe('fundStyleBox', () => {
   it('matches a hand-calculated box', () => {
-    const box = fundStyleBox([c('LGV', '40'), c('LGG', '30'), c('MDB', '20'), c('SMV', '10')], cells)!;
+    const box = fundStyleBox([c('LGV', '40'), c('LGG', '30'), c('MDB', '20'), c('SMV', '10')], cells, '100')!;
     expect(box.large).toEqual({ value: '40', blend: '0', growth: '30' });
     expect(box.mid).toEqual({ value: '0', blend: '20', growth: '0' });
     expect(box.small).toEqual({ value: '10', blend: '0', growth: '0' });
   });
 
-  it('measures against total constituent weight, even when it is not 100', () => {
-    const box = fundStyleBox([c('LGV', '49.75'), c('LGG', '49.75')], cells)!;
+  it("measures against the fund's equity share", () => {
+    const box = fundStyleBox([c('LGV', '49.75'), c('LGG', '49.75')], cells, '99.5')!;
     expect(box.large.value).toBe('50');
     expect(sum(box)).toBe('100');
   });
 
   it('leaves unclassified weight out instead of scaling up', () => {
-    const box = fundStyleBox([c('LGV', '50'), c('LGG', '25'), c('UNKNOWN', '25')], cells)!;
+    const box = fundStyleBox([c('LGV', '50'), c('LGG', '25'), c('UNKNOWN', '25')], cells, '100')!;
     expect(box.large.value).toBe('50');
     expect(sum(box)).toBe('75');
   });
 
-  it('needs at least 60% classified', () => {
-    expect(fundStyleBox([c('LGV', '59.9'), c('UNKNOWN', '40.1')], cells)).toBeNull();
-    expect(fundStyleBox([c('LGV', '60'), c('UNKNOWN', '40')], cells)).not.toBeNull();
+  it('never spreads a truncated list over the listed stocks: the missing weight is Not classified', () => {
+    const box = fundStyleBox([c('LGV', '40'), c('LGG', '25.5')], cells, '100')!;
+    expect(box.large).toEqual({ value: '40', blend: '0', growth: '25.5' });
+    expect(sum(box)).toBe('65.5');
   });
 
-  it('is null without constituent weight', () => {
-    expect(fundStyleBox([], cells)).toBeNull();
-    expect(fundStyleBox([c('LGV', '0')], cells)).toBeNull();
+  it('counts the missing weight of a truncated list against the 60% rule', () => {
+    expect(fundStyleBox([c('LGV', '30'), c('LGG', '25')], cells, '100')).toBeNull();
+    expect(fundStyleBox([c('LGV', '59.9'), c('UNKNOWN', '40.1')], cells, '100')).toBeNull();
+    expect(fundStyleBox([c('LGV', '60'), c('UNKNOWN', '40')], cells, '100')).not.toBeNull();
+  });
+
+  it('uses 100 when the equity share is unknown', () => {
+    expect(sum(fundStyleBox([c('LGV', '80')], cells, null)!)).toBe('80');
+  });
+
+  it('never exceeds 100% when listed equity is above the stated equity share', () => {
+    expect(sum(fundStyleBox([c('LGV', '60'), c('LGG', '40.2')], cells, '99.9')!)).toBe('100');
+  });
+
+  it('is null without constituents or classified weight', () => {
+    expect(fundStyleBox([], cells, '100')).toBeNull();
+    expect(fundStyleBox([c('LGV', '0')], cells, '0')).toBeNull();
   });
 });
 
@@ -60,7 +75,7 @@ describe('styleBox fallbackTickers', () => {
   });
 
   it('lists equity funds without a holdings-based box, sorted', () => {
-    const box = fundStyleBox([c('LGV', '100')], cells);
+    const box = fundStyleBox([c('LGV', '100')], cells, '100');
     const input: PrismViewInput = {
       holdings: [
         { ticker: 'ZFUND', kind: 'FUND', valueCents: '100' },
