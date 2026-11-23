@@ -76,6 +76,8 @@ export interface PrismViewInput {
 export interface StyleResult {
   cells: Record<StyleSize, Record<StyleStyle, Decimal>>;
   notClassified: Decimal;
+  /** Funds with equity but no holdings-based box, shown as a one-cell estimate (or not classified). */
+  fallbackTickers: string[];
 }
 
 /** Weighted valuation metrics; null when no holding contributes (D-11). */
@@ -130,6 +132,7 @@ export interface Paired<T> {
 export interface SerializedStyle {
   cells: Record<StyleSize, Record<StyleStyle, string>>;
   notClassified: string;
+  fallbackTickers: string[];
 }
 
 /** Equity breakdown as 1dp strings. */

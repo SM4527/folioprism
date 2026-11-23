@@ -41,11 +41,13 @@ function cellsOf(ticker: string, kind: string, input: PrismViewInput): Decimal[]
 /** Equity-weighted style box at 1dp, nine cells plus Not classified summing to 100.0; null without equity (D-08, D-09). */
 export function styleBox(input: PrismViewInput): StyleResult | null {
   const sums = CELLS.map(() => new Decimal(0));
+  const fallback = new Set<string>();
   let equity = new Decimal(0);
   for (const { holding, w } of weights(input).items) {
     const e = w.times(equityShare(holding, input));
     if (e.isZero()) continue;
     equity = equity.plus(e);
+    if (holding.kind === 'FUND' && !input.funds[holding.ticker]?.styleBox) fallback.add(holding.ticker);
     cellsOf(holding.ticker, holding.kind, input).forEach((pct, i) => (sums[i] = sums[i].plus(e.times(pct))));
   }
   if (equity.isZero()) return null;
@@ -54,5 +56,5 @@ export function styleBox(input: PrismViewInput): StyleResult | null {
   const cells = Object.fromEntries(
     STYLE_SIZES.map((size) => [size, Object.fromEntries(STYLE_STYLES.map((style) => [style, shown[cellIndex({ size, style })]]))]),
   ) as StyleResult['cells'];
-  return { cells, notClassified: shown[CELLS.length] };
+  return { cells, notClassified: shown[CELLS.length], fallbackTickers: [...fallback].sort() };
 }
