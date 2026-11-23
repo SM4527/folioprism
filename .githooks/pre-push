@@ -6,8 +6,17 @@
 zero=0000000000000000000000000000000000000000
 while read local_ref local_sha remote_ref remote_sha; do
   [ "$local_sha" = "$zero" ] && continue
+  if [ "$remote_sha" != "$zero" ] && ! git cat-file -e "$remote_sha^{commit}" 2>/dev/null; then
+    echo "pre-push: blocked, $remote_ref is at $remote_sha, which is not in this clone." >&2
+    echo "pre-push: run 'git fetch', then rebase or merge, and push again." >&2
+    exit 1
+  fi
   if [ "$remote_sha" = "$zero" ]; then range="$local_sha --not --remotes"; else range="$remote_sha..$local_sha"; fi
-  files=$(git log --format= --name-only --diff-filter=AMR $range | sort -u)
+  if ! files=$(git log --format= --name-only --diff-filter=AMR $range); then
+    echo "pre-push: blocked, git could not list the commits in $range" >&2
+    exit 1
+  fi
+  files=$(printf '%s\n' "$files" | sort -u)
   bad=$(printf '%s\n' "$files" | grep -iE '\.png$' | grep -v '^docs/screenshots/'
         printf '%s\n' "$files" | grep -E '^(data/local|imports|backups)/'
         printf '%s\n' "$files" | grep -iE '\.csv$' | grep -v '^tests/fixtures/'
@@ -18,8 +27,13 @@ while read local_ref local_sha remote_ref remote_sha; do
     echo "$bad" >&2
     exit 1
   fi
-  if ! node scripts/privacy-scan.mjs push $range >&2; then
+  node scripts/privacy-scan.mjs push $range >&2
+  status=$?
+  if [ $status -eq 1 ]; then
     echo "pre-push: blocked, private tickers in the pushed changes (see lines above)" >&2
+    exit 1
+  elif [ $status -ne 0 ]; then
+    echo "pre-push: blocked, the privacy scan failed to run (exit $status); nothing was scanned" >&2
     exit 1
   fi
 done

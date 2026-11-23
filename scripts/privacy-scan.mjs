@@ -83,6 +83,16 @@ function scanDir(dir) {
   return hits;
 }
 
+/**
+ * Exit 2 on any failure so callers can tell an error from a hit (exit 1). Git errors name the command;
+ * other errors print only their type, since a JSON parse message can quote private file content.
+ */
+function fail(error) {
+  const detail = error.status !== undefined ? error.message.split('\n')[0] : error.name;
+  console.error(`privacy-scan: error, scan did not run: ${detail}`);
+  process.exit(2);
+}
+
 function main() {
   const [mode, ...rest] = process.argv.slice(2);
   const hits = mode === 'push' ? scanPush(rest) : mode === 'dir' ? scanDir(rest[0]) : null;
@@ -95,4 +105,10 @@ function main() {
   process.exit(hits.length ? 1 : 0);
 }
 
-if (import.meta.main) main();
+if (import.meta.main) {
+  try {
+    main();
+  } catch (error) {
+    fail(error);
+  }
+}
