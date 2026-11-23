@@ -5,6 +5,7 @@ import { fundStyleBox } from '../engine/prism-view/fund-style';
 import type { FundAggregates } from '../engine/prism-view/types';
 import { overlayOn, readLocal } from '../local-data';
 import { curatedAggregates, curatedFund } from './mock';
+import { sizeThresholds } from './size-breakpoints';
 
 const value = z.number().transform(String).nullable();
 const factsSchema = z.record(z.string(), z.object({ marketCapMil: value, pe: value, pb: value, divYieldPct: value }));
@@ -23,7 +24,7 @@ let cells: Map<string, StyleCellKey> | undefined;
 
 /** Style box cell per ticker, classified once per process over the whole facts universe. */
 export function stockCells(): Map<string, StyleCellKey> {
-  return (cells ??= classifyUniverse(stockFacts()));
+  return (cells ??= classifyUniverse(stockFacts(), sizeThresholds()));
 }
 
 /** A fund's style box calculated from the constituents it is analysed with; null below 60% coverage. */

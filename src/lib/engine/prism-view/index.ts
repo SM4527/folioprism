@@ -46,6 +46,7 @@ const style = (s: StyleResult | null): SerializedStyle | null =>
     cells: mapValues(s.cells, (row) => mapValues(row, pct)) as SerializedStyle['cells'],
     notClassified: pct(s.notClassified),
     fallbackTickers: s.fallbackTickers,
+    sizeBasis: s.sizeBasis,
   };
 
 const breakdown = <K extends string, G extends string>(

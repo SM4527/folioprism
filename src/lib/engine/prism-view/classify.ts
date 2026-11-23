@@ -11,12 +11,24 @@ export interface StockFact {
 
 export type StyleCellKey = { size: StyleSize; style: StyleStyle };
 
+/**
+ * Market-cap thresholds in $mil. 'market': relative to the US market (largest 70% of value Large,
+ * next 20% Mid, rest Small). 'fixed': the $10B / $2B fallback when no breakpoints file is available.
+ */
+export interface SizeThresholds {
+  largeMinMil: string;
+  midMinMil: string;
+  basis: 'market' | 'fixed';
+}
+
+export const FIXED_THRESHOLDS: SizeThresholds = { largeMinMil: '10000', midMinMil: '2000', basis: 'fixed' };
+
 /** P/B below this is treated as a data error (seen: BRK-B at 0.001). */
 const MIN_PB = new Decimal('0.05');
 
-/** Size band from market cap in $mil: large from $10B, mid from $2B. */
-export function sizeOf(marketCapMil: Decimal): StyleSize {
-  return marketCapMil.gte(10000) ? 'large' : marketCapMil.gte(2000) ? 'mid' : 'small';
+/** Size band from market cap in $mil against the thresholds. */
+export function sizeOf(marketCapMil: Decimal, t: SizeThresholds): StyleSize {
+  return marketCapMil.gte(t.largeMinMil) ? 'large' : marketCapMil.gte(t.midMinMil) ? 'mid' : 'small';
 }
 
 /** The three value yields; a yield is null when its ratio is missing or unusable. Higher means more value. */
@@ -62,13 +74,13 @@ function styleBand(band: [string, (Decimal | null)[]][]): [string, StyleStyle][]
  * Style box cell for every classifiable stock, ranked within each size band across the whole universe,
  * so a stock lands in the same cell in every fund. Stocks without a market cap or any usable ratio are left out.
  */
-export function classifyUniverse(facts: Record<string, StockFact>): Map<string, StyleCellKey> {
+export function classifyUniverse(facts: Record<string, StockFact>, t: SizeThresholds): Map<string, StyleCellKey> {
   const bands = new Map<StyleSize, [string, (Decimal | null)[]][]>(STYLE_SIZES.map((s) => [s, []]));
   for (const [ticker, f] of Object.entries(facts)) {
     if (f.marketCapMil === null || new Decimal(f.marketCapMil).lte(0)) continue;
     const ys = yields(f);
     if (ys.every((y) => y === null)) continue;
-    bands.get(sizeOf(new Decimal(f.marketCapMil)))!.push([ticker, ys]);
+    bands.get(sizeOf(new Decimal(f.marketCapMil), t))!.push([ticker, ys]);
   }
   const out = new Map<string, StyleCellKey>();
   for (const [size, band] of bands) for (const [t, style] of styleBand(band)) out.set(t, { size, style });

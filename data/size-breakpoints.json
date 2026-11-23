@@ -1,0 +1,9 @@
+{
+ "totalUsMarketValueUsd": 70000000000000,
+ "asOf": "2026-11-20",
+ "enteredBy": "maintainer",
+ "note": "Approximate total US equity market value, float-adjusted where available; entered by hand.",
+ "largeCutoffWeightPct": 0.1232,
+ "midCutoffWeightPct": 0.0224,
+ "weightsAsOf": "2026-06-30"
+}

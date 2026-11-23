@@ -9,7 +9,7 @@ import { computePrismView, serializePrismView } from '../../src/lib/engine/prism
 import { ALLOCATION_KEYS, STYLE_SIZES, STYLE_STYLES } from '../../src/lib/engine/taxonomy';
 import { curatedAggregates } from '../../src/lib/market/mock';
 import { curatedWithStyle } from '../../src/lib/market/stock-facts';
-import { classifyUniverse } from '../../src/lib/engine/prism-view/classify';
+import { classifyUniverse, FIXED_THRESHOLDS } from '../../src/lib/engine/prism-view/classify';
 import { fundStyleBox } from '../../src/lib/engine/prism-view/fund-style';
 import type { PrismViewInput } from '../../src/lib/engine/prism-view/types';
 import { loadPrismViewFixture } from './load-fixture';
@@ -150,7 +150,7 @@ describe('styleBox', () => {
       CHP1: f('8', '0.9', '5'), CHP2: f('9', '1.1', '4'),
       MID1: f('18', '3', '1.5'), MID2: f('20', '3.5', '1.2'),
       EXP1: f('70', '25', '0'), EXP2: f('90', '30', '0'),
-    });
+    }, FIXED_THRESHOLDS);
     const fund = (box: ReturnType<typeof fundStyleBox>) => ({ ...curatedAggregates('VTI')!, styleBox: box });
     const one = (box: ReturnType<typeof fundStyleBox>): PrismViewInput => ({
       holdings: [{ ticker: 'ZFND', kind: 'FUND', valueCents: '1000000' }],

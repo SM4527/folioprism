@@ -9,7 +9,8 @@ import { CardFrame } from '@/components/prism-view/card-frame';
 import { heaviestIndex, rampStep, type RampInk } from '@/components/prism-view/ramp';
 
 const STYLE_RULE =
-  'Calculated from holdings. Size by market cap: Large $10B and up, Mid $2B to $10B, Small under $2B. ' +
+  'Calculated from holdings. Size is relative to the US market: the largest companies making up 70% of total ' +
+  'market value are Large, the next 20% Mid, the rest Small. ' +
   'Value, Blend or Growth by thirds of each stock’s earnings, book and dividend yields, ranked within its size band. ' +
   'A fund is the sum of its holdings; holdings without data count as Not classified. ' +
   'Funds with under 60% of holdings classified use one cell from their average market cap and P/B.';
@@ -155,6 +156,9 @@ function StyleBox({ portfolio, bmark, benchmark }: StyleBoxProps) {
               <p className="mt-1">
                 % of equity · {new Decimal(100).minus(portfolio.notClassified).toFixed(1)}% classified
               </p>
+              {portfolio.sizeBasis === 'fixed' && (
+                <p className="mt-1 max-w-[216px]">Size uses fixed $10B / $2B cut-offs (breakpoints file missing)</p>
+              )}
               {portfolio.fallbackTickers.length > 0 && (
                 <p className="mt-1 max-w-[216px]">{portfolio.fallbackTickers.join(', ')}: single-cell estimate (low coverage)</p>
               )}

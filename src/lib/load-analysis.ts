@@ -5,6 +5,7 @@ import { readImports, withImport } from '@/lib/fund-imports';
 import { PORTFOLIO_ID, toHoldingRow } from '@/lib/holdings';
 import { getHoldings, getMetadata, getQuotes, type FundHoldings, type QuoteResult, type StockMetadata } from '@/lib/market';
 import { curatedStock, isCurated } from '@/lib/market/mock';
+import { sizeThresholds } from '@/lib/market/size-breakpoints';
 import { calculatedStyleBox, curatedWithStyle, stockCells } from '@/lib/market/stock-facts';
 
 /** FUND if curated or quoted as ETF / MUTUALFUND, else STOCK (D-11). */
@@ -54,6 +55,6 @@ export async function loadAnalysis(mergeShareClasses: boolean): Promise<Analysis
   const tickers = holdings.map((h) => h.ticker).filter((t) => !isCashLike(t));
   const quotes = await getQuotes(tickers);
   const [funds, metadata] = await Promise.all([resolveFunds(tickers, quotes), resolveMetadata(tickers, quotes)]);
-  const market = { funds, metadata, benchmark: curatedWithStyle(portfolio.benchmarkTicker) };
+  const market = { funds, metadata, benchmark: curatedWithStyle(portfolio.benchmarkTicker), sizeThresholds: sizeThresholds() };
   return buildAnalysis(portfolio, holdings, quotes, market, mergeShareClasses);
 }

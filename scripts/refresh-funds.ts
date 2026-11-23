@@ -10,11 +10,12 @@ import { mapToTickers } from '../src/lib/refresh/figi';
 import { formatFundsJson } from '../src/lib/refresh/funds-json';
 import { issuerConstituents } from '../src/lib/refresh/issuer';
 import { filingProblem, latestNportUrl, parseNport, type NportFiling } from '../src/lib/refresh/nport';
+import { BREAKPOINTS_FILE, cutoffWeights, totalAgeLine, type Breakpoints } from '../src/lib/refresh/size-breakpoints';
 
 type Fund = Record<string, unknown> & {
   holdingsAsOf?: string;
   holdingsSource?: string;
-  constituents: { ticker: string; name: string }[];
+  constituents: { ticker: string; name: string; weightPct: number }[];
 };
 
 const PUBLIC = { funds: 'data/mock-funds.json', sources: 'data/fund-sources.json', cusips: 'data/cusip-tickers.json' };
@@ -194,6 +195,16 @@ async function main() {
   const out = formatFundsJson(kept);
   if (out !== before) writeFileSync(target, out);
   console.log(`Updated ${updated.length} of ${tickers.length} funds in ${target}`);
+  console.log(isPublic ? updateBreakpoints(kept.VTI) : totalAgeLine(readJson<Breakpoints>(BREAKPOINTS_FILE), new Date()));
+}
+
+/** Recompute the size cut-off weights from VTI's N-PORT holdings; the hand-entered US market total is kept. */
+function updateBreakpoints(vti: Fund): string {
+  const b = readJson<Breakpoints>(BREAKPOINTS_FILE);
+  const weights = cutoffWeights(vti.constituents);
+  const next: Breakpoints = { ...b, ...weights, weightsAsOf: vti.holdingsAsOf?.slice(0, 10) ?? b.weightsAsOf };
+  writeFileSync(BREAKPOINTS_FILE, JSON.stringify(next, null, 1) + '\n');
+  return totalAgeLine(next, new Date());
 }
 
 main();

@@ -4,6 +4,7 @@ import { canonicalizeInput, normalize } from './engine/normalize';
 import { serialize } from './engine/serialize';
 import { canonicalTicker, isCashLike } from './engine/ticker';
 import { computePrismView, serializePrismView } from './engine/prism-view';
+import type { SizeThresholds } from './engine/prism-view/classify';
 import type { FundAggregates, SerializedPrismView, PrismViewInput } from './engine/prism-view/types';
 import type {
   EngineInput,
@@ -29,6 +30,8 @@ export interface MarketData {
   funds: Record<string, FundHoldings>;
   metadata: Record<string, StockMetadata | null>;
   benchmark: FundAggregates | null;
+  /** Size cut-offs; the fixed fallback when absent. */
+  sizeThresholds?: SizeThresholds;
 }
 
 /** One priced holding on the wire; cents are integer strings (D-14). */
@@ -95,12 +98,14 @@ function prismViewInput(resolved: ResolvedHolding[], market: MarketData): PrismV
     holdings: resolved.map((r) => ({ ticker: r.ticker, kind: r.kind, valueCents: r.valueCents.toString() })),
     funds: rekey(Object.fromEntries(Object.entries(market.funds).map(([t, f]) => [t, f.aggregates ?? null]))),
     stocks: rekey(market.metadata),
+    sizeThresholds: market.sizeThresholds,
   };
 }
 
 /** The benchmark as one fund holding worth the portfolio total (D-14). */
-function benchmarkInput(ticker: string, aggregates: FundAggregates, totalCents: bigint): PrismViewInput {
-  return { holdings: [{ ticker, kind: 'FUND', valueCents: totalCents.toString() }], funds: { [ticker]: aggregates }, stocks: {} };
+function benchmarkInput(ticker: string, aggregates: FundAggregates, totalCents: bigint, sizeThresholds?: SizeThresholds): PrismViewInput {
+  const holdings = [{ ticker, kind: 'FUND' as const, valueCents: totalCents.toString() }];
+  return { holdings, funds: { [ticker]: aggregates }, stocks: {}, sizeThresholds };
 }
 
 /** The ok quotes, keyed by ticker. */
@@ -243,7 +248,7 @@ export function buildAnalysis(
     },
     prismView: serializePrismView(
       computePrismView(prismViewInput(resolved, market)),
-      benchmark ? computePrismView(benchmarkInput(portfolio.benchmarkTicker, benchmark, totalCents)) : null,
+      benchmark ? computePrismView(benchmarkInput(portfolio.benchmarkTicker, benchmark, totalCents, market.sizeThresholds)) : null,
     ),
   };
 }

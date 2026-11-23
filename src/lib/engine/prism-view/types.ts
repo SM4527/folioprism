@@ -1,3 +1,4 @@
+import type { SizeThresholds } from './classify';
 import type Decimal from 'decimal.js';
 import type { HoldingKind } from '../types';
 import type {
@@ -70,6 +71,8 @@ export interface PrismViewInput {
   holdings: PrismViewHolding[];
   funds: Record<string, FundAggregates | null>;
   stocks: Record<string, StockFacts | null>;
+  /** Size cut-offs; the fixed $10B / $2B fallback when absent. */
+  sizeThresholds?: SizeThresholds;
 }
 
 /** Style box shares of equity, nine cells plus Not classified (D-09, D-10). */
@@ -78,6 +81,8 @@ export interface StyleResult {
   notClassified: Decimal;
   /** Funds with equity but no holdings-based box, shown as a one-cell estimate (or not classified). */
   fallbackTickers: string[];
+  /** Which size cut-offs were used: relative to the US market, or the fixed fallback. */
+  sizeBasis: SizeThresholds['basis'];
 }
 
 /** Weighted valuation metrics; null when no holding contributes (D-11). */
@@ -133,6 +138,7 @@ export interface SerializedStyle {
   cells: Record<StyleSize, Record<StyleStyle, string>>;
   notClassified: string;
   fallbackTickers: string[];
+  sizeBasis: SizeThresholds['basis'];
 }
 
 /** Equity breakdown as 1dp strings. */

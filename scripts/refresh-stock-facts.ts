@@ -10,6 +10,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fetchYahooFacts } from '../src/lib/market/yahoo';
 import { coveragePct, FACTS_OUT, factsTickers, LOCAL_FUNDS, PUBLIC_FUNDS, type ReadFile } from '../src/lib/refresh/stock-facts';
+import { BREAKPOINTS_FILE, totalAgeLine } from '../src/lib/refresh/size-breakpoints';
 
 const read: ReadFile = (path) => (existsSync(path) ? readFileSync(path, 'utf8') : null);
 const includeLocal = process.argv.includes('--include-local');
@@ -28,4 +29,5 @@ if (includeLocal) {
   const below = local.filter((p) => p < 60).length;
   console.log(`  personal funds: ${local.length}, ${below} below 60% coverage (they keep the one-cell estimate)`);
 }
+console.log(totalAgeLine(JSON.parse(read(BREAKPOINTS_FILE)!), new Date()));
 if (failedBatches > 0) process.exitCode = 1;

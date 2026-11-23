@@ -9,7 +9,7 @@ vi.mock('yahoo-finance2', () => ({
 }));
 
 const { fetchYahooFacts, toStockFact, FACTS_BATCH } = await import('../src/lib/market/yahoo');
-const { classifyUniverse } = await import('../src/lib/engine/prism-view/classify');
+const { classifyUniverse, FIXED_THRESHOLDS } = await import('../src/lib/engine/prism-view/classify');
 
 const q = (symbol: string, extra: Record<string, unknown>) => ({ symbol, quoteType: 'EQUITY', currency: 'USD', ...extra });
 
@@ -44,7 +44,7 @@ describe('fetchYahooFacts', () => {
     expect(quote).toHaveBeenCalledWith(['ZZ-B']);
     expect(facts['ZZ.B'].pb).toBe(0.001);
     expect(failedBatches).toBe(0);
-    const cells = classifyUniverse({ 'ZZ.B': { marketCapMil: '1200000', pe: '16', pb: '0.001', divYieldPct: '0' } });
+    const cells = classifyUniverse({ 'ZZ.B': { marketCapMil: '1200000', pe: '16', pb: '0.001', divYieldPct: '0' } }, FIXED_THRESHOLDS);
     expect(cells.get('ZZ.B')).toEqual({ size: 'large', style: 'blend' });
   });
 

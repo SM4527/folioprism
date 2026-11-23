@@ -76,7 +76,7 @@ npm ci                                                       # once
 
 ### Stock facts for the style box
 
-The style box is calculated from each fund's holdings using per-stock market cap, P/E, P/B and dividend yield. The default stack always uses the synthetic `data/stock-facts.sample.json` (made by `scripts/make-sample-facts.ts`), so sample screenshots show illustrative values. For the personal stack, fetch real facts from Yahoo into the gitignored `data/local/stock-facts.json`; they are never committed:
+The style box is calculated from each fund's holdings using per-stock market cap, P/E, P/B and dividend yield. Size is relative to the US market: the largest companies making up 70% of total market value are Large, the next 20% Mid, the rest Small. The cut-offs live in `data/size-breakpoints.json`: `refresh-funds.sh --public` recomputes them from VTI's holdings, and the US market total in that file is entered by hand (update it at each release). The default stack always uses the synthetic `data/stock-facts.sample.json` (made by `scripts/make-sample-facts.ts`), so sample screenshots show illustrative values. For the personal stack, fetch real facts from Yahoo into the gitignored `data/local/stock-facts.json`; they are never committed:
 
 ```bash
 npx tsx scripts/refresh-stock-facts.ts --include-local && ./scripts/personal-restart.sh
