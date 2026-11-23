@@ -1,6 +1,6 @@
 import { REGION_GROUPS, SUB_REGIONS, type RegionGroupKey, type SubRegionKey } from '@/lib/engine/taxonomy';
 import { CAPTION } from '@/components/styles';
-import { heaviestIndex, rampStep } from '@/components/xray/ramp';
+import { heaviestIndex, rampStep } from '@/components/prism-view/ramp';
 
 export const SUB_REGION_LABEL: Record<SubRegionKey, string> = {
   northAmerica: 'North America',

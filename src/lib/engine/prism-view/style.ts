@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import { STYLE_SIZES, STYLE_STYLES, type StyleSize, type StyleStyle } from '../taxonomy';
-import type { StyleResult, XrayInput } from './types';
+import type { StyleResult, PrismViewInput } from './types';
 import { display, equityShare, notClassified, scaled, weights } from './weights';
 
 const CELLS = STYLE_SIZES.flatMap((size) => STYLE_STYLES.map((style) => ({ size, style })));
@@ -23,7 +23,7 @@ const cellIndex = (cell: { size: StyleSize; style: StyleStyle }) =>
   CELLS.findIndex((c) => c.size === cell.size && c.style === cell.style);
 
 /** One holding's nine cell shares in percent of its equity (D-10). */
-function cellsOf(ticker: string, kind: string, input: XrayInput): Decimal[] {
+function cellsOf(ticker: string, kind: string, input: PrismViewInput): Decimal[] {
   const cells = CELLS.map(() => new Decimal(0));
   const fund = kind === 'FUND' ? input.funds[ticker] : null;
   if (fund?.styleBox) {
@@ -39,7 +39,7 @@ function cellsOf(ticker: string, kind: string, input: XrayInput): Decimal[] {
 }
 
 /** Equity-weighted style box at 1dp, nine cells plus Not classified summing to 100.0; null without equity (D-08, D-09). */
-export function styleBox(input: XrayInput): StyleResult | null {
+export function styleBox(input: PrismViewInput): StyleResult | null {
   const sums = CELLS.map(() => new Decimal(0));
   let equity = new Decimal(0);
   for (const { holding, w } of weights(input).items) {

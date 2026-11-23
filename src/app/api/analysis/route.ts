@@ -4,7 +4,7 @@ import { loadAnalysis } from '@/lib/load-analysis';
 
 const querySchema = z.object({ mergeShareClasses: z.enum(['0', '1']).default('0') });
 
-/** Priced holdings, the portfolio summary, the Top 50 intersection and the X-Ray (D-14, D-16). */
+/** Priced holdings, the portfolio summary, the Top 50 intersection and the Prism View (D-14, D-16). */
 export async function GET(request: Request) {
   await connection();
   const { searchParams } = new URL(request.url);

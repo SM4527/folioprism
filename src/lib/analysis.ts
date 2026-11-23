@@ -3,8 +3,8 @@ import { computeIntersection } from './engine/intersection';
 import { canonicalizeInput, normalize } from './engine/normalize';
 import { serialize } from './engine/serialize';
 import { canonicalTicker, isCashLike } from './engine/ticker';
-import { computeXray, serializeXray } from './engine/xray';
-import type { FundAggregates, SerializedXray, XrayInput } from './engine/xray/types';
+import { computePrismView, serializePrismView } from './engine/prism-view';
+import type { FundAggregates, SerializedPrismView, PrismViewInput } from './engine/prism-view/types';
 import type {
   EngineInput,
   FundSource,
@@ -79,8 +79,8 @@ export interface Analysis {
   };
   holdings: AnalysisHolding[];
   intersection: { rows: SerializedRow[]; coverage: AnalysisCoverage };
-  /** X-Ray allocation, style box, valuation and fees, portfolio vs benchmark (D-14, D-16). */
-  xray: SerializedXray;
+  /** Prism View allocation, style box, valuation and fees, portfolio vs benchmark (D-14, D-16). */
+  prismView: SerializedPrismView;
 }
 
 /** The fixed price of CASH and the $1.00 NAV of money-market funds (D-09). */
@@ -89,8 +89,8 @@ export const CASH_PRICE = '1.00';
 const rekey = <T>(record: Record<string, T>) =>
   Object.fromEntries(Object.entries(record).map(([k, v]) => [canonicalTicker(k), v]));
 
-/** Xray input from the priced holdings, fund aggregates and stock metadata, keyed by canonical ticker. */
-function xrayInput(resolved: ResolvedHolding[], market: MarketData): XrayInput {
+/** PrismView input from the priced holdings, fund aggregates and stock metadata, keyed by canonical ticker. */
+function prismViewInput(resolved: ResolvedHolding[], market: MarketData): PrismViewInput {
   return {
     holdings: resolved.map((r) => ({ ticker: r.ticker, kind: r.kind, valueCents: r.valueCents.toString() })),
     funds: rekey(Object.fromEntries(Object.entries(market.funds).map(([t, f]) => [t, f.aggregates ?? null]))),
@@ -99,7 +99,7 @@ function xrayInput(resolved: ResolvedHolding[], market: MarketData): XrayInput {
 }
 
 /** The benchmark as one fund holding worth the portfolio total (D-14). */
-function benchmarkInput(ticker: string, aggregates: FundAggregates, totalCents: bigint): XrayInput {
+function benchmarkInput(ticker: string, aggregates: FundAggregates, totalCents: bigint): PrismViewInput {
   return { holdings: [{ ticker, kind: 'FUND', valueCents: totalCents.toString() }], funds: { [ticker]: aggregates }, stocks: {} };
 }
 
@@ -197,7 +197,7 @@ function cashRow(h: HoldingRow, value: ResolvedHolding | undefined): AnalysisHol
   };
 }
 
-/** Price every holding, total the portfolio, run the look-through intersection and the X-Ray against the benchmark (D-14, D-16). */
+/** Price every holding, total the portfolio, run the look-through intersection and the Prism View against the benchmark (D-14, D-16). */
 export function buildAnalysis(
   portfolio: { name: string; benchmarkTicker: string },
   holdings: HoldingRow[],
@@ -241,9 +241,9 @@ export function buildAnalysis(
       rows: serialize(result).rows,
       coverage: coverageOf(result, resolved, funds),
     },
-    xray: serializeXray(
-      computeXray(xrayInput(resolved, market)),
-      benchmark ? computeXray(benchmarkInput(portfolio.benchmarkTicker, benchmark, totalCents)) : null,
+    prismView: serializePrismView(
+      computePrismView(prismViewInput(resolved, market)),
+      benchmark ? computePrismView(benchmarkInput(portfolio.benchmarkTicker, benchmark, totalCents)) : null,
     ),
   };
 }

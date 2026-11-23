@@ -6,7 +6,7 @@ import mockStocks from '../../../data/mock-stocks.json';
 import { readLocal } from '../local-data';
 import { ALLOCATION_KEYS, BOND_SECTORS, CREDIT, SECTORS, STYLE_STYLES, SUB_REGIONS } from '../engine/taxonomy';
 import type { FundData } from '../engine/types';
-import type { FundAggregates } from '../engine/xray/types';
+import type { FundAggregates } from '../engine/prism-view/types';
 import type { MarketQuote, Provenance, StockMetadata } from './types';
 
 const price = z.number().nonnegative().transform(String);

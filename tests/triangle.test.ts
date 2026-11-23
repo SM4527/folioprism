@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { trianglePoint } from '../src/components/xray/triangle';
+import { trianglePoint } from '../src/components/prism-view/triangle';
 
 describe('trianglePoint', () => {
   it('puts equal shares at the centroid', () => {

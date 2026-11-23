@@ -1,15 +1,15 @@
 import Decimal from 'decimal.js';
 import { describe, it, expect } from 'vitest';
-import { allocation } from '../../src/lib/engine/xray/allocation';
-import { fees } from '../../src/lib/engine/xray/fees';
-import { scaled } from '../../src/lib/engine/xray/weights';
-import { styleBox, styleCell } from '../../src/lib/engine/xray/style';
-import { valuation } from '../../src/lib/engine/xray/valuation';
-import { computeXray, serializeXray } from '../../src/lib/engine/xray';
+import { allocation } from '../../src/lib/engine/prism-view/allocation';
+import { fees } from '../../src/lib/engine/prism-view/fees';
+import { scaled } from '../../src/lib/engine/prism-view/weights';
+import { styleBox, styleCell } from '../../src/lib/engine/prism-view/style';
+import { valuation } from '../../src/lib/engine/prism-view/valuation';
+import { computePrismView, serializePrismView } from '../../src/lib/engine/prism-view';
 import { ALLOCATION_KEYS, STYLE_SIZES, STYLE_STYLES } from '../../src/lib/engine/taxonomy';
 import { curatedAggregates } from '../../src/lib/market/mock';
-import type { XrayInput } from '../../src/lib/engine/xray/types';
-import { loadXrayFixture } from './load-fixture';
+import type { PrismViewInput } from '../../src/lib/engine/prism-view/types';
+import { loadPrismViewFixture } from './load-fixture';
 
 const fixed = (r: Record<string, Decimal>, dp = 1) =>
   Object.fromEntries(Object.entries(r).map(([k, v]) => [k, v.toFixed(dp)]));
@@ -24,14 +24,14 @@ function lcg(seed: number) {
 }
 
 describe('allocation', () => {
-  it('splits xray-basic and sums to exactly 100.0', () => {
-    const a = allocation(loadXrayFixture('xray-basic'));
+  it('splits prism-view-basic and sums to exactly 100.0', () => {
+    const a = allocation(loadPrismViewFixture('prism-view-basic'));
     expect(fixed(a)).toEqual({ cash: '2.1', usStock: '69.6', nonUsStock: '1.9', bond: '23.2', other: '3.2' });
     expect(total(Object.values(a))).toBe('100.0');
   });
 
   it('puts a stock with null facts or null country in other', () => {
-    const input: XrayInput = {
+    const input: PrismViewInput = {
       holdings: [
         { ticker: 'AAA', kind: 'STOCK', valueCents: '100' },
         { ticker: 'BBB', kind: 'STOCK', valueCents: '100' },
@@ -46,14 +46,14 @@ describe('allocation', () => {
   });
 
   it('counts a money-market fund as 100% cash', () => {
-    const input: XrayInput = { holdings: [{ ticker: 'SPAXX', kind: 'CASH', valueCents: '5000' }], funds: {}, stocks: {} };
+    const input: PrismViewInput = { holdings: [{ ticker: 'SPAXX', kind: 'CASH', valueCents: '5000' }], funds: {}, stocks: {} };
     expect(fixed(allocation(input)).cash).toBe('100.0');
   });
 
   it('rescales a fund block that sums to 99.6', () => {
-    const base = loadXrayFixture('xray-basic');
+    const base = loadPrismViewFixture('prism-view-basic');
     const vti = base.funds.VTI!;
-    const input: XrayInput = {
+    const input: PrismViewInput = {
       ...base,
       funds: { ...base.funds, VTI: { ...vti, assetAllocation: { ...vti.assetAllocation!, usStock: '98.5' } } },
     };
@@ -68,7 +68,7 @@ describe('allocation', () => {
   });
 
   it('always sums to exactly 100.0 over 200 random portfolios', () => {
-    const base = loadXrayFixture('xray-basic');
+    const base = loadPrismViewFixture('prism-view-basic');
     const next = lcg(42);
     for (let run = 0; run < 200; run++) {
       const holdings = base.holdings.map((h) => ({ ...h, valueCents: String(next() % 10_000_000) }));
@@ -80,7 +80,7 @@ describe('allocation', () => {
 
 describe('fees', () => {
   it('weights expense ratios and lists unknown tickers', () => {
-    const f = fees(loadXrayFixture('xray-basic'));
+    const f = fees(loadPrismViewFixture('prism-view-basic'));
     expect(f.expenseRatioPct.toFixed(4)).toBe('0.0258');
     expect(f.feeCents).toBe(1650n);
     expect(f.unknownTickers).toEqual(['XFND']);
@@ -103,7 +103,7 @@ const stock = (pe: string | null, marketCapMil: string | null = null) => ({
   pcf: null,
 });
 
-const curatedOnly = (ticker: string): XrayInput => ({
+const curatedOnly = (ticker: string): PrismViewInput => ({
   holdings: [{ ticker, kind: 'FUND', valueCents: '1000000' }],
   funds: { [ticker]: curatedAggregates(ticker)! },
   stocks: {},
@@ -134,8 +134,8 @@ describe('styleCell', () => {
 });
 
 describe('styleBox', () => {
-  it('spreads a fund styleBox and sums to exactly 100.0 on xray-basic', () => {
-    const s = styleBox(loadXrayFixture('xray-basic'))!;
+  it('spreads a fund styleBox and sums to exactly 100.0 on prism-view-basic', () => {
+    const s = styleBox(loadPrismViewFixture('prism-view-basic'))!;
     expect(styleSum(s)).toBe('100.0');
     expect(s.notClassified.toFixed(1)).toBe('2.2');
     expect(s.cells.small.growth.gt(0)).toBe(true);
@@ -162,7 +162,7 @@ describe('styleBox', () => {
 
 describe('valuation', () => {
   it('uses a weighted harmonic mean that skips null and negative values', () => {
-    const input: XrayInput = {
+    const input: PrismViewInput = {
       holdings: ['A', 'B', 'C', 'D'].map((ticker) => ({ ticker, kind: 'STOCK' as const, valueCents: '100' })),
       funds: {},
       stocks: { A: stock('10'), B: stock('30'), C: stock(null), D: stock('-5') },
@@ -171,7 +171,7 @@ describe('valuation', () => {
   });
 
   it('uses a weighted geometric mean for market cap', () => {
-    const input: XrayInput = {
+    const input: PrismViewInput = {
       holdings: ['A', 'B'].map((ticker) => ({ ticker, kind: 'STOCK' as const, valueCents: '100' })),
       funds: {},
       stocks: { A: stock(null, '1000'), B: stock(null, '4000') },
@@ -183,19 +183,19 @@ describe('valuation', () => {
   });
 });
 
-describe('computeXray', () => {
+describe('computePrismView', () => {
   it('gives null style and valuation with no NaN for a zero-equity portfolio', () => {
-    const r = computeXray(loadXrayFixture('xray-no-equity'));
+    const r = computePrismView(loadPrismViewFixture('prism-view-no-equity'));
     expect(r.styleBox).toBeNull();
     expect(r.valuation).toBeNull();
     expect(fixed(r.allocation)).toEqual({ cash: '20.8', usStock: '0.0', nonUsStock: '0.0', bond: '79.2', other: '0.0' });
     expect(r.fees.feeCents).toBe(600n);
-    expect(JSON.stringify(serializeXray(r, null))).not.toContain('NaN');
+    expect(JSON.stringify(serializePrismView(r, null))).not.toContain('NaN');
   });
 
   it('serializes portfolio and benchmark at their display precision', () => {
-    const p = computeXray(loadXrayFixture('xray-basic'));
-    const s = serializeXray(p, computeXray(curatedOnly('SPY')));
+    const p = computePrismView(loadPrismViewFixture('prism-view-basic'));
+    const s = serializePrismView(p, computePrismView(curatedOnly('SPY')));
     expect(s.allocation.portfolio.usStock).toBe('69.6');
     expect(s.styleBox.portfolio!.notClassified).toBe('2.2');
     expect(s.valuation.portfolio!.pe).toMatch(/^\d+\.\d{2}$/);
@@ -204,7 +204,7 @@ describe('computeXray', () => {
   });
 
   it('sets every benchmark field to null without a benchmark', () => {
-    const s = serializeXray(computeXray(loadXrayFixture('xray-basic')), null);
+    const s = serializePrismView(computePrismView(loadPrismViewFixture('prism-view-basic')), null);
     expect([s.allocation, s.styleBox, s.valuation, s.fees].map((p) => p.benchmark)).toEqual([null, null, null, null]);
   });
 });

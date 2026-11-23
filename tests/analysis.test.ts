@@ -4,7 +4,7 @@ import { buildAnalysis } from '../src/lib/analysis';
 import type { FundHoldings } from '../src/lib/market/types';
 import type { HoldingRow } from '../src/lib/holdings';
 import type { MarketQuote, QuoteResult, StockMetadata } from '../src/lib/market/types';
-import type { FundAggregates } from '../src/lib/engine/xray/types';
+import type { FundAggregates } from '../src/lib/engine/prism-view/types';
 import { curatedAggregates } from '../src/lib/market/mock';
 import { toCents } from '../src/lib/engine/normalize';
 import { BENCHMARK_TICKERS } from '../src/lib/benchmarks';
@@ -89,7 +89,7 @@ describe('buildAnalysis cash and money markets', () => {
   });
 
   it('counts cash and money markets as cash, never as intersection rows', () => {
-    expect(a.xray.allocation.portfolio.cash).toBe('30.0');
+    expect(a.prismView.allocation.portfolio.cash).toBe('30.0');
     const tickers = a.intersection.rows.flatMap((r) => [r.ticker, ...r.children.map((c) => c.sourceTicker)]);
     expect(tickers).not.toContain('CASH');
     expect(tickers).not.toContain('VMFXX');
@@ -190,7 +190,7 @@ describe('buildAnalysis intersection', () => {
   });
 });
 
-describe('buildAnalysis xray (D-14, D-16)', () => {
+describe('buildAnalysis prismView (D-14, D-16)', () => {
   const rows: HoldingRow[] = [
     { id: 1, ticker: 'VTI', inputMode: 'DOLLARS', dollarAmount: '40000.00' },
     { id: 3, ticker: 'AAPL', inputMode: 'SHARES', shares: '25' },
@@ -208,7 +208,7 @@ describe('buildAnalysis xray (D-14, D-16)', () => {
   };
   const spy = curatedAggregates('SPY')!;
   const build = (benchmark: FundAggregates | null, hs = rows, q = quotes, meta: StockMetadata | null = aapl) =>
-    buildAnalysis(portfolio, hs, q, market({ VTI: vti }, { AAPL: meta }, benchmark), false).xray;
+    buildAnalysis(portfolio, hs, q, market({ VTI: vti }, { AAPL: meta }, benchmark), false).prismView;
   const sum = (o: Record<string, string>) => Decimal.sum(0, ...Object.values(o));
 
   it('sums portfolio and benchmark allocation to exactly 100.0', () => {
@@ -243,7 +243,7 @@ describe('buildAnalysis xray (D-14, D-16)', () => {
     expect(x.styleBox.portfolio!.notClassified).toBe('100.0');
   });
 
-  it('leaves unpriced SHARES holdings out of xray', () => {
+  it('leaves unpriced SHARES holdings out of prismView', () => {
     const extra: HoldingRow[] = [...rows, { id: 5, ticker: 'ZZZZZQ', inputMode: 'SHARES', shares: '10' }];
     const q = new Map([...quotes, ['ZZZZZQ', { status: 'unknown' } as QuoteResult]]);
     expect(build(spy, extra, q)).toEqual(build(spy));

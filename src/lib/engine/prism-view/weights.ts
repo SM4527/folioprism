@@ -1,15 +1,15 @@
 import Decimal from 'decimal.js';
 import { largestRemainder } from '../rounding';
 import { isCashLike } from '../ticker';
-import type { XrayHolding, XrayInput } from './types';
+import type { PrismViewHolding, PrismViewInput } from './types';
 
 export interface WeightedHolding {
-  holding: XrayHolding;
+  holding: PrismViewHolding;
   w: Decimal;
 }
 
 /** Total cents and each holding's weight = valueCents / totalCents, all 0 for a zero total (D-07). */
-export function weights(input: XrayInput): { totalCents: bigint; items: WeightedHolding[] } {
+export function weights(input: PrismViewInput): { totalCents: bigint; items: WeightedHolding[] } {
   const totalCents = input.holdings.reduce((sum, h) => sum + BigInt(h.valueCents), 0n);
   const items = input.holdings.map((holding) => ({
     holding,
@@ -19,7 +19,7 @@ export function weights(input: XrayInput): { totalCents: bigint; items: Weighted
 }
 
 /** Stock share of a holding as a fraction: stocks 1, cash 0, funds equityPct / 100 (D-08). */
-export function equityShare(holding: XrayHolding, input: XrayInput): Decimal {
+export function equityShare(holding: PrismViewHolding, input: PrismViewInput): Decimal {
   if (holding.kind === 'CASH' || isCashLike(holding.ticker)) return new Decimal(0);
   if (holding.kind === 'STOCK') return new Decimal(1);
   const pct = input.funds[holding.ticker]?.equityPct;

@@ -120,8 +120,8 @@ describe('chatSnapshot', () => {
     }
   });
 
-  it('passes the xray through and keeps compact coverage', () => {
-    expect(snap.xray).toEqual(analysis.xray);
+  it('passes the prismView through and keeps compact coverage', () => {
+    expect(snap.prismView).toEqual(analysis.prismView);
     const c = analysis.intersection.coverage;
     expect(snap.coverage).toEqual({
       lookThroughPct: c.lookThroughPct,

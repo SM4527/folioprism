@@ -1,13 +1,13 @@
 import type { Analysis } from '@/lib/analysis';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AllocationCard } from '@/components/xray/allocation-card';
-import { BondCard } from '@/components/xray/bond-card';
-import { CardFrame } from '@/components/xray/card-frame';
-import { StockAnalysisCard } from '@/components/xray/stock-analysis-card';
-import { StyleCard } from '@/components/xray/style-card';
-import { SummaryBanner } from '@/components/xray/summary-banner';
+import { AllocationCard } from '@/components/prism-view/allocation-card';
+import { BondCard } from '@/components/prism-view/bond-card';
+import { CardFrame } from '@/components/prism-view/card-frame';
+import { StockAnalysisCard } from '@/components/prism-view/stock-analysis-card';
+import { StyleCard } from '@/components/prism-view/style-card';
+import { SummaryBanner } from '@/components/prism-view/summary-banner';
 
-interface XrayOverviewProps {
+interface PrismViewOverviewProps {
   analysis: Analysis | null;
   /** A refetch is in flight while a previous analysis is shown. */
   busy: boolean;
@@ -26,8 +26,8 @@ const SKELETON_FRAMES = [
 ];
 const SKELETON_WIDTHS = ['w-full', 'w-4/5', 'w-3/5', 'w-full', 'w-4/5', 'w-3/5'];
 
-/** The X-Ray Overview tab: summary banner, then the card grid or a state panel (D-17, 04-UI-SPEC States). */
-export function XrayOverview({ analysis, busy, failed, name, benchmark }: XrayOverviewProps) {
+/** The Prism View tab: summary banner, then the card grid or a state panel (D-17, 04-UI-SPEC States). */
+export function PrismViewOverview({ analysis, busy, failed, name, benchmark }: PrismViewOverviewProps) {
   return (
     <div className="flex flex-col gap-4">
       <SummaryBanner
@@ -42,7 +42,7 @@ export function XrayOverview({ analysis, busy, failed, name, benchmark }: XrayOv
   );
 }
 
-function body({ analysis, busy, failed }: Pick<XrayOverviewProps, 'analysis' | 'busy' | 'failed'>) {
+function body({ analysis, busy, failed }: Pick<PrismViewOverviewProps, 'analysis' | 'busy' | 'failed'>) {
   if (analysis === null && failed)
     return (
       <StatePanel
@@ -60,22 +60,22 @@ function body({ analysis, busy, failed }: Pick<XrayOverviewProps, 'analysis' | '
     );
   return (
     <div className={GRID}>
-      <AllocationCard allocation={analysis.xray.allocation} benchmark={analysis.summary.benchmark} busy={busy} />
+      <AllocationCard allocation={analysis.prismView.allocation} benchmark={analysis.summary.benchmark} busy={busy} />
       <StyleCard
-        styleBox={analysis.xray.styleBox}
-        valuation={analysis.xray.valuation}
-        fees={analysis.xray.fees}
+        styleBox={analysis.prismView.styleBox}
+        valuation={analysis.prismView.valuation}
+        fees={analysis.prismView.fees}
         benchmark={analysis.summary.benchmark}
         busy={busy}
       />
       <StockAnalysisCard
-        sectors={analysis.xray.sectors}
-        regions={analysis.xray.regions}
+        sectors={analysis.prismView.sectors}
+        regions={analysis.prismView.regions}
         benchmark={analysis.summary.benchmark}
         busy={busy}
       />
-      {analysis.xray.bonds && (
-        <BondCard bonds={analysis.xray.bonds} benchmark={analysis.summary.benchmark} busy={busy} />
+      {analysis.prismView.bonds && (
+        <BondCard bonds={analysis.prismView.bonds} benchmark={analysis.summary.benchmark} busy={busy} />
       )}
     </div>
   );

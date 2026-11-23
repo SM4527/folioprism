@@ -24,7 +24,7 @@ async function resolveFunds(tickers: string[], quotes: Map<string, QuoteResult>)
   return Object.fromEntries(funds.map((t, i) => [t, resolve(t, holdings[i])]));
 }
 
-/** Metadata for priced or curated direct stocks, read in the request so the X-Ray can use it (D-05, pitfall 4). */
+/** Metadata for priced or curated direct stocks, read in the request so the Prism View can use it (D-05, pitfall 4). */
 async function resolveMetadata(tickers: string[], quotes: Map<string, QuoteResult>): Promise<Record<string, StockMetadata | null>> {
   const known = (t: string) => quotes.get(t)?.status === 'ok' || curatedStock(t) !== undefined;
   const stocks = tickers.filter((t) => known(t) && !isFund(t, quotes.get(t)));

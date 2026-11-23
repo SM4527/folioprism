@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import { FIG, GT_CELL, GT_GROUP_ROW, GT_HEAD, GT_INDENT, GT_ROW, GT_TOTAL_ROW } from '@/components/styles';
 import type { CategoryColor } from '@/components/palette';
-import { PairedBar } from '@/components/xray/paired-bar';
+import { PairedBar } from '@/components/prism-view/paired-bar';
 
 /** Figure column key; doubles as the data-col verification hook (D-22). */
 export type ColKey = 'port' | 'bmark' | 'net' | 'long' | 'short';
@@ -58,7 +58,7 @@ function scaleMax(rows: GroupRow[], bar: NonNullable<GroupTableProps['bar']>): n
   return Math.max(0, ...barred.flatMap((r) => [r.values[bar.port], r.values[bar.bmark]]).map((v) => Number(v ?? 0)));
 }
 
-/** Shared X-Ray group table with leaf, group, Not classified and Total rows plus data hooks (04-UI-SPEC). */
+/** Shared Prism View group table with leaf, group, Not classified and Total rows plus data hooks (04-UI-SPEC). */
 export function GroupTable({ group, caption, labelHeader, columns, rows, bar, minWidth = 'min-w-[400px]' }: GroupTableProps) {
   const shown = rows.filter(isShown);
   const max = bar ? scaleMax(shown, bar) : 0;

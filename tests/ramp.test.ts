@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { heaviestIndex, rampStep } from '../src/components/xray/ramp';
+import { heaviestIndex, rampStep } from '../src/components/prism-view/ramp';
 
 const fill = (n: number) => `color-mix(in oklab, var(--primary) ${n}%, var(--background))`;
 

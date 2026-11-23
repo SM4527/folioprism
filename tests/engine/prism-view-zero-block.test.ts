@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { computeXray, serializeXray } from '../../src/lib/engine/xray';
-import type { FundAggregates, XrayInput } from '../../src/lib/engine/xray/types';
-import { loadXrayFixture } from './load-fixture';
+import { computePrismView, serializePrismView } from '../../src/lib/engine/prism-view';
+import type { FundAggregates, PrismViewInput } from '../../src/lib/engine/prism-view/types';
+import { loadPrismViewFixture } from './load-fixture';
 
 const zeros = <K extends string>(block: Record<K, string>) =>
   Object.fromEntries(Object.keys(block).map((k) => [k, '0'])) as Record<K, string>;
 
 /** AAPL plus a fund whose every sourced block sums to 0 (CR-01). */
-function input(): XrayInput {
-  const base = loadXrayFixture('xray-basic');
+function input(): PrismViewInput {
+  const base = loadPrismViewFixture('prism-view-basic');
   const vti = base.funds.VTI!;
   const fund: FundAggregates = {
     ...vti,
@@ -34,12 +34,12 @@ function input(): XrayInput {
 
 describe('zero-sum blocks', () => {
   it('land in Not classified instead of producing NaN', () => {
-    const json = JSON.stringify(serializeXray(computeXray(input()), null));
+    const json = JSON.stringify(serializePrismView(computePrismView(input()), null));
     expect(json).not.toContain('NaN');
   });
 
   it('keep the other holdings classified', () => {
-    const x = computeXray(input());
+    const x = computePrismView(input());
     expect(x.sectors!.leaves.technology.toFixed(1)).toBe('52.6');
     expect(x.sectors!.notClassified.toFixed(1)).toBe('47.4');
     expect(x.allocation.usStock.toFixed(1)).toBe('50.0');

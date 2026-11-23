@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import { describe, it, expect } from 'vitest';
-import { computeXray, serializeXray } from '../../src/lib/engine/xray';
-import { display } from '../../src/lib/engine/xray/weights';
+import { computePrismView, serializePrismView } from '../../src/lib/engine/prism-view';
+import { display } from '../../src/lib/engine/prism-view/weights';
 import {
   BOND_SECTORS,
   CREDIT,
@@ -10,7 +10,7 @@ import {
   STYLE_SIZES,
   STYLE_STYLES,
 } from '../../src/lib/engine/taxonomy';
-import type { FundAggregates, XrayHolding, XrayInput } from '../../src/lib/engine/xray/types';
+import type { FundAggregates, PrismViewHolding, PrismViewInput } from '../../src/lib/engine/prism-view/types';
 
 function lcg(seed: number) {
   let state = seed;
@@ -46,14 +46,14 @@ function fund(next: Rand, bondPct: number): FundAggregates {
   };
 }
 
-function portfolio(next: Rand): XrayInput {
-  const input: XrayInput = { holdings: [], funds: {}, stocks: {} };
+function portfolio(next: Rand): PrismViewInput {
+  const input: PrismViewInput = { holdings: [], funds: {}, stocks: {} };
   const n = next() % 7;
   for (let i = 0; i < n; i++) {
     const ticker = `T${i}`;
     const kind = next() % 5;
     const valueCents = String(next() % 3 === 0 ? 0 : next() % 10000000);
-    const add = (k: XrayHolding['kind']) => input.holdings.push({ ticker, kind: k, valueCents });
+    const add = (k: PrismViewHolding['kind']) => input.holdings.push({ ticker, kind: k, valueCents });
     if (kind === 0) {
       add('STOCK');
       input.stocks[ticker] = next() % 3
@@ -73,7 +73,7 @@ function portfolio(next: Rand): XrayInput {
 }
 
 const sum1 = (values: string[]) => Decimal.sum(0, ...values).toFixed(1);
-const total = (input: XrayInput) => input.holdings.reduce((s, h) => s + BigInt(h.valueCents), 0n);
+const total = (input: PrismViewInput) => input.holdings.reduce((s, h) => s + BigInt(h.valueCents), 0n);
 
 describe('cross-view exact sums (QUAL-02, XRAY-08)', () => {
   it('sums every non-null group to exactly 100.0 with no NaN over random portfolios', () => {
@@ -81,7 +81,7 @@ describe('cross-view exact sums (QUAL-02, XRAY-08)', () => {
     let zeroEquity = 0;
     for (let seed = 1; seed <= 300; seed++) {
       const input = portfolio(lcg(seed * 104729));
-      const x = serializeXray(computeXray(input), null);
+      const x = serializePrismView(computePrismView(input), null);
       const text = JSON.stringify(x);
       expect(text).not.toContain('NaN');
       expect(text).not.toContain('Infinity');

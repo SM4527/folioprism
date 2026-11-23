@@ -59,15 +59,15 @@ export interface StockFacts {
 }
 
 /** One normalized holding; cents as a string so fixtures are JSON (D-07). */
-export interface XrayHolding {
+export interface PrismViewHolding {
   ticker: string;
   kind: HoldingKind;
   valueCents: string;
 }
 
-/** Immutable xray snapshot; doubles as the JSON fixture format (D-06). */
-export interface XrayInput {
-  holdings: XrayHolding[];
+/** Immutable Prism View input snapshot; doubles as the JSON fixture format (D-06). */
+export interface PrismViewInput {
+  holdings: PrismViewHolding[];
   funds: Record<string, FundAggregates | null>;
   stocks: Record<string, StockFacts | null>;
 }
@@ -110,7 +110,7 @@ export interface BondsResult {
 }
 
 /** Engine output for one portfolio; percents are 1dp display values (D-15). */
-export interface XrayResult {
+export interface PrismViewResult {
   allocation: Record<AllocationKey, Decimal>;
   styleBox: StyleResult | null;
   sectors: EquityBreakdown<SectorKey, SuperSectorKey> | null;
@@ -163,8 +163,8 @@ export interface SerializedBonds {
   effectiveMaturityYears: string | null;
 }
 
-/** The xray block of /api/analysis (D-16). */
-export interface SerializedXray {
+/** The Prism View block of /api/analysis (D-16). */
+export interface SerializedPrismView {
   allocation: Paired<Record<AllocationKey, string>>;
   styleBox: Paired<SerializedStyle | null>;
   sectors: Paired<SerializedBreakdown<SectorKey, SuperSectorKey> | null>;

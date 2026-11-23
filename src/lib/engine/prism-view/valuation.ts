@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import type { FundValuation, ValuationResult, XrayInput } from './types';
+import type { FundValuation, ValuationResult, PrismViewInput } from './types';
 import { equityShare, weights } from './weights';
 
 type Point = { e: Decimal; x: Decimal };
@@ -21,7 +21,7 @@ function geometric(points: Point[]): Decimal | null {
 }
 
 /** Equity-weighted valuation metrics; null without equity (D-11). */
-export function valuation(input: XrayInput): ValuationResult | null {
+export function valuation(input: PrismViewInput): ValuationResult | null {
   const holders = weights(input)
     .items.map(({ holding, w }) => ({
       e: w.times(equityShare(holding, input)),

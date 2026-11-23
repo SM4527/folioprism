@@ -16,15 +16,15 @@ import type {
   SerializedFees,
   SerializedStyle,
   SerializedValuation,
-  SerializedXray,
+  SerializedPrismView,
   StyleResult,
   ValuationResult,
-  XrayInput,
-  XrayResult,
+  PrismViewInput,
+  PrismViewResult,
 } from './types';
 
 /** Allocation, style box, sectors, regions, valuation, fees and bonds for one portfolio or benchmark (D-06, D-14). */
-export function computeXray(input: XrayInput): XrayResult {
+export function computePrismView(input: PrismViewInput): PrismViewResult {
   return {
     allocation: allocation(input),
     styleBox: styleBox(input),
@@ -75,14 +75,14 @@ const bondsOf = (b: BondsResult | null): SerializedBonds | null =>
     effectiveMaturityYears: ratio(b.effectiveMaturityYears),
   };
 
-function paired<T>(p: XrayResult, b: XrayResult | null, f: (r: XrayResult) => T): Paired<T> {
+function paired<T>(p: PrismViewResult, b: PrismViewResult | null, f: (r: PrismViewResult) => T): Paired<T> {
   return { portfolio: f(p), benchmark: b && f(b) };
 }
 
 /** Wire form: 1dp percents, 2dp valuation, 4dp expense ratio; benchmark fields null without one; bonds null without portfolio bonds (D-13, D-15, D-16). */
-export function serializeXray(portfolio: XrayResult, benchmark: XrayResult | null): SerializedXray {
+export function serializePrismView(portfolio: PrismViewResult, benchmark: PrismViewResult | null): SerializedPrismView {
   return {
-    allocation: paired(portfolio, benchmark, (r) => mapValues(r.allocation, pct) as SerializedXray['allocation']['portfolio']),
+    allocation: paired(portfolio, benchmark, (r) => mapValues(r.allocation, pct) as SerializedPrismView['allocation']['portfolio']),
     styleBox: paired(portfolio, benchmark, (r) => style(r.styleBox)),
     sectors: paired(portfolio, benchmark, (r) => breakdown(r.sectors)),
     regions: paired(portfolio, benchmark, (r) => breakdown(r.regions)),

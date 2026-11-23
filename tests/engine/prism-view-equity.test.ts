@@ -1,11 +1,11 @@
 import Decimal from 'decimal.js';
 import { describe, it, expect } from 'vitest';
-import { sectors } from '../../src/lib/engine/xray/sectors';
-import { regions } from '../../src/lib/engine/xray/regions';
-import { computeXray, serializeXray } from '../../src/lib/engine/xray';
+import { sectors } from '../../src/lib/engine/prism-view/sectors';
+import { regions } from '../../src/lib/engine/prism-view/regions';
+import { computePrismView, serializePrismView } from '../../src/lib/engine/prism-view';
 import { REGION_GROUPS, SUPER_SECTORS } from '../../src/lib/engine/taxonomy';
-import type { EquityBreakdown, XrayInput } from '../../src/lib/engine/xray/types';
-import { loadXrayFixture } from './load-fixture';
+import type { EquityBreakdown, PrismViewInput } from '../../src/lib/engine/prism-view/types';
+import { loadPrismViewFixture } from './load-fixture';
 
 const sum = (values: Decimal[]) => Decimal.sum(0, ...values).toFixed(1);
 
@@ -21,16 +21,16 @@ function lcg(seed: number) {
   return () => (state = (state * 48271) % 2147483647);
 }
 
-const basic = () => loadXrayFixture('xray-basic');
+const basic = () => loadPrismViewFixture('prism-view-basic');
 
-const onlyStock = (country: string | null): XrayInput => ({
+const onlyStock = (country: string | null): PrismViewInput => ({
   holdings: [{ ticker: 'ZZZ', kind: 'STOCK', valueCents: '1000' }],
   funds: {},
   stocks: { ZZZ: { sector: 'energy', country, marketCapMil: null, pe: null, pb: null, ps: null, pcf: null } },
 });
 
 describe('sectors', () => {
-  it('sums to exactly 100.0 on xray-basic with TSM in Not classified', () => {
+  it('sums to exactly 100.0 on prism-view-basic with TSM in Not classified', () => {
     const s = sectors(basic())!;
     expectExact(s, SUPER_SECTORS);
     expect(s.notClassified.toFixed(1)).toBe('2.2');
@@ -39,7 +39,7 @@ describe('sectors', () => {
 
   it('puts a fund with a null sectors block wholly in Not classified', () => {
     const base = basic();
-    const input: XrayInput = {
+    const input: PrismViewInput = {
       holdings: [{ ticker: 'VTI', kind: 'FUND', valueCents: '1000' }],
       funds: { VTI: { ...base.funds.VTI!, sectors: null } },
       stocks: {},
@@ -71,10 +71,10 @@ describe('regions', () => {
 
 describe('equity breakdown edges', () => {
   it('is null for a zero-equity portfolio with no NaN', () => {
-    const r = computeXray(loadXrayFixture('xray-no-equity'));
+    const r = computePrismView(loadPrismViewFixture('prism-view-no-equity'));
     expect(r.sectors).toBeNull();
     expect(r.regions).toBeNull();
-    expect(JSON.stringify(serializeXray(r, null))).not.toContain('NaN');
+    expect(JSON.stringify(serializePrismView(r, null))).not.toContain('NaN');
   });
 
   it('always sums to exactly 100.0 over 200 random portfolios', () => {
@@ -91,12 +91,12 @@ describe('equity breakdown edges', () => {
   });
 
   it('serializes sectors and regions at 1dp with a null benchmark side', () => {
-    const p = computeXray(basic());
-    const s = serializeXray(p, computeXray(loadXrayFixture('xray-no-equity')));
+    const p = computePrismView(basic());
+    const s = serializePrismView(p, computePrismView(loadPrismViewFixture('prism-view-no-equity')));
     expect(s.sectors.portfolio!.notClassified).toBe('2.2');
     expect(s.sectors.portfolio!.leaves.technology).toBe('37.9');
     expect(s.regions.portfolio!.groups.americas).toMatch(/^\d+\.\d$/);
     expect(s.sectors.benchmark).toBeNull();
-    expect(serializeXray(p, null).regions.benchmark).toBeNull();
+    expect(serializePrismView(p, null).regions.benchmark).toBeNull();
   });
 });

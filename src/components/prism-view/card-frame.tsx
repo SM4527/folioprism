@@ -10,7 +10,7 @@ interface CardFrameProps {
   children: ReactNode;
 }
 
-/** X-Ray card: labelled section, 40px header, 16px body that dims while a refetch is in flight. */
+/** Prism View card: labelled section, 40px header, 16px body that dims while a refetch is in flight. */
 export function CardFrame({ title, aside, busy = false, className = '', children }: CardFrameProps) {
   const id = useId();
   return (

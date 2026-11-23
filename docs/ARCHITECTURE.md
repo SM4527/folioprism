@@ -27,7 +27,7 @@ lib/db (Prisma) <---- cache ----  lib/market (provider facade)
    |   MarketDataCache (24h TTL)        |-- mock.ts    (data/mock-funds.json)
    v                                    v
 PostgreSQL 16                 lib/engine (pure functions, Decimal.js)
-                                 normalize -> lookThrough -> intersection / xray
+                                 normalize -> lookThrough -> intersection / prismView
 ```
 The engine (`lib/engine`) is pure: it takes resolved holdings and market data and returns view models, with no I/O. That makes it fully unit-testable.
 
@@ -58,7 +58,7 @@ FolioPrism/
 │  │  ├─ ui/                     # shadcn generated
 │  │  ├─ header.tsx
 │  │  ├─ holdings/               # holdings-bar, holdings-table, quick-add-row, csv-import, benchmark-select
-│  │  ├─ xray/                   # summary-banner, asset-allocation-card, sector-card, region-card,
+│  │  ├─ prism-view/             # summary-banner, asset-allocation-card, sector-card, region-card,
 │  │  │                          # style-box-card, bond-card
 │  │  └─ intersection/           # intersection-table, intersection-toolbar
 │  ├─ lib/
@@ -75,11 +75,11 @@ FolioPrism/
 │  │     ├─ normalize.ts         # holdings -> dollar values, total
 │  │     ├─ look-through.ts      # exposures per (stock, source)
 │  │     ├─ intersection.ts      # aggregate, sort, top 50, rounding
-│  │     ├─ xray.ts              # allocation, sectors, regions, style box, bonds
+│  │     ├─ prism-view/          # allocation, sectors, regions, style box, bonds
 │  │     ├─ taxonomy.ts          # sector/region/super-sector maps
 │  │     └─ rounding.ts          # largest-remainder allocation
 │  └─ generated/prisma/          # Prisma client output (gitignored)
-├─ tests/engine/                 # intersection.test.ts, xray.test.ts, rounding.test.ts
+├─ tests/engine/                 # intersection.test.ts, prism-view.test.ts, rounding.test.ts
 └─ docs/ARCHITECTURE.md
 ```
 
@@ -143,7 +143,7 @@ model MarketDataCache {
 | PATCH | `/api/holdings/[id]` | partial of the above | row |
 | DELETE | `/api/holdings/[id]` | | 204 |
 | POST | `/api/holdings/import` | `text/csv` (`ticker,amount` or `ticker,shares` header) | `{ imported, rows }` |
-| GET | `/api/analysis` | `?mergeShareClasses=0\|1` | `{ summary, xray, intersection }` |
+| GET | `/api/analysis` | `?mergeShareClasses=0\|1` | `{ summary, prismView, intersection }` |
 
 Route handlers use `params: Promise<{ id: string }>` (Next 15+). Input is validated with a small `zod` schema per handler. CSV export is built client-side from the `intersection` payload, so no endpoint is needed for it.
 
@@ -192,7 +192,7 @@ Curated funds: VTI, FXAIX, FSKAX, VOO, QQQ, SCHD, BND, plus the benchmarks SPY a
 **Step 2. lookThrough** → `Exposure { stock, sourceTicker, sourceName, fundWeightPct: Decimal, exposure: Decimal }`
 - For a direct stock: `exposure = valueCents`, `fundWeightPct = 100`.
 - For a fund f and constituent i: `exposure_i,f = value_f × weight_i,f / 100`, kept at full precision.
-- Fund weight not covered by constituents (`100 − Σweights`) becomes an exposure to the pseudo-stock `OTHER:<f>`. It is excluded from the Top 50 but counted in totals and the X-Ray.
+- Fund weight not covered by constituents (`100 − Σweights`) becomes an exposure to the pseudo-stock `OTHER:<f>`. It is excluded from the Top 50 but counted in totals and the Prism View.
 
 **Step 3. intersection**
 1. Canonical key: the ticker. With `mergeShareClasses`, `SHARE_CLASS_MAP` merges `{GOOG→GOOGL, BRK.A→BRK.B, ...}`.
@@ -203,7 +203,7 @@ Curated funds: VTI, FXAIX, FSKAX, VOO, QQQ, SCHD, BND, plus the benchmarks SPY a
 3. Sort parents by `valueCents` desc and keep the top 50. Children are sorted by `valueCents` desc.
 4. Output `IntersectionRow { ticker, name, portfolioPct, valueCents, children: [{ sourceTicker, sourceName, fundWeightPct, portfolioPct, valueCents }] }`. `valueCents` is serialized as a string.
 
-**Step 4. xray** (weights = holding value / total, computed with Decimal)
+**Step 4. prismView** (weights = holding value / total, computed with Decimal)
 - **Asset allocation**: `Σ_h w_h × alloc_h`. A direct stock is 100% US or Non-US according to its `country`. Net = Long, Short = 0. The benchmark column runs the same function on a 100% benchmark portfolio.
 - **Sectors**: equity-weighted, `Σ_h w_h × equityShare_h × sector_h / Σ_h w_h × equityShare_h`, normalized to 100% of equity. They are grouped into super-sectors through `taxonomy.ts`:
   - Cyclical: Basic Materials, Consumer Cyclical, Financial Services, Real Estate
@@ -213,13 +213,13 @@ Curated funds: VTI, FXAIX, FSKAX, VOO, QQQ, SCHD, BND, plus the benchmarks SPY a
   Yahoo `sectorWeightings` keys (`realestate`, `consumer_cyclical`, …) are mapped to these 11.
 - **Regions**: the same equity weighting. Country maps to 10 sub-regions, which roll up to 3 groups (Americas, Greater Europe, Greater Asia).
 - **Style box**: per stock, size comes from market cap (Large ≥ $10B, Mid $2B–10B, Small < $2B). Valuation comes from P/B against breakpoints (Value < 2.5, Growth > 5, otherwise Blend), as a documented simplification. Funds use curated `styleBox` if present, else their look-through constituents re-scaled to 100%. The result is normalized to 100% of equity.
-- **Valuation metrics**: weighted harmonic mean for P/E, P/B, P/S, P/CF (the Morningstar convention, robust to outliers). Average market cap uses a weighted geometric mean. Each is computed for both the portfolio and the benchmark.
+- **Valuation metrics**: weighted harmonic mean for P/E, P/B, P/S, P/CF (the standard convention, robust to outliers). Average market cap uses a weighted geometric mean. Each is computed for both the portfolio and the benchmark.
 - **Bonds**: present only if bond weight > 0. Bond-weighted sectors, credit quality (AAA, AA, A, BBB, BB, B, Below B, NR), and weighted effective duration and maturity.
 
 **Analysis response**
 ```ts
 { summary: { name, benchmark, totalCents, asOf, staleTickers: string[] },
-  xray: { allocation, sectors, regions, styleBox, valuation, bonds | null },   // each with portfolio + benchmark
+  prismView: { allocation, sectors, regions, styleBox, valuation, bonds | null },   // each with portfolio + benchmark
   intersection: { rows: IntersectionRow[], coverage: { lookThroughPct, otherPct } } }
 ```
 
@@ -239,7 +239,7 @@ page.tsx (server: loads portfolio + holdings)
    │       ├─ <HoldingRow/> × n          inline edit, debounce 500ms -> PATCH; delete -> DELETE
    │       └─ <QuickAddRow/>             ticker + mode toggle + amount -> POST
    └─ <Tabs>
-       ├─ "X-Ray Overview"
+       ├─ "Prism View"
        │   ├─ <SummaryBanner/>
        │   ├─ <AssetAllocationCard/>     Recharts horizontal bar + table
        │   ├─ <StockAnalysisCard>
@@ -248,7 +248,7 @@ page.tsx (server: loads portfolio + holdings)
        │   ├─ <StyleCard>
        │   │   ├─ <StyleBox/>            3×3 grid, opacity = weight/max
        │   │   └─ <StyleMetricsTable/>
-       │   └─ <BondCard/>                rendered only if xray.bonds
+       │   └─ <BondCard/>                rendered only if prismView.bonds
        └─ "Stock Intersection"
            ├─ <IntersectionToolbar/>     Expand all | Collapse all | search | merge share classes | Export CSV
            └─ <IntersectionTable/>       parent rows + child rows
@@ -270,9 +270,9 @@ After any holdings mutation, `GET /api/analysis` is refetched. The previous anal
 └──────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.3 Tab 1: X-Ray Overview
+### 4.3 Tab 1: Prism View
 ```
-[ X-Ray Overview ]  Stock Intersection
+[ Prism View ]  Stock Intersection
 ┌──────────────────────────────────────────────────────────────────────────────────────┐
 │ My Portfolio        Benchmark: SPY        Total Market Value: $151,402.10   as of …  │
 └──────────────────────────────────────────────────────────────────────────────────────┘
@@ -301,7 +301,7 @@ After any holdings mutation, `GET /api/analysis` is refetched. The previous anal
 
 ### 4.4 Tab 2: Stock Intersection (Top 50)
 ```
- X-Ray Overview  [ Stock Intersection ]
+ Prism View  [ Stock Intersection ]
 [Expand all] [Collapse all]  [🔍 filter ticker__]  [◯ Merge share classes]   [Export CSV]
 ┌──────────┬──────────────────────────────────────┬────────┬──────────────┬───────────────┐
 │% of Net  │ Underlying Stocks / Holdings         │ Ticker │ % of Port NA │ ($) Mkt Value │
@@ -367,7 +367,7 @@ On Windows the scripts run under Git Bash or WSL. The repo gets `.gitattributes`
 1. **Intersection sums**: for fixture portfolios, every parent's `valueCents === Σ child.valueCents` and `portfolioPct === Σ child.portfolioPct` (exact Decimal equality, at 4 dp and at the 2 dp display level).
 2. **Top 50**: the result is sorted desc, has ≤ 50 rows, and excludes `OTHER:*`.
 3. **Share-class merge**: GOOG and GOOGL combine when the toggle is on and stay separate when it is off.
-4. **X-Ray**: sector weights sum to 100% of equity, style-box cells sum to 100%, and allocation sums to 100%.
+4. **Prism View**: sector weights sum to 100% of equity, style-box cells sum to 100%, and allocation sums to 100%.
 5. **Rounding**: largest-remainder output always sums to the target.
 
 ## 7. Implementation order (incremental, each step verified)
@@ -376,6 +376,6 @@ On Windows the scripts run under Git Bash or WSL. The repo gets `.gitattributes`
 3. Prisma schema, migration and seed against compose DB. Check with `prisma studio`.
 4. Market layer: mock, then yahoo, then google, then cache. Smoke test via `/api/analysis`.
 5. API routes, checked with curl.
-6. UI: holdings bar, then Intersection tab, then X-Ray tab, using the `frontend-design` skill. Verify with Playwright screenshots.
+6. UI: holdings bar, then Intersection tab, then Prism View tab, using the `frontend-design` skill. Verify with Playwright screenshots.
 7. Dockerfile, compose and scripts. Run `start → add holding → restart → holding persists`.
 

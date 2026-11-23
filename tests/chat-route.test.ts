@@ -17,7 +17,7 @@ const analysis: Analysis = {
     ],
     coverage: { lookThroughPct: '100.0000', otherPct: '0.0000', fundCoveredPct: null, fundOtherPct: null, items: [] },
   },
-  xray: {} as Analysis['xray'],
+  prismView: {} as Analysis['prismView'],
 };
 
 vi.mock('../src/lib/load-analysis', () => ({ loadAnalysis: vi.fn(async () => analysis) }));

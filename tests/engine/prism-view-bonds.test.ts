@@ -1,10 +1,10 @@
 import Decimal from 'decimal.js';
 import { describe, it, expect } from 'vitest';
-import { bonds } from '../../src/lib/engine/xray/bonds';
-import { computeXray, serializeXray } from '../../src/lib/engine/xray';
+import { bonds } from '../../src/lib/engine/prism-view/bonds';
+import { computePrismView, serializePrismView } from '../../src/lib/engine/prism-view';
 import { BOND_SECTORS, CREDIT } from '../../src/lib/engine/taxonomy';
-import type { FundAggregates, FundBond, XrayInput } from '../../src/lib/engine/xray/types';
-import { loadXrayFixture } from './load-fixture';
+import type { FundAggregates, FundBond, PrismViewInput } from '../../src/lib/engine/prism-view/types';
+import { loadPrismViewFixture } from './load-fixture';
 
 const sum = (values: Decimal[]) => Decimal.sum(0, ...values).toFixed(1);
 
@@ -26,7 +26,7 @@ const govOnly: FundBond = {
   effectiveMaturityYears: null,
 };
 
-const twoFunds = (a: FundBond | null, b: FundBond | null): XrayInput => ({
+const twoFunds = (a: FundBond | null, b: FundBond | null): PrismViewInput => ({
   holdings: [
     { ticker: 'A', kind: 'FUND', valueCents: '3000' },
     { ticker: 'B', kind: 'FUND', valueCents: '1000' },
@@ -36,8 +36,8 @@ const twoFunds = (a: FundBond | null, b: FundBond | null): XrayInput => ({
 });
 
 describe('bonds', () => {
-  it('weights BND in xray-basic and sums sectors and credit to exactly 100.0', () => {
-    const b = bonds(loadXrayFixture('xray-basic'))!;
+  it('weights BND in prism-view-basic and sums sectors and credit to exactly 100.0', () => {
+    const b = bonds(loadPrismViewFixture('prism-view-basic'))!;
     expect(sum(BOND_SECTORS.map((k) => b.sectors![k]))).toBe('100.0');
     expect(sum(CREDIT.map((k) => b.credit![k]))).toBe('100.0');
     expect(b.sectors!.government.toFixed(1)).toBe('50.5');
@@ -71,24 +71,24 @@ describe('bonds', () => {
   });
 
   it('is null for an all-equity portfolio and serializes to null', () => {
-    const input: XrayInput = {
+    const input: PrismViewInput = {
       holdings: [{ ticker: 'AAPL', kind: 'STOCK', valueCents: '1000' }],
       funds: {},
       stocks: { AAPL: null },
     };
     expect(bonds(input)).toBeNull();
-    expect(serializeXray(computeXray(input), null).bonds).toBeNull();
+    expect(serializePrismView(computePrismView(input), null).bonds).toBeNull();
   });
 
-  it('is non-null with null fields for xray-no-equity', () => {
-    const r = computeXray(loadXrayFixture('xray-no-equity'));
+  it('is non-null with null fields for prism-view-no-equity', () => {
+    const r = computePrismView(loadPrismViewFixture('prism-view-no-equity'));
     expect(r.bonds).not.toBeNull();
     expect(r.bonds!.sectors).toBeNull();
     expect([r.sectors, r.regions, r.styleBox, r.valuation]).toEqual([null, null, null, null]);
   });
 
   it('serializes 1dp percents and 2dp years with a null benchmark side', () => {
-    const s = serializeXray(computeXray(loadXrayFixture('xray-basic')), null);
+    const s = serializePrismView(computePrismView(loadPrismViewFixture('prism-view-basic')), null);
     expect(s.bonds!.portfolio.sectors!.government).toBe('50.5');
     expect(s.bonds!.portfolio.effectiveDurationYears).toBe('5.70');
     expect(s.bonds!.benchmark).toBeNull();

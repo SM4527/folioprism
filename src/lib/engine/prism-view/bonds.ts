@@ -1,13 +1,13 @@
 import Decimal from 'decimal.js';
 import { BOND_SECTORS, CREDIT } from '../taxonomy';
 import { isCashLike } from '../ticker';
-import type { BondsResult, FundBond, XrayInput } from './types';
+import type { BondsResult, FundBond, PrismViewInput } from './types';
 import { display, scaled, weights } from './weights';
 
 type Holder = { b: Decimal; bond: FundBond | null };
 
 /** Each fund's bond weight = weight x its scaled bond allocation / 100; stocks and cash are 0 (D-13). */
-function holders(input: XrayInput): Holder[] {
+function holders(input: PrismViewInput): Holder[] {
   return weights(input).items.flatMap(({ holding, w }) => {
     if (holding.kind !== 'FUND' || isCashLike(holding.ticker)) return [];
     const fund = input.funds[holding.ticker];
@@ -44,7 +44,7 @@ function mean(hs: Holder[], pick: (b: FundBond) => string | null): Decimal | nul
 }
 
 /** Bond analysis weighted by bond value; null when the portfolio holds no bonds (D-13). */
-export function bonds(input: XrayInput): BondsResult | null {
+export function bonds(input: PrismViewInput): BondsResult | null {
   const hs = holders(input);
   if (hs.length === 0) return null;
   return {

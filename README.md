@@ -1,14 +1,14 @@
 # FolioPrism
 
-A self-hosted portfolio look-through ("X-Ray") web app. Enter your stocks, ETFs and mutual funds; FolioPrism unpacks each fund into its underlying stocks, aggregates the overlap, and shows:
+A self-hosted portfolio web app. Enter your stocks, ETFs and mutual funds; FolioPrism unpacks each fund into its underlying stocks, aggregates the overlap, and shows:
 
-- **X-Ray Overview** — asset allocation, 11 sectors in 3 super-sectors, world regions, 3x3 style box, valuation metrics, expense ratio, and bonds, all vs a benchmark (SPY, VTI or AGG).
+- **Prism View**, a portfolio look-through — asset allocation, 11 sectors in 3 super-sectors, world regions, 3x3 style box, valuation metrics, expense ratio, and bonds, all vs a benchmark (SPY, VTI or AGG).
 - **Stock Intersection** — the Top 50 underlying stocks with % of portfolio and $ value, each expandable into the funds it comes from. Child rows always sum exactly to the parent.
 - **AI chat (optional)** — ask questions like "what is my top 10 stock concentration?", answered from the current analysis.
 
 Single user, single portfolio, no account. Data stays on your machine.
 
-![X-Ray Overview of the sample portfolio](docs/screenshots/xray-overview.png)
+![Prism View of the sample portfolio](docs/screenshots/prism-view-overview.png)
 
 ![AI chat answering questions about the sample portfolio](docs/screenshots/ai-chat.png)
 

@@ -1,4 +1,4 @@
-import { trianglePoint, VERTICES, type SuperSectorShares } from '@/components/xray/triangle';
+import { trianglePoint, VERTICES, type SuperSectorShares } from '@/components/prism-view/triangle';
 
 const MOTION = 'transition-transform duration-150 ease-out motion-reduce:transition-none';
 const { sensitive: S, cyclical: C, defensive: D } = VERTICES;

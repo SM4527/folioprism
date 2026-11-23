@@ -66,7 +66,7 @@ describe('unpricedNote', () => {
   });
 });
 
-describe('X-Ray number formatting', () => {
+describe('Prism View number formatting', () => {
   it('formats market cap, ratios, expense ratios and years', () => {
     expect(formatMarketCapMil('210431.4')).toBe('$210,431');
     expect(formatRatio('24.126')).toBe('24.13');

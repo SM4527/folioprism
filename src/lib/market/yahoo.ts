@@ -2,7 +2,7 @@ import Decimal from 'decimal.js';
 import YahooFinance from 'yahoo-finance2';
 import { CREDIT, SECTOR_BY_NAME, SECTORS, YAHOO_SECTOR_KEYS, type CreditKey, type SectorKey } from '../engine/taxonomy';
 import { canonicalTicker } from '../engine/ticker';
-import type { FundAggregates } from '../engine/xray/types';
+import type { FundAggregates } from '../engine/prism-view/types';
 import {
   fundAggregatesSchema,
   fundHoldingsSchema,
@@ -117,7 +117,7 @@ export interface RawStockSummary {
   financialData?: { operatingCashflow?: number };
 }
 
-/** The nine Morningstar US style categories; only these count a fund's stock share as US (D-04). */
+/** The nine US equity style-box categories (large/mid/small x value/blend/growth); only these count a fund's stock share as US (D-04). */
 const US_EQUITY_CATEGORIES = new Set([
   'Large Value',
   'Large Blend',

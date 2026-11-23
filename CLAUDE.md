@@ -1,4 +1,4 @@
-Build **FolioPrism**, a portfolio look-through ("X-Ray") web application
+Build **FolioPrism**, a portfolio look-through web application; the look-through view is called Prism View
 
 @planning/PLAN.md has all the details.
 
@@ -19,7 +19,7 @@ The user runs FolioPrism daily with real holdings on a separate personal stack. 
 
 **FolioPrism**
 
-FolioPrism is a self-hosted portfolio look-through ("X-Ray") web app for a single investor's portfolio of individual stocks, ETFs, and index/mutual funds. It persists holdings in a containerized PostgreSQL database, unpacks fund constituents, aggregates overlapping positions, and renders two views: a Morningstar-style **X-Ray Overview** (asset allocation, sectors, regions, style box, valuation, bonds) and a **Stock Intersection** table of the Top 50 underlying stocks with per-fund attribution.
+FolioPrism is a self-hosted portfolio look-through web app for a single investor's portfolio of individual stocks, ETFs, and index/mutual funds. It persists holdings in a containerized PostgreSQL database, unpacks fund constituents, aggregates overlapping positions, and renders two views: **Prism View**, a style-box and sector look-through (asset allocation, sectors, regions, style box, valuation, bonds) and a **Stock Intersection** table of the Top 50 underlying stocks with per-fund attribution.
 
 **Core Value:** Show exactly how much of the portfolio sits in each underlying stock, and which funds it comes from, with child rows that always sum exactly to the parent row.
 

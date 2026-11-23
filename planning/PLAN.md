@@ -1,8 +1,10 @@
 # CLAUDE.md
 
+Feature renamed from X-Ray to Prism View in v1.2.0.
+
 ## Project Overview
-Build **FolioPrism**, a portfolio look-through ("X-Ray") web application. Given a user's single portfolio of individual stocks, ETFs, and index/mutual funds, the app persists all holdings in a containerized database, unpacks underlying fund constituents, aggregates overlapping positions, and renders two core views:
-1. **Portfolio X-Ray Overview**: Macro portfolio breakdown (Asset Allocation, Stock Sectors, World Regions, Investment Style Box, and Equity/Bond Valuation Metrics).
+Build **FolioPrism**, a portfolio look-through web application. Given a user's single portfolio of individual stocks, ETFs, and index/mutual funds, the app persists all holdings in a containerized database, unpacks underlying fund constituents, aggregates overlapping positions, and renders two core views:
+1. **Prism View**: Macro portfolio breakdown (Asset Allocation, Stock Sectors, World Regions, Investment Style Box, and Equity/Bond Valuation Metrics).
 2. **Stock Intersection (Top 50 Holdings)**: A hierarchical, expandable table showing the **Top 50 underlying stocks**, their total **% of Portfolio Net Assets**, total **Market Value ($)**, and nested child rows breaking down the exact contribution from each parent fund or direct holding.
 
 ---
@@ -28,7 +30,7 @@ For every underlying stock $i$:
    - Sort descending by total `Market Value ($)` and slice the **Top 50** stocks.
    - Retain all parent fund child rows under each stock sorted by dollar contribution descending.
 
-### 3. Portfolio X-Ray Overview Aggregations (Macro Look-Through)
+### 3. Prism View Aggregations (Macro Look-Through)
 Aggregate fund-level and stock-level metadata weighted by portfolio dollar value across:
 - **Asset Allocation**: Cash, US Stocks, Non-US Stocks, Bonds, Other/Not Classified (Net %, Long %, Short % vs. Benchmark %).
 - **Stock Sectors (11 Standard Equity Sectors grouped into 3 Super-Sectors)**:
@@ -79,7 +81,7 @@ Create a `/scripts` directory containing executable bash scripts (`chmod +x`):
 - Inline editable holdings table (`Ticker`, `Shares` or `Dollar Value`, `Live Price`, `Total Value`, `Delete`) that auto-saves directly to PostgreSQL.
 - Quick-add input row, CSV import (`ticker,amount` or `ticker,shares`), and Benchmark selector (`SPY`, `VTI`, `AGG`).
 
-### Tab 1: X-Ray Overview
+### Tab 1: Prism View
 Build a dense, institutional-grade dashboard with a top summary banner (`Portfolio Title`, `Benchmark`, and `Total Market Value $`):
 1. **Asset Allocation Card**: Horizontal bar chart + table (`Net %`, `Long %`, `Short %`, `Bmark %`).
 2. **Stock Analysis Card**:

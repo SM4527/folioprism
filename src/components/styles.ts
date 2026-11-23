@@ -1,7 +1,7 @@
 /** Small-caps label style shared by panel headers and table headers (02-UI-SPEC). */
 export const LABEL = 'text-xs leading-4 font-semibold tracking-[0.06em] text-muted-foreground uppercase';
 
-/** X-Ray card frame: white, hairline border, no shadow (04-UI-SPEC Card frame). */
+/** Prism View card frame: white, hairline border, no shadow (04-UI-SPEC Card frame). */
 export const CARD = 'overflow-hidden rounded-lg border bg-card';
 
 /** 40px card header row with a bottom hairline. */

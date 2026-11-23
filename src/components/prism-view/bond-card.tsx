@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
-import type { SerializedBonds, SerializedXray } from '@/lib/engine/xray/types';
+import type { SerializedBonds, SerializedPrismView } from '@/lib/engine/prism-view/types';
 import { BOND_SECTORS, CREDIT, type BondSectorKey, type CreditKey } from '@/lib/engine/taxonomy';
 import { formatYears } from '@/lib/format';
 import { LABEL } from '@/components/styles';
-import { CardFrame } from '@/components/xray/card-frame';
-import { GroupTable, type GroupColumn, type GroupRow } from '@/components/xray/group-table';
-import { MetricTable } from '@/components/xray/style-card';
+import { CardFrame } from '@/components/prism-view/card-frame';
+import { GroupTable, type GroupColumn, type GroupRow } from '@/components/prism-view/group-table';
+import { MetricTable } from '@/components/prism-view/style-card';
 
 const SECTOR_LABEL: Record<BondSectorKey, string> = {
   government: 'Government',
@@ -44,7 +44,7 @@ function rows<K extends string>(
 }
 
 interface BondCardProps {
-  bonds: NonNullable<SerializedXray['bonds']>;
+  bonds: NonNullable<SerializedPrismView['bonds']>;
   benchmark: string;
   busy: boolean;
 }

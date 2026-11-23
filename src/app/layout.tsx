@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "FolioPrism",
-  description: "Portfolio look-through (X-Ray)",
+  description: "Prism View: a portfolio look-through of every ETF and mutual fund you own",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { FundData } from '../engine/types';
 import { ALLOCATION_KEYS, BOND_SECTORS, CREDIT, SECTORS, STYLE_STYLES, SUB_REGIONS } from '../engine/taxonomy';
-import type { FundAggregates, StockFacts } from '../engine/xray/types';
+import type { FundAggregates, StockFacts } from '../engine/prism-view/types';
 
 /** A non-negative decimal string, the wire format for every price (D-05). */
 export const DECIMAL = z.string().regex(/^\d+(\.\d+)?$/);
@@ -34,7 +34,7 @@ function percents<K extends string>(keys: readonly K[]) {
 
 const styleRow = percents(STYLE_STYLES);
 
-/** Fund-level X-Ray aggregates as decimal strings; any block may be null (D-01, D-02, D-03). */
+/** Fund-level Prism View aggregates as decimal strings; any block may be null (D-01, D-02, D-03). */
 export const fundAggregatesSchema = z.object({
   assetAllocation: percents(ALLOCATION_KEYS).nullable(),
   equityPct: PERCENT.nullable(),

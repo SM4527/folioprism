@@ -1,11 +1,11 @@
 import { useId } from 'react';
-import type { SerializedFees, SerializedStyle, SerializedXray } from '@/lib/engine/xray/types';
+import type { SerializedFees, SerializedStyle, SerializedPrismView } from '@/lib/engine/prism-view/types';
 import { STYLE_SIZES, STYLE_STYLES, type StyleSize, type StyleStyle } from '@/lib/engine/taxonomy';
 import { formatCents, formatExpensePct, formatMarketCapMil, formatRatio } from '@/lib/format';
 import { Badge } from '@/components/ui/badge';
 import { CAPTION, FIG, GT_CELL, GT_HEAD, GT_ROW, LABEL } from '@/components/styles';
-import { CardFrame } from '@/components/xray/card-frame';
-import { heaviestIndex, rampStep, type RampInk } from '@/components/xray/ramp';
+import { CardFrame } from '@/components/prism-view/card-frame';
+import { heaviestIndex, rampStep, type RampInk } from '@/components/prism-view/ramp';
 
 const STYLE_RULE =
   'Approximate. Size by market cap: Large $10B and up, Mid $2B to $10B, Small under $2B. ' +
@@ -31,9 +31,9 @@ const VALUATION_ROWS = [
 ] as const;
 
 interface StyleCardProps {
-  styleBox: SerializedXray['styleBox'];
-  valuation: SerializedXray['valuation'];
-  fees: SerializedXray['fees'];
+  styleBox: SerializedPrismView['styleBox'];
+  valuation: SerializedPrismView['valuation'];
+  fees: SerializedPrismView['fees'];
   benchmark: string;
   busy: boolean;
 }
@@ -202,7 +202,7 @@ function MetricFigure({ value }: { value: string }) {
 }
 
 /** Weighted expense ratio and annual fees, with the unknown-ER note (D-12). */
-function Fees({ fees }: { fees: SerializedXray['fees'] }) {
+function Fees({ fees }: { fees: SerializedPrismView['fees'] }) {
   const { portfolio, benchmark } = fees;
   return (
     <div className="mt-4 border-t pt-4">

@@ -1,9 +1,9 @@
 import Decimal from 'decimal.js';
 import { toCents } from '../normalize';
-import type { FeesResult, XrayInput } from './types';
+import type { FeesResult, PrismViewInput } from './types';
 
 /** Weighted expense ratio, annual fee in cents and funds with unknown ER; stocks and cash are 0% (D-12). */
-export function fees(input: XrayInput): FeesResult {
+export function fees(input: PrismViewInput): FeesResult {
   const totalCents = input.holdings.reduce((sum, h) => sum + BigInt(h.valueCents), 0n);
   const funds = input.holdings.filter((h) => h.kind === 'FUND');
   const unknownTickers = funds.filter((h) => input.funds[h.ticker]?.expenseRatioPct == null).map((h) => h.ticker).sort();

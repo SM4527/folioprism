@@ -1,12 +1,12 @@
 'use client';
 
 import { Bar, BarChart, XAxis, YAxis, type BarShapeProps } from 'recharts';
-import type { SerializedXray } from '@/lib/engine/xray/types';
+import type { SerializedPrismView } from '@/lib/engine/prism-view/types';
 import { ALLOCATION_KEYS, type AllocationKey } from '@/lib/engine/taxonomy';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 import { ALLOCATION_COLOR } from '@/components/palette';
-import { CardFrame } from '@/components/xray/card-frame';
-import { GroupTable, type GroupColumn } from '@/components/xray/group-table';
+import { CardFrame } from '@/components/prism-view/card-frame';
+import { GroupTable, type GroupColumn } from '@/components/prism-view/group-table';
 
 const LABELS: Record<AllocationKey, string> = {
   cash: 'Cash',
@@ -29,7 +29,7 @@ const config = {
 } satisfies ChartConfig;
 
 interface AllocationCardProps {
-  allocation: SerializedXray['allocation'];
+  allocation: SerializedPrismView['allocation'];
   benchmark: string;
   busy: boolean;
 }

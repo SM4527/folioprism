@@ -10,7 +10,7 @@ import { CsvImport, type ImportResult } from '@/components/holdings/csv-import';
 import { useAnalysis } from '@/components/use-analysis';
 import { PortfolioTabs } from '@/components/portfolio-tabs';
 import { IntersectionPanel } from '@/components/intersection/intersection-panel';
-import { XrayOverview } from '@/components/xray/xray-overview';
+import { PrismViewOverview } from '@/components/prism-view/prism-view-overview';
 import { ChatPanel, ChatToggle } from '@/components/chat/chat-panel';
 
 interface PortfolioAppProps {
@@ -177,8 +177,8 @@ export function PortfolioApp({ portfolio, initialHoldings, chatEnabled }: Portfo
         />
         <PortfolioTabs
           updating={busy}
-          xray={
-            <XrayOverview
+          prismView={
+            <PrismViewOverview
               analysis={analysis}
               busy={busy}
               failed={failed}

@@ -18,7 +18,7 @@ export const CHAT_TOP_STOCKS = 25;
 
 /** The compact analysis the model answers from (AI-03). */
 export function chatSnapshot(analysis: Analysis) {
-  const { summary, holdings, intersection, xray } = analysis;
+  const { summary, holdings, intersection, prismView } = analysis;
   const rows = intersection.rows;
   const items = intersection.coverage.items;
   return {
@@ -39,7 +39,7 @@ export function chatSnapshot(analysis: Analysis) {
       usd: usd(r.valueCents),
       sources: r.children.map((c) => ({ ticker: c.sourceTicker, usd: usd(c.valueCents) })),
     })),
-    xray,
+    prismView,
     coverage: {
       lookThroughPct: intersection.coverage.lookThroughPct,
       fundCoveredPct: intersection.coverage.fundCoveredPct,
@@ -61,6 +61,7 @@ const SYSTEM_PROMPT = [
   'Answer only from the JSON portfolio snapshot in the user message.',
   'Percents are of total portfolio net assets; usd values are US dollars.',
   `topStocks are only the largest underlying stocks, sorted by value, and their sources sum to the row; a stock not in topStocks is smaller than the last one listed, so say it is outside the top ${CHAT_TOP_STOCKS} rather than not held; a source ticker names a holding in summary.holdings, and a source equal to the row ticker is a direct holding.`,
+  'prismView is the Prism View (portfolio look-through): asset allocation, sectors, regions, style box, valuation, fees and bonds, portfolio vs benchmark.',
   'For top 10 concentration use summary.top10Pct.',
   'A source has no pct: quote its usd, and its weight inside its fund is its usd over that holding usd in summary.holdings.',
   'Data gaps: summary.asOf is the latest price time; summary.staleTickers have cached or sample prices; summary.unpricedTickers have no price and are left out of every total and percent; coverage.items holdingsAsOf is each fund holdings date and coverage.staleHoldings are funds with holdings older than 180 days.',

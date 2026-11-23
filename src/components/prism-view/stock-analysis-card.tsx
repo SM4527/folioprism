@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
-import type { SerializedBreakdown, SerializedXray } from '@/lib/engine/xray/types';
+import type { SerializedBreakdown, SerializedPrismView } from '@/lib/engine/prism-view/types';
 import { REGION_GROUPS, SUPER_SECTORS, type SectorKey, type SuperSectorKey } from '@/lib/engine/taxonomy';
 import { SUPER_SECTOR_COLOR, type CategoryColor } from '@/components/palette';
 import { LABEL } from '@/components/styles';
-import { CardFrame } from '@/components/xray/card-frame';
-import { GroupTable, type GroupColumn, type GroupRow } from '@/components/xray/group-table';
-import { REGION_GROUP_LABEL, RegionStrip, SUB_REGION_LABEL } from '@/components/xray/region-strip';
-import { SectorTriangle } from '@/components/xray/sector-triangle';
+import { CardFrame } from '@/components/prism-view/card-frame';
+import { GroupTable, type GroupColumn, type GroupRow } from '@/components/prism-view/group-table';
+import { REGION_GROUP_LABEL, RegionStrip, SUB_REGION_LABEL } from '@/components/prism-view/region-strip';
+import { SectorTriangle } from '@/components/prism-view/sector-triangle';
 
 const SECTOR_LABEL: Record<SectorKey, string> = {
   basicMaterials: 'Basic Materials',
@@ -59,8 +59,8 @@ function breakdownRows<K extends string, G extends string>(
 }
 
 interface StockAnalysisCardProps {
-  sectors: SerializedXray['sectors'];
-  regions: SerializedXray['regions'];
+  sectors: SerializedPrismView['sectors'];
+  regions: SerializedPrismView['regions'];
   benchmark: string;
   busy: boolean;
 }

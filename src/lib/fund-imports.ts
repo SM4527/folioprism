@@ -49,7 +49,7 @@ export async function deleteImport(ticker: string): Promise<number> {
   return count;
 }
 
-/** The fund with imported constituents; name and X-Ray aggregates stay from the base source (DEC-06). */
+/** The fund with imported constituents; name and Prism View aggregates stay from the base source (DEC-06). */
 export function withImport(base: FundHoldings, imp: FundImport): FundHoldings {
   return {
     ...base,
