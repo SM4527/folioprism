@@ -81,7 +81,7 @@ Provider settings change over time; check them against each provider's current d
 
 ### Fully local alternative
 
-To ask questions without anything leaving your machine, use Prism MCP with a local model in LM Studio. It reads FolioPrism's API on localhost and returns percentages only by default.
+To ask questions without anything leaving your machine, use [Prism MCP](https://github.com/SM4527/prism-mcp) with a local model in LM Studio. It reads FolioPrism's API on localhost and returns percentages only by default.
 
 ## Refresh fund holdings
 
