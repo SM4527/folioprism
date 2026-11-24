@@ -5,7 +5,8 @@
  * minus any ticker in the public data/mock-funds.json (fund or constituent).
  *
  *   node scripts/privacy-scan.mjs push <rev-range...>   added lines and messages of the commits in the range
- *   node scripts/privacy-scan.mjs dir <path>            every file under a directory (for example a built app)
+ *   node scripts/privacy-scan.mjs dir <path>            every file under a directory (for example a built app),
+ *                                                       skipping .git and git-ignored paths below it
  *
  * Prints file:line for each hit (never the ticker) and exits 1 when anything matches.
  */
@@ -68,13 +69,28 @@ function scanPush(range) {
   return hits;
 }
 
-/** Hits in every text file under a directory; binary files (with a NUL byte) are skipped. */
+/** Git-ignored files and folders (folders collapsed), as slash paths without a trailing slash. */
+function ignoredPaths() {
+  const out = git('ls-files', '--others', '--ignored', '--exclude-standard', '--directory');
+  return new Set(out.split('\n').filter(Boolean).map((p) => p.replace(/\/$/, '')));
+}
+
+/** Hits in every text file under a directory, skipping .git and git-ignored paths below it; binary files (with a NUL byte) are skipped. */
 function scanDir(dir) {
   const re = matcher(privateTickers(readFileSync('data/mock-funds.json', 'utf8')));
   if (!re) return [];
+  const ignored = ignoredPaths();
   const hits = [];
+  const skip = (p) => path.basename(p) === '.git' || ignored.has(p.replaceAll('\\', '/'));
   const walk = (p) => {
-    if (statSync(p).isDirectory()) return readdirSync(p).forEach((n) => walk(path.join(p, n)));
+    let stat;
+    try {
+      stat = statSync(p);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+      return console.error(`privacy-scan: skipped broken link ${p}`);
+    }
+    if (stat.isDirectory()) return readdirSync(p).map((n) => path.join(p, n)).filter((c) => !skip(c)).forEach(walk);
     const text = readFileSync(p, 'utf8');
     if (text.includes('\0')) return;
     text.split('\n').forEach((l, i) => re.test(l) && hits.push(`${p}:${i + 1}`));
@@ -84,11 +100,11 @@ function scanDir(dir) {
 }
 
 /**
- * Exit 2 on any failure so callers can tell an error from a hit (exit 1). Git errors name the command;
- * other errors print only their type, since a JSON parse message can quote private file content.
+ * Exit 2 on any failure so callers can tell an error from a hit (exit 1). Prints the first line of the
+ * error message; a JSON parse message can quote private file content, so do not paste it into tracked files.
  */
 function fail(error) {
-  const detail = error.status !== undefined ? error.message.split('\n')[0] : error.name;
+  const detail = error.message.split('\n')[0];
   console.error(`privacy-scan: error, scan did not run: ${detail}`);
   process.exit(2);
 }
