@@ -3,18 +3,21 @@ import type { ChatMessage } from './snapshot';
 
 export const BUSY_MESSAGE = 'The assistant is busy, please try again in a minute.';
 
-/** Every configured provider failed (D-02). */
+export const BUSY_FALLBACK_OFF = 'The assistant is busy. Fallback to another provider is off (CHAT_FALLBACK).';
+
+/** Every provider we were allowed to try failed (D-02); the hint says a second provider is configured but unused. */
 export class AssistantBusyError extends Error {
-  constructor() {
-    super(BUSY_MESSAGE);
+  constructor(fallbackHint = false) {
+    super(fallbackHint ? BUSY_FALLBACK_OFF : BUSY_MESSAGE);
   }
 }
 
-/** Groq first, OpenRouter's free model as the fallback (D-02). */
+/** Groq first; OpenRouter's free model is used as the fallback only when CHAT_FALLBACK=on (D-02). */
 const PROVIDERS = [
-  { name: 'groq', url: 'https://api.groq.com/openai/v1/chat/completions', model: 'openai/gpt-oss-120b', key: 'GROQ_API_KEY', extra: {} },
+  { name: 'groq', label: 'Groq', url: 'https://api.groq.com/openai/v1/chat/completions', model: 'openai/gpt-oss-120b', key: 'GROQ_API_KEY', extra: {} },
   {
     name: 'openrouter',
+    label: 'OpenRouter',
     url: 'https://openrouter.ai/api/v1/chat/completions',
     model: 'nvidia/nemotron-3.5-super-vl:free',
     key: 'OPENROUTER_API_KEY',
@@ -76,11 +79,33 @@ function parseJson(text: unknown): unknown {
   }
 }
 
-/** Ask each configured provider in order; throws AssistantBusyError when all fail. */
-export async function askAssistant(messages: ChatMessage[]): Promise<string> {
-  for (const provider of configuredProviders()) {
-    const reply = await ask(provider, messages);
-    if (reply !== null) return reply;
+const warnedValues = new Set<string>();
+
+/** CHAT_FALLBACK is off unless exactly "on"; an unknown value warns once and counts as off. */
+export function fallbackEnabled(): boolean {
+  const value = process.env.CHAT_FALLBACK || 'off';
+  if (value !== 'on' && value !== 'off' && !warnedValues.has(value)) {
+    warnedValues.add(value);
+    console.warn('CHAT_FALLBACK must be off or on; treating it as off');
   }
-  throw new AssistantBusyError();
+  return value === 'on';
+}
+
+export interface Answer {
+  reply: string;
+  provider: string;
+  model: string;
+}
+
+/** Ask the first configured provider, then the rest only when fallback is on; throws AssistantBusyError when all fail. */
+export async function askAssistant(messages: ChatMessage[]): Promise<Answer> {
+  const configured = configuredProviders();
+  const allowed = fallbackEnabled() ? configured : configured.slice(0, 1);
+  for (const provider of allowed) {
+    const reply = await ask(provider, messages);
+    if (reply === null) continue;
+    if (provider !== configured[0]) console.info('chat fell back from', configured[0].name, 'to', provider.name);
+    return { reply, provider: provider.label, model: provider.model };
+  }
+  throw new AssistantBusyError(allowed.length < configured.length);
 }

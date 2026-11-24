@@ -16,6 +16,11 @@ describe('askChat', () => {
     expect(await askChat('q', false)).toEqual({ reply: 'Hi' });
   });
 
+  it('carries provider and model on success', async () => {
+    respond('{"reply":"Hi","provider":"Groq","model":"openai/gpt-oss-120b"}', 200);
+    expect(await askChat('q', false)).toEqual({ reply: 'Hi', provider: 'Groq', model: 'openai/gpt-oss-120b' });
+  });
+
   it('returns NO_REPLY for 2xx without a reply', async () => {
     respond('{}', 200);
     expect(await askChat('q', false)).toEqual({ error: NO_REPLY });

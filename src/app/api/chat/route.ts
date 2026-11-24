@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AssistantBusyError, BUSY_MESSAGE, askAssistant, chatEnabled } from '@/lib/chat/llm';
+import { AssistantBusyError, askAssistant, chatEnabled } from '@/lib/chat/llm';
 import { chatMessages, chatSnapshot } from '@/lib/chat/snapshot';
 import { rejectCrossSite } from '@/lib/guard';
 import { loadAnalysis } from '@/lib/load-analysis';
@@ -18,9 +18,9 @@ export async function POST(request: Request) {
   if (!parsed.success) return Response.json({ error: parsed.error.issues[0].message }, { status: 400 });
   const snapshot = chatSnapshot(await loadAnalysis(parsed.data.mergeShareClasses));
   try {
-    return Response.json({ reply: await askAssistant(chatMessages(parsed.data.question, snapshot)) });
+    return Response.json(await askAssistant(chatMessages(parsed.data.question, snapshot)));
   } catch (error) {
-    if (error instanceof AssistantBusyError) return Response.json({ error: BUSY_MESSAGE }, { status: 503 });
+    if (error instanceof AssistantBusyError) return Response.json({ error: error.message }, { status: 503 });
     throw error;
   }
 }

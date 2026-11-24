@@ -33,6 +33,7 @@ vi.mock('../src/lib/load-analysis', () => ({ loadAnalysis: vi.fn(async () => ana
 const { POST } = await import('../src/app/api/chat/route');
 
 const BUSY = 'The assistant is busy, please try again in a minute.';
+const BUSY_HINT = 'The assistant is busy. Fallback to another provider is off (CHAT_FALLBACK).';
 
 function ask(body: unknown): Request {
   return new Request('http://localhost:8420/api/chat', {
@@ -59,17 +60,25 @@ describe('POST /api/chat', () => {
     vi.restoreAllMocks();
   });
 
-  it('answers a valid question with { reply }', async () => {
+  it('answers a valid question with reply, provider and model', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => completion('{"reply":"Top 10 is 10.00%"}')));
     const res = await POST(ask({ question: 'what is my top 10 stock concentration?' }));
     expect(res.status).toBe(200);
     const text = await res.text();
-    expect(JSON.parse(text)).toEqual({ reply: 'Top 10 is 10.00%' });
+    expect(JSON.parse(text)).toEqual({ reply: 'Top 10 is 10.00%', provider: 'Groq', model: 'openai/gpt-oss-120b' });
     expect(text).not.toContain('test-groq');
     expect(text).not.toContain('test-or');
   });
 
+  it('returns 503 with the fallback hint when Groq fails and fallback is off', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => completion('', 429)));
+    const res = await POST(ask({ question: 'what is my top 10 stock concentration?' }));
+    expect(res.status).toBe(503);
+    expect(await res.json()).toEqual({ error: BUSY_HINT });
+  });
+
   it('returns 503 with the busy message when every provider fails', async () => {
+    vi.stubEnv('CHAT_FALLBACK', 'on');
     vi.stubGlobal('fetch', vi.fn(async () => completion('', 429)));
     const res = await POST(ask({ question: 'what is my top 10 stock concentration?' }));
     expect(res.status).toBe(503);

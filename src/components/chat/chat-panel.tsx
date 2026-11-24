@@ -6,12 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CAPTION } from '@/components/styles';
 import { askChat } from '@/lib/chat/ask';
+import { providerLabel } from '@/lib/chat/label';
 
 const SUGGESTION = 'What is my top 10 stock concentration?';
 
 interface Turn {
   question: string;
   reply?: string;
+  provider?: string;
+  model?: string;
   error?: string;
 }
 
@@ -44,9 +47,16 @@ function TurnView({ turn }: { turn: Turn }) {
         </p>
       )}
       {turn.reply !== undefined && (
-        <p data-chat="answer" className="border-l-2 border-primary pl-3 text-[13px] leading-5 whitespace-pre-wrap text-foreground">
-          {turn.reply}
-        </p>
+        <div className="border-l-2 border-primary pl-3">
+          <p data-chat="answer" className="text-[13px] leading-5 whitespace-pre-wrap text-foreground">
+            {turn.reply}
+          </p>
+          {turn.provider && turn.model && (
+            <p data-chat="provider" className="mt-1 text-[11px] leading-4 text-muted-foreground">
+              {providerLabel(turn.provider, turn.model)}
+            </p>
+          )}
+        </div>
       )}
       {turn.error !== undefined && (
         <p data-chat="error" className="border-l-2 border-destructive pl-3 text-[13px] leading-5 text-destructive">

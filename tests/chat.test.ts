@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildAnalysis } from '../src/lib/analysis';
-import { AssistantBusyError, BUSY_MESSAGE, askAssistant, chatEnabled } from '../src/lib/chat/llm';
+import { AssistantBusyError, BUSY_FALLBACK_OFF, BUSY_MESSAGE, askAssistant, chatEnabled } from '../src/lib/chat/llm';
 import { CHAT_TOP_STOCKS, chatMessages, chatSnapshot } from '../src/lib/chat/snapshot';
 import type { HoldingRow } from '../src/lib/holdings';
 import { curatedAggregates, curatedFund, curatedStock, mockQuote } from '../src/lib/market/mock';
@@ -195,6 +195,7 @@ describe('askAssistant', () => {
   beforeEach(() => {
     vi.stubEnv('GROQ_API_KEY', 'test-groq');
     vi.stubEnv('OPENROUTER_API_KEY', 'test-or');
+    vi.stubEnv('CHAT_FALLBACK', 'on');
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.spyOn(console, 'info').mockImplementation(() => {});
   });
@@ -208,7 +209,7 @@ describe('askAssistant', () => {
   it('answers from Groq openai/gpt-oss-120b', async () => {
     const fetchMock = vi.fn(async () => completion('{"reply":"Top 10 is 31.2%"}', 200, { prompt_tokens: 1234 }));
     vi.stubGlobal('fetch', fetchMock);
-    expect(await askAssistant(messages)).toBe('Top 10 is 31.2%');
+    expect(await askAssistant(messages)).toEqual({ reply: 'Top 10 is 31.2%', provider: 'Groq', model: 'openai/gpt-oss-120b' });
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toBe(GROQ_URL);
@@ -222,7 +223,7 @@ describe('askAssistant', () => {
       url === GROQ_URL ? completion('', 429) : completion('{"reply":"From OpenRouter"}'),
     );
     vi.stubGlobal('fetch', fetchMock);
-    expect(await askAssistant(messages)).toBe('From OpenRouter');
+    expect((await askAssistant(messages)).reply).toBe('From OpenRouter');
     expect(fetchMock).toHaveBeenCalledTimes(2);
     const [url, init] = fetchMock.mock.calls[1] as unknown as [string, RequestInit];
     expect(url).toBe(OPENROUTER_URL);
@@ -237,14 +238,14 @@ describe('askAssistant', () => {
       if (url === GROQ_URL) throw new TypeError('fetch failed');
       return completion('{"reply":"From OpenRouter"}');
     }));
-    expect(await askAssistant(messages)).toBe('From OpenRouter');
+    expect((await askAssistant(messages)).reply).toBe('From OpenRouter');
   });
 
   it('falls back when Groq returns invalid JSON content', async () => {
     vi.stubGlobal('fetch', vi.fn(async (url: string) =>
       url === GROQ_URL ? completion('not json') : completion('{"reply":"From OpenRouter"}'),
     ));
-    expect(await askAssistant(messages)).toBe('From OpenRouter');
+    expect((await askAssistant(messages)).reply).toBe('From OpenRouter');
   });
 
   it('throws AssistantBusyError when every provider fails', async () => {
@@ -258,7 +259,7 @@ describe('askAssistant', () => {
     vi.stubEnv('GROQ_API_KEY', '');
     const fetchMock = vi.fn(async () => completion('{"reply":"From OpenRouter"}'));
     vi.stubGlobal('fetch', fetchMock);
-    expect(await askAssistant(messages)).toBe('From OpenRouter');
+    expect((await askAssistant(messages)).reply).toBe('From OpenRouter');
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect((fetchMock.mock.calls[0] as unknown as [string])[0]).toBe(OPENROUTER_URL);
   });
@@ -269,6 +270,51 @@ describe('askAssistant', () => {
     vi.stubGlobal('fetch', fetchMock);
     await expect(askAssistant(messages)).rejects.toBeInstanceOf(AssistantBusyError);
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('is busy with a hint and never calls OpenRouter when fallback is off', async () => {
+    vi.stubEnv('CHAT_FALLBACK', 'off');
+    const fetchMock = vi.fn(async () => completion('', 429));
+    vi.stubGlobal('fetch', fetchMock);
+    const error = await askAssistant(messages).catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(AssistantBusyError);
+    expect((error as Error).message).toBe(BUSY_FALLBACK_OFF);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect((fetchMock.mock.calls[0] as unknown as [string])[0]).toBe(GROQ_URL);
+  });
+
+  it('defaults to off when CHAT_FALLBACK is unset', async () => {
+    vi.stubEnv('CHAT_FALLBACK', '');
+    const fetchMock = vi.fn(async () => completion('', 429));
+    vi.stubGlobal('fetch', fetchMock);
+    await expect(askAssistant(messages)).rejects.toBeInstanceOf(AssistantBusyError);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('answers from OpenRouter with fallback off when it is the only configured provider', async () => {
+    vi.stubEnv('CHAT_FALLBACK', 'off');
+    vi.stubEnv('GROQ_API_KEY', '');
+    vi.stubGlobal('fetch', vi.fn(async () => completion('{"reply":"From OpenRouter"}')));
+    expect(await askAssistant(messages)).toMatchObject({ reply: 'From OpenRouter', provider: 'OpenRouter' });
+  });
+
+  it('gives the plain busy message when fallback is off and no second key exists', async () => {
+    vi.stubEnv('CHAT_FALLBACK', 'off');
+    vi.stubEnv('OPENROUTER_API_KEY', '');
+    vi.stubGlobal('fetch', vi.fn(async () => completion('', 429)));
+    const error = await askAssistant(messages).catch((e: unknown) => e);
+    expect((error as Error).message).toBe(BUSY_MESSAGE);
+  });
+
+  it('treats an invalid CHAT_FALLBACK as off and warns once', async () => {
+    vi.stubEnv('CHAT_FALLBACK', 'sometimes');
+    const fetchMock = vi.fn(async () => completion('', 429));
+    vi.stubGlobal('fetch', fetchMock);
+    await expect(askAssistant(messages)).rejects.toBeInstanceOf(AssistantBusyError);
+    await expect(askAssistant(messages)).rejects.toBeInstanceOf(AssistantBusyError);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const warned = vi.mocked(console.warn).mock.calls.filter((c) => String(c[0]).includes('CHAT_FALLBACK'));
+    expect(warned).toHaveLength(1);
   });
 
   it('never puts a key in a request body', async () => {

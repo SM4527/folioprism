@@ -57,13 +57,14 @@ Put one or both keys in `.env` in the project root (it is gitignored):
 ```
 GROQ_API_KEY=...        # primary: Groq free tier, openai/gpt-oss-120b
 OPENROUTER_API_KEY=...  # fallback: an OpenRouter free (:free) model
+CHAT_FALLBACK=off       # off (default) or on; see below
 ```
 
 The app container reads them from the root `.env`, whether started by `./scripts/start.sh` or by a manual compose run. Keys exported only in the shell are not passed in. Keys stay on the server. Without keys the chat panel is hidden and everything else works.
 
 ### What leaves your machine
 
-Each question sends a summary of the current analysis to the chat provider: holdings with dollar values, the top 25 underlying stocks and the Prism View. With real holdings, that is your portfolio. FolioPrism tries Groq first and falls back to OpenRouter without asking, so lock down both before using the chat on a personal stack.
+Each question sends a summary of the current analysis to the chat provider: holdings with dollar values, the top 25 underlying stocks and the Prism View. With real holdings, that is your portfolio. FolioPrism uses only the first configured provider (Groq if its key is set). It tries OpenRouter after a Groq failure only when `CHAT_FALLBACK=on` (default `off`; any other value counts as off). Each reply shows which provider answered, as "via Groq · openai/gpt-oss-120b". Lock down every provider whose key you set before using the chat on a personal stack.
 
 **Groq** (console.groq.com → Settings)
 
@@ -74,7 +75,7 @@ Each question sends a summary of the current analysis to the chat provider: hold
 
 - Turn off "Allow free endpoints that train on request data" and "Allow free endpoints that publish prompts". The second lets free providers publish prompts to public datasets.
 - Keep paid-endpoint training, the 1% data discount and input/output logging off.
-- Or leave `OPENROUTER_API_KEY` unset. The chat then uses Groq only and shows a busy message instead of falling back.
+- Or leave `OPENROUTER_API_KEY` unset, or keep `CHAT_FALLBACK=off` with a Groq key set. The chat then never reaches OpenRouter and shows a busy message when Groq fails.
 
 Provider settings change over time; check them against each provider's current docs.
 
