@@ -46,7 +46,7 @@ function card(page: Page, title: string) {
 }
 
 await page.getByRole('tab', { name: 'Prism View' }).click();
-await card(page, 'Asset Allocation').waitFor();
+await page.getByText('Weighted expense ratio').waitFor();
 await shootElement('prism-view-overview', page.getByRole('tabpanel'));
 await shootElement('stock-analysis', card(page, 'Stock Analysis'));
 await shootElement('bonds', card(page, 'Bond Analysis'));
