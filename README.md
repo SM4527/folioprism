@@ -25,26 +25,21 @@ Single user, single portfolio, no account. Data stays on your machine.
 
 FolioPrism is a personal analysis tool, not investment advice. Market data comes from unofficial Yahoo Finance and Google Finance sources and may be delayed or wrong; fund holdings come from public SEC N-PORT filings.
 
-## Run
+## Run and stop
 
 Requires Docker (on Windows, run the scripts from Git Bash or WSL).
 
 ```bash
 ./scripts/start.sh                          # build + start, then open http://localhost:8420
 ./scripts/logs.sh                           # tail app and db logs
+./scripts/stop.sh                           # holdings are kept in the folioprism_pgdata volume
+./scripts/restart.sh
 MARKET_DATA_MODE=mock ./scripts/restart.sh  # offline, curated market data
 ```
 
-The app listens on `127.0.0.1:8420`. PostgreSQL is not exposed to the host. A yellow "Sample data" banner runs across the top of this stack; the personal stack shows a small blue "Personal" badge instead. `npm run shots` regenerates `docs/screenshots/` from the sample stack only (it fails if the banner is missing).
+The app listens on `127.0.0.1:8420`. PostgreSQL is not exposed to the host. A yellow "Sample data" banner runs across the top of this stack; the personal stack shows a small blue "Personal" badge instead.
 
 Docker files live in `docker/`. To run compose by hand from the project root, use `docker compose -f docker/docker-compose.yml ...`; the app container still gets the root `.env`. `MARKET_DATA_MODE` (default `live`) is read from the shell; a value in the root `.env` is honored only by the scripts.
-
-## Stop
-
-```bash
-./scripts/stop.sh     # holdings are kept in the folioprism_pgdata volume
-./scripts/restart.sh
-```
 
 ## Reset
 
@@ -139,6 +134,21 @@ To keep real holdings apart from development, run a second, independent stack on
 
 The default scripts never touch the personal stack, and the personal scripts never touch the default one. There is no personal reset script.
 
+## Develop
+
+```bash
+npm ci
+npm test && npm run lint
+```
+
+### Screenshots
+
+`npm run shots` regenerates `docs/screenshots/` from the sample stack on `127.0.0.1:8420` and never touches the personal stack. It fails if the "Sample data" banner is not visible before a capture. It needs:
+
+- the default stack running (`./scripts/start.sh`)
+- Node 24 (it runs the `.mts` script directly) and, once, `npx playwright install chromium`
+- `GROQ_API_KEY` or `OPENROUTER_API_KEY` in `.env`, otherwise the chat panel is hidden and `ai-chat.png` cannot be captured
+
 ## Stack
 
 Next.js 16, TypeScript, Tailwind v4, shadcn/ui, Recharts, Prisma 7, PostgreSQL 16, yahoo-finance2, decimal.js, Vitest. Market data comes from Yahoo Finance with cache, stale and curated fallbacks (`data/mock-funds.json`).
@@ -147,10 +157,11 @@ Next.js 16, TypeScript, Tailwind v4, shadcn/ui, Recharts, Prisma 7, PostgreSQL 1
 
 - `planning/PLAN.md` — product spec
 - `docs/ARCHITECTURE.md` — system and UI design
+- `CHANGELOG.md` — release notes
 
 ## Built with Claude Code
 
-FolioPrism was designed by Sivanandam Manickavasagam and built with [Claude Code](https://claude.com/claude-code): Claude agents planned, wrote, tested and reviewed the code phase by phase from written specs. The build followed the GSD workflow: research, phased plans, code review and verification for each phase, across two milestones (v1.0 and v1.1).
+FolioPrism was designed by Sivanandam Manickavasagam and built with [Claude Code](https://claude.com/claude-code): Claude agents planned, wrote, tested and reviewed the code phase by phase from written specs. The build followed the GSD workflow: research, phased plans, code review and verification for each phase.
 
 ## License
 
