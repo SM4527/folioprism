@@ -35,7 +35,7 @@ Requires Docker (on Windows, run the scripts from Git Bash or WSL).
 MARKET_DATA_MODE=mock ./scripts/restart.sh  # offline, curated market data
 ```
 
-The app listens on `127.0.0.1:8420`. PostgreSQL is not exposed to the host. A yellow "Sample data" banner runs across the top of this stack; the personal stack has none.
+The app listens on `127.0.0.1:8420`. PostgreSQL is not exposed to the host. A yellow "Sample data" banner runs across the top of this stack; the personal stack shows a small blue "Personal" badge instead. `npm run shots` regenerates `docs/screenshots/` from the sample stack only (it fails if the banner is missing).
 
 Docker files live in `docker/`. To run compose by hand from the project root, use `docker compose -f docker/docker-compose.yml ...`; the app container still gets the root `.env`. `MARKET_DATA_MODE` (default `live`) is read from the shell; a value in the root `.env` is honored only by the scripts.
 

@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "shots": "node scripts/screenshots.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -35,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "playwright": "^1.65.1",
     "prisma": "7.10.1",
     "tailwindcss": "4.3.3",
     "tsx": "^4.23.15",

@@ -115,7 +115,7 @@ export function ChatPanel({ open, onClose, mergeShareClasses }: ChatPanelProps) 
       aria-hidden={!open}
       inert={!open}
       onKeyDown={onKeyDown}
-      className={`fixed top-14 right-0 bottom-0 z-40 flex w-full flex-col border-l bg-card shadow-[-4px_0_12px_-6px_rgb(15_23_42/0.15)] transition-transform duration-150 motion-reduce:transition-none sm:w-96 ${open ? 'translate-x-0' : 'translate-x-full'}`}
+      className={`fixed top-22 right-0 bottom-0 z-40 flex w-full flex-col border-l bg-card shadow-[-4px_0_12px_-6px_rgb(15_23_42/0.15)] transition-transform duration-150 motion-reduce:transition-none sm:w-96 ${open ? 'translate-x-0' : 'translate-x-full'}`}
     >
       <div className="flex h-10 shrink-0 items-center justify-between border-b px-4">
         <h2 className="text-sm font-semibold">Ask about this portfolio</h2>
