@@ -3,7 +3,7 @@
 A self-hosted portfolio web app. Enter your stocks, ETFs and mutual funds; FolioPrism unpacks each fund into its underlying stocks, aggregates the overlap, and shows:
 
 - **Prism View**, a portfolio look-through — asset allocation, 11 sectors in 3 super-sectors, world regions, 3x3 style box (calculated from holdings), valuation metrics, expense ratio, and bonds, all vs a benchmark (SPY, VTI or AGG).
-- **Stock Intersection** — the Top 50 underlying stocks with % of portfolio and $ value, each expandable into the funds it comes from. Child rows always sum exactly to the parent.
+- **Stock Intersection** — the Top 50 underlying stocks with % of portfolio and $ value, each expandable into the funds it comes from. Child rows always sum exactly to the parent: all aggregation uses `decimal.js` exact decimal arithmetic, so there is no floating-point drift across overlapping funds.
 - **AI chat (optional)** — ask questions like "what is my top 10 stock concentration?", answered from the current analysis.
 
 Single user, single portfolio, no account. Data stays on your machine.
@@ -122,6 +122,8 @@ Keep broker exports in `imports/` (gitignored). Enable the pre-push hook with `g
 ## Personal stack (optional)
 
 To keep real holdings apart from development, run a second, independent stack on http://localhost:8430 with its own containers (`folioprism-personal-*`) and volume (`folioprism_personal_pgdata`). It loads `data/local/` and starts with an empty portfolio instead of the sample.
+
+Before entering real holdings, enable the pre-push privacy guard once: `git config core.hooksPath .githooks` (see [Private curated data](#private-curated-data)).
 
 ```bash
 ./scripts/personal-start.sh     # build and start
