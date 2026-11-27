@@ -8,6 +8,8 @@ A self-hosted portfolio web app. Enter your stocks, ETFs and mutual funds; Folio
 
 Single user, single portfolio, no account. Data stays on your machine.
 
+**Tech stack:** Next.js 16 (App Router, React 19) and TypeScript 6 with Tailwind v4, shadcn/ui and Recharts; Prisma 7 (`@prisma/adapter-pg`) on PostgreSQL 16; yahoo-finance2 for market data; decimal.js for all money math; Vitest for tests. Runs as two Docker containers (`folioprism-app` on Node 24, `folioprism-db`) with holdings in a named volume. Details in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
 ![Prism View of the sample portfolio](docs/screenshots/prism-view-overview.png)
 
 ![AI chat answering questions about the sample portfolio](docs/screenshots/ai-chat.png)
@@ -27,7 +29,18 @@ FolioPrism is a personal analysis tool, not investment advice. Market data comes
 
 ## Run and stop
 
-Requires Docker (on Windows, run the scripts from Git Bash or WSL).
+Requires Docker (on Windows, run the scripts from Git Bash or WSL). There are two independent stacks. Start with the sample stack; add the personal stack only when you want to enter real holdings.
+
+| | Sample stack (default) | Personal stack (optional) |
+|---|---|---|
+| Purpose | Try the app, develop, take screenshots | Your real holdings |
+| URL | http://localhost:8420 | http://localhost:8430 |
+| Scripts | `scripts/start.sh`, `stop.sh`, `restart.sh`, `logs.sh` | `scripts/personal-start.sh`, `personal-stop.sh`, `personal-restart.sh`, `personal-logs.sh` |
+| Compose file | `docker/docker-compose.yml` | `docker/compose.personal.yml` |
+| Starts with | Sample portfolio | Empty portfolio |
+| `data/local/` overlay | Off (`LOCAL_OVERLAY=off`) | On (`LOCAL_OVERLAY=on`) |
+| Banner | Yellow "Sample data" | Small blue "Personal" badge |
+| Database volume | `folioprism_pgdata` | `folioprism_personal_pgdata` |
 
 ```bash
 ./scripts/start.sh                          # build + start, then open http://localhost:8420
@@ -37,7 +50,7 @@ Requires Docker (on Windows, run the scripts from Git Bash or WSL).
 MARKET_DATA_MODE=mock ./scripts/restart.sh  # offline, curated market data
 ```
 
-The app listens on `127.0.0.1:8420`. PostgreSQL is not exposed to the host. A yellow "Sample data" banner runs across the top of this stack; the personal stack shows a small blue "Personal" badge instead.
+Both listen on loopback only, and PostgreSQL is never exposed to the host. See [Personal stack](#personal-stack-optional) before entering real data.
 
 Docker files live in `docker/`. To run compose by hand from the project root, use `docker compose -f docker/docker-compose.yml ...`; the app container still gets the root `.env`. `MARKET_DATA_MODE` (default `live`) is read from the shell; a value in the root `.env` is honored only by the scripts.
 
@@ -80,29 +93,15 @@ To ask questions without anything leaving your machine, use [Prism MCP](https://
 
 ## Refresh fund holdings
 
-`./scripts/refresh-funds.sh` rebuilds fund constituents from SEC N-PORT filings or issuer files. It runs on the host, not in the container, needs Node 22.9+ on the host, and reads the root `.env` itself (no `WSLENV` needed under WSL).
-
-- `--public` refreshes the funds in `data/fund-sources.json` into the tracked `data/mock-funds.json` and `data/cusip-tickers.json`, for a deliberate commit.
-- Without a flag it also refreshes the funds in `data/local/fund-sources.json`, and writes every result only to the gitignored `data/local/` (for the personal stack). Tracked files are not changed.
-- An older source never replaces a newer kept snapshot, unless you pass `--allow-older` for that run; each replacement is printed.
+Fund constituents come from SEC N-PORT filings or issuer files, and the style box uses per-stock facts from Yahoo. Both run on the host (Node 22.9+, `npm ci` once):
 
 ```bash
-npm ci                                                       # once
-./scripts/refresh-funds.sh --public && ./scripts/restart.sh  # public data, then test and commit
-./scripts/refresh-funds.sh && ./scripts/personal-restart.sh  # personal stack
+./scripts/refresh-funds.sh --public && ./scripts/restart.sh   # public funds into tracked data/, then test and commit
+./scripts/refresh-funds.sh && ./scripts/personal-restart.sh   # personal funds into gitignored data/local/
+npx tsx scripts/refresh-stock-facts.ts --include-local && ./scripts/personal-restart.sh  # real stock facts, personal stack only
 ```
 
-### Stock facts for the style box
-
-The style box is calculated from each fund's holdings using per-stock market cap, P/E, P/B and dividend yield. Size is relative to the US market: the largest companies making up 70% of total market value are Large, the next 20% Mid, the rest Small. The cut-offs live in `data/size-breakpoints.json`: `refresh-funds.sh --public` recomputes them from VTI's holdings, and the US market total in that file is entered by hand (update it at each release). The default stack always uses the synthetic `data/stock-facts.sample.json` (made by `scripts/make-sample-facts.ts`), so sample screenshots show illustrative values. For the personal stack, fetch real facts from Yahoo into the gitignored `data/local/stock-facts.json`; they are never committed:
-
-```bash
-npx tsx scripts/refresh-stock-facts.ts --include-local && ./scripts/personal-restart.sh
-```
-
-Without `--include-local` it fetches only the public curated funds' holdings and reads nothing else in `data/local/`. Add `--dry-run` to count the tickers without any network call or write.
-
-Optional keys in `.env`: `OPENFIGI_API_KEY` (higher OpenFIGI rate limit for CUSIP/ISIN-to-ticker mapping) and `SEC_USER_AGENT` (SEC asks for a real contact; a placeholder is used otherwise). It can run on a schedule, for example weekly from Windows Task Scheduler via `wsl.exe`, appending output to `refresh.log` (gitignored).
+Add `--dry-run` to `refresh-stock-facts.ts` to count tickers without any network call. SEC N-PORT parsing, OpenFIGI mapping, size breakpoints, `--allow-older` and scheduling are in [docs/DATA_PIPELINE.md](docs/DATA_PIPELINE.md).
 
 ## Import fund holdings (CSV)
 
@@ -134,6 +133,17 @@ To keep real holdings apart from development, run a second, independent stack on
 
 The default scripts never touch the personal stack, and the personal scripts never touch the default one. There is no personal reset script.
 
+## Troubleshooting and offline fallback
+
+The Yahoo and Google Finance endpoints are unofficial and may rate-limit or change without notice. FolioPrism degrades in order instead of failing:
+
+- **Quotes:** cache (15 minutes fresh), then Yahoo, then Google for tickers Yahoo missed, then the stale cache, then the curated `data/mock-quotes.json`. A ticker no source can price shows as unreachable or unknown.
+- **Fund holdings:** curated funds in `data/mock-funds.json` first, then the 24-hour cache or Yahoo's top 10, otherwise the fund counts as 100% Other and the coverage note says so.
+- **Offline:** `MARKET_DATA_MODE=mock ./scripts/restart.sh` skips every live call and uses only curated data. Direct stocks without curated facts show no sector or style rather than invented values.
+- **Fund missing or incomplete:** import the issuer's holdings CSV for that fund (see above), or run `./scripts/refresh-funds.sh`.
+- **Holdings without prices:** use dollar mode or the CSV import (`ticker,amount` or `ticker,shares`).
+- **Stack won't start:** `./scripts/logs.sh` (or `personal-logs.sh`); the start scripts wait about two minutes for the health check.
+
 ## Develop
 
 ```bash
@@ -149,14 +159,11 @@ npm test && npm run lint
 - Node 24 (it runs the `.mts` script directly) and, once, `npx playwright install chromium`
 - `GROQ_API_KEY` or `OPENROUTER_API_KEY` in `.env`, otherwise the chat panel is hidden and `ai-chat.png` cannot be captured
 
-## Stack
-
-Next.js 16, TypeScript, Tailwind v4, shadcn/ui, Recharts, Prisma 7, PostgreSQL 16, yahoo-finance2, decimal.js, Vitest. Market data comes from Yahoo Finance with cache, stale and curated fallbacks (`data/mock-funds.json`).
-
 ## Docs
 
 - `planning/PLAN.md` — product spec
 - `docs/ARCHITECTURE.md` — system and UI design
+- `docs/DATA_PIPELINE.md` — fund and stock-facts refresh in depth
 - `CHANGELOG.md` — release notes
 
 ## Built with Claude Code
