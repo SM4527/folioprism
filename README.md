@@ -1,5 +1,9 @@
 # FolioPrism
 
+[![ci](https://img.shields.io/github/actions/workflow/status/SM4527/folioprism/ci.yml?branch=main&label=ci&logo=github)](https://github.com/SM4527/folioprism/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![release](https://img.shields.io/github/v/release/SM4527/folioprism?color=orange)](https://github.com/SM4527/folioprism/releases)
+
 A self-hosted portfolio web app. Enter your stocks, ETFs and mutual funds; FolioPrism unpacks each fund into its underlying stocks, aggregates the overlap, and shows:
 
 - **Prism View**, a portfolio look-through — asset allocation, 11 sectors in 3 super-sectors, world regions, 3x3 style box (calculated from holdings), valuation metrics, expense ratio, and bonds, all vs a benchmark (SPY, VTI or AGG).
