@@ -46,9 +46,9 @@ Requires Docker (on Windows, run the scripts from Git Bash or WSL). There are tw
 | Banner | Yellow "Sample data" | Small blue "Personal" badge |
 | Database volume | `folioprism_pgdata` | `folioprism_personal_pgdata` |
 
-```bash
 Create the shared network once before the first start: `docker network create prism`
 
+```bash
 ./scripts/start.sh                          # build + start, then open http://localhost:8420
 ./scripts/logs.sh                           # tail app and db logs
 ./scripts/stop.sh                           # holdings are kept in the folioprism_pgdata volume
