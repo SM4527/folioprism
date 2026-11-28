@@ -46,7 +46,7 @@ Requires Docker (on Windows, run the scripts from Git Bash or WSL). There are tw
 | Banner | Yellow "Sample data" | Small blue "Personal" badge |
 | Database volume | `folioprism_pgdata` | `folioprism_personal_pgdata` |
 
-Create the shared network once before the first start: `docker network create prism`
+Create the shared network once before the first start: `docker network create prism` (other Prism apps, such as SignalPrism, join it to read holdings). The start scripts create it if it is missing.
 
 ```bash
 ./scripts/start.sh                          # build + start, then open http://localhost:8420
@@ -99,7 +99,7 @@ To ask questions without anything leaving your machine, use [Prism MCP](https://
 
 ## Refresh fund holdings
 
-Fund constituents come from SEC N-PORT filings or issuer files, and the style box uses per-stock facts from Yahoo. Both run on the host (Node 22.9+, `npm ci` once):
+Fund constituents come from SEC N-PORT filings or issuer files, and the style box uses per-stock facts from Yahoo. Both run on the host (Node 24, `npm ci` once):
 
 ```bash
 ./scripts/refresh-funds.sh --public && ./scripts/restart.sh   # public funds into tracked data/, then test and commit
